@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Importar y usar rutas
 app.use('/api/auth', require('./src/routes/authRoutes'));
+app.use('/admin', require('./src/routes/adminRoutes'));
 
 
 app.use('/api', require('./src/routes'));
