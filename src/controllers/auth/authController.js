@@ -6,8 +6,17 @@ exports.login = (req, res) => {
     res.send('Login exitoso');
   };
   
-  exports.register = (req, res) => {
+  exports.register = async (req, res) => {
     // Lógica de registro de usuarios
-    res.send('Registro exitoso');
+    /* const name = req.body.name;
+    const lastname = req.body.lastname;
+    const age = req.body.age; */
+    const { username, age } = req.body;
+    res.send(`Registro exitoso ${username}`);
+    console.log(username)
   };
+
+  exports.formRegistrar = (req, res) => {
+    res.render('auth/formRegistro',{title : "Registro"})
+  }
   
