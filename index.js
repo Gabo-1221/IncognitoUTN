@@ -22,6 +22,10 @@ app.get('/', (req, res) => {
   res.render('index', { title: 'Mi aplicación Express' });
 });
 
+app.use((req, res) =>{
+  res.status(404).send('No se encuentra la ruta establecida')
+})
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
