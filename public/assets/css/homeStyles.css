@@ -1,0 +1,306 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+header {
+    background-color: #6a0dad; /* Lila */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: relative;
+}
+
+header .logo img {
+    height: 40px;
+}
+
+nav {
+    display: flex;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.cta-buttons .cta {
+    background-color: #89449c; /* Verde */
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 4px;
+}
+
+.hamburger-menu span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+}
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/img/resources/image_hero.jpg') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero h1 {
+    font-size: 36px;
+    color: rgb(224, 219, 224);
+    margin-bottom: 20px;
+}
+
+.hero-buttons .hero-button {
+    background-color: #89449c; /* Verde */
+    color: white;
+    text-decoration: none;
+    padding: 15px 30px;
+    margin: 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.manage-shipments {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: white;
+}
+
+.manage-shipments h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.feature-item {
+    background-color: #e6e6fa; /* Fondo lila claro */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 150px;
+}
+
+.feature-item i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #89449c; /* Verde */
+}
+
+footer {
+    background-color: #6a0dad; /* Lila */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Estilos Responsivos */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav, .cta-buttons {
+        display: none;
+    }
+
+    .hamburger-menu {
+        display: flex;
+    }
+
+    nav.open, .cta-buttons.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        background-color: #6a0dad; /* Lila */
+        border-radius: 5px;
+        padding: 10px;
+        width: calc(100% - 40px);
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    nav ul li {
+        text-align: right;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        gap: 10px;
+        text-align: right;
+        margin-top: 10px;
+    }
+
+    .hero {
+        padding: 50px 20px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero-buttons .hero-button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 16px;
+    }
+
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-item {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 10px;
+    }
+
+    .hero h1 {
+        font-size: 24px;
+    }
+
+    .hero-buttons .hero-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .features {
+        gap: 10px;
+    }
+}
+
+
+.btn-outline-home {
+    color: #6a0dad;
+    border-color: #6a0dad;
+    background: transparent;
+  }
+  .btn-outline-home:hover {
+    color: #fff;
+    background-color: #750ebe;
+    border-color: #750ebe;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+    transform: translateY(-1px);
+  }
+  .btn-check:focus + .btn-outline-home, .btn-outline-home:focus {
+    color: #fff;
+    background-color: #750ebe;
+    border-color: #750ebe;
+    box-shadow: none;
+    transform: translateY(0);
+  }
+  .btn-check:checked + .btn-outline-home, .btn-check:active + .btn-outline-home, .btn-outline-home:active, .btn-outline-home.active, .btn-outline-home.dropdown-toggle.show {
+    color: #fff;
+    background-color: #750ebe;
+    border-color: #750ebe;
+  }
+  .btn-check:checked + .btn-outline-home:focus, .btn-check:active + .btn-outline-home:focus, .btn-outline-home:active:focus, .btn-outline-home.active:focus, .btn-outline-home.dropdown-toggle.show:focus {
+    box-shadow: none;
+  }
+  .btn-outline-home.disabled, .btn-outline-home:disabled {
+    box-shadow: none;
+  }
+  
+  .btn-outline-home .badge {
+    background: #6a0dad;
+    border-color: #6a0dad;
+    color: #fff;
+  }
+  
+  .btn-outline-home:hover .badge,
+  .btn-outline-home:focus:hover .badge,
+  .btn-outline-home:active .badge,
+  .btn-outline-home.active .badge,
+  .show > .btn-outline-home.dropdown-toggle .badge {
+    background: #fff;
+    border-color: #fff;
+    color: #6a0dad;
+  }
+
+
+  .btn-primary-home {
+    color: #fff;
+    background-color: #6a0dad;
+    border-color: #750ebe;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(105, 108, 255, 0.4);
+  }
+  .btn-primary-home:hover {
+    color: #fff;
+    background-color: #750ebe;
+    border-color: #750ebe;
+    transform: translateY(-1px);
+  }
+  .btn-check:focus + .btn-primary-home, .btn-primary-home:focus, .btn-primary-home.focus {
+    color: #fff;
+    background-color: #750ebe;
+    border-color: #750ebe;
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  .btn-check:checked + .btn-primary-home, .btn-check:active + .btn-primary-home, .btn-primary-home:active, .btn-primary-home.active, .show > .btn-primary-home.dropdown-toggle {
+    color: #fff;
+    background-color: #6a0dad;
+    border-color: #6a0dad;
+  }
+  .btn-check:checked + .btn-primary-home:focus, .btn-check:active + .btn-primary-home:focus, .btn-primary-home:active:focus, .btn-primary-home.active:focus, .show > .btn-primary-home.dropdown-toggle:focus {
+    box-shadow: none;
+  }
+  .btn-primary-home.disabled, .btn-primary-home:disabled {
+    box-shadow: none;
+  }
+
+  .buttons-hero-menu{
+    text-decoration: none;
+    padding: 15px 30px;
+    margin: 10px;
+    border-radius: 5px;
+    display: inline-block;
+  }
