@@ -18,14 +18,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Importar y usar rutas
 app.use('/api/auth', require('./src/routes/authRoutes'));
 app.use('/admin', require('./src/routes/adminRoutes'));
+app.use('/', require('./src/routes/homeRoutes')); 
 
 
 app.use('/api', require('./src/routes'));
 //./src/routes
 // Ruta para renderizar una vista de ejemplo con EJS
-app.get('/', (req, res) => {
-  res.render('home/home', { title: 'Página Principal sin login' });
-});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
