@@ -9,9 +9,9 @@ exports.login = (req, res) => {
     /* const name = req.body.name;
     const lastname = req.body.lastname;
     const age = req.body.age; */
-    const { username, age } = req.body;
-    res.send(`Registro exitoso ${username}`);
-    console.log(username)
+    const { username, lastname,age } = req.body;
+    res.send(`Registro exitoso ${username} ${lastname} con edad de ${age}`);
+    console.log(req.body)
   };
 
   exports.formRegistrar = (req, res) => {

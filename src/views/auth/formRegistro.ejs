@@ -101,7 +101,7 @@
           <h4 class="mb-2 text-center">Registro</h4>
           <p class="mb-4 text-center">Crea una nueva cuenta y Ayuda a Evaluador</p>
 
-          <form id="formAuthentication" class="mb-3" action="/auth/register" method="POST">
+          <form id="" class="mb-3" enctype="application/x-www-form-urlencoded"  action="/auth/register" method="post">
             <div class="mb-3">
               <label for="username" class="form-label">Nombre</label>
               <input
@@ -128,11 +128,11 @@
               <label for="age" class="form-label">Edad</label>
               <input
                 type="number"
-                pattern="1-100"
+                pattern=""
                 class="form-control"
                 id="age"
                 name="age"
-                placeholder="Ingresa Edad"
+                placeholder="Ingresar Edad"
                 autofocus
               />
             </div>
