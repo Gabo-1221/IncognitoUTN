@@ -15,11 +15,15 @@ app.set('views', path.join(__dirname, 'src/views'));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Importar y usar rutas
+app.use('/api/auth', require('./src/routes/authRoutes'));
+
+
 app.use('/api', require('./src/routes'));
 //./src/routes
 // Ruta para renderizar una vista de ejemplo con EJS
 app.get('/', (req, res) => {
-  res.render('index', { title: 'Mi aplicación Express' });
+  res.render('home/home', { title: 'Página Principal sin login' });
 });
 
 const PORT = process.env.PORT || 5000;
