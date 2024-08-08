@@ -9,7 +9,7 @@
   data-template="vertical-menu-template-free"
 >
   <head>
-    <%- include('layout/cabecera') %>
+    <%- include('../layout/cabecera') %>
   </head>
   <body>
     <!-- <h1><%= title %></h1>
@@ -17,11 +17,11 @@
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
-        <%- include('components/menu') %>
+        <%- include('../components/menu') %>
 
         <!-- Layout container -->
         <div class="layout-page">
-          <%- include('components/navbar') %>
+          <%- include('../components/navbar') %>
 
           <!-- Content wrapper -->
           <div class="content-wrapper">
@@ -791,7 +791,7 @@
             </div>
             <!-- / Content -->
 
-            <%- include('components/footer') %>
+            <%- include('../components/footer') %>
 
             <div class="content-backdrop fade"></div>
           </div>
@@ -814,6 +814,6 @@
       >
     </div>
 
-    <%- include('components/scriptsBody') %>
+    <%- include('../components/scriptsBody') %>
   </body>
 </html>
