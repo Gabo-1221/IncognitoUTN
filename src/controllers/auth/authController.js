@@ -1,5 +1,7 @@
 // controllers/auth/authController.js
 exports.login = (req, res) => {
+  const { email, password } = req.body;
+  console.log(email, password);
     // Lógica de autenticación para login
     res.send('Login exitoso');
   };
