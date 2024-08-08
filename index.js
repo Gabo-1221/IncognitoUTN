@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true })); // Para solicitudes URL-encoded
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Importar y usar rutas
 app.use('/auth', require('./src/routes/authRoutes'));
 app.use('/admin', require('./src/routes/adminRoutes'));
