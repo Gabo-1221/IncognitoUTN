@@ -1,0 +1,489 @@
+<!-- src/views/index.ejs -->
+<!DOCTYPE html>
+<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+    data-template="vertical-menu-template-free">
+
+<head>
+    <%- include('headerHome') %>
+</head>
+
+<body>
+    <!-- Encabezado -->
+    <div class="contenedorHome layout-page-cards-home">
+        <header>
+            <div class="logo">
+                <a href="/" class="footer-link fw-bolder" class="logo-text">
+                    <img src="../assets/img/resources/incognito.ico" alt="Logo de Mystery Shopper" />
+                    Incognito UTN
+                </a>
+            </div>
+            <nav id="nav-menu">
+                <ul>
+                    <li>
+                        <button class="btn btn-nav-link" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd">
+                            ¿Qué es un Mystery Shopper?
+                        </button>
+                    </li>
+
+                    <li>
+                        <a href="/sobreNosotros"><button class="btn btn-nav-link">Sobre nosotros</button></a>
+                    </li>
+                    <li>
+                        <a href="/auth/login"><button class="btn btn-nav-link">Iniciar Sesión</button></a>
+                    </li>
+                    <li>
+                        <a href="/auth/register"><button class="btn btn-nav-link">Registrarse</button></a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="hamburger-menu" id="hamburger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </header>
+
+        <!-- Contenido principal -->
+
+        <!-- Sección Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>"Calidad oculta, resultados visibles: Incognito UTN"</h1>
+                <p>
+                    Conviértete en un Mystery Shopper y ayuda a mejorar el servicio al cliente.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#como-funciona" class="buttons-hero-menu">
+                        <button type="button" class="btn btn-primary-home"><span
+                                class="tf-icons bx bx-pie-chart-alt"></span> Cómo Funciona</button>
+                    </a>
+                    <a href="#beneficios" class="buttons-hero-menu">
+                        <button type="button" class="btn btn-primary-home"><span
+                                class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Beneficios</button>
+                    </a>
+                    <a href="/auth/register" class="buttons-hero-menu">
+                        <button type="button" class="btn btn-primary-home"><span
+                                class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Únete Ahora</button>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div>
+                <div class="row" data-masonry='{"percentPosition": true }'>
+                    <div class="col-sm-6 col-lg-4 mb-4">
+                        <div class="card">
+                            <img class="card-img-top" src="../assets/img/resources/manos_comunidad.jpg"
+                                alt="Card image cap" />
+                            <!-- <img class="card-img-top" src="https://firebasestorage.googleapis.com/v0/b/incognitoutn-9b612.appspot.com/o/resources_app%2Fimg%2Fmanos_comunidad.jpg?alt=media&token=7882ac86-ac7f-425d-beb5-d1f1ad6352ba" alt="Card image cap" /> -->
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    Mejora la experiencia del cliente
+                                </h5>
+                                <p class="card-text">
+                                    Evalúa la calidad del servicio y la experiencia del cliente. Esto ayuda a
+                                    identificar áreas de mejora y a garantizar que los consumidores estén satisfechos
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-4">
+                        <div class="card p-3">
+                            <figure class="p-3 mb-0">
+                                <blockquote class="blockquote">
+                                    <p>
+                                        Es una herramienta valiosa para mejorar la calidad del servicio al cliente y
+                                        optimizar la gestión empresarial.
+                                    </p>
+                                </blockquote>
+                                <figcaption class="blockquote-footer mb-0 text-muted">
+                                    Incognito
+                                    <cite title="Source Title">/ PixelFusion</cite>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-4">
+                        <div class="card">
+                            <img class="card-img-top" src="../assets/img/resources/lab_evaluadora.gif"
+                                alt="Card image cap" />
+                            <!-- <img class="card-img-top" src="https://firebasestorage.googleapis.com/v0/b/incognitoutn-9b612.appspot.com/o/resources_app%2Fimg%2Flab_evaluadora.gif?alt=media&token=fd0b82df-6872-40d4-80f3-063a303d2830" alt="Card image cap" /> -->
+                            <div class="card-body">
+                                <h5 class="card-title">Incognito UTN</h5>
+                                <p class="card-text">
+                                    Obtener métricas objetivas sobre el desempeño del personal es esencial para la toma
+                                    de decisiones.
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-muted">Ultima actualización: hace 3 minutos</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-4">
+                        <div class="card bg-primary text-white text-center p-3">
+                            <figure class="mb-0">
+                                <blockquote class="blockquote">
+                                    <p>
+                                        Estamos construyendo algo increíble. ¿Te gustaría formar parte?
+                                    </p>
+                                </blockquote>
+                                <!-- <figcaption class="blockquote-footer mb-0 text-white">
+                                    Someone famous in
+                                    <cite title="Source Title">Source Title</cite>
+                                </figcaption> -->
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-4">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Evaluación externa e imparcial.</h5>
+                                <p class="card-text">
+                                    La gestión se evalúa desde la perspectiva de un cliente anónimo, brindando una
+                                    visión objetiva.
+                                </p>
+                                <!-- <p class="card-text">
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </p> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-lg-4 mb-4">
+                        <div class="card bg-primary text-white text-center p-3">
+                            <figure class="mb-0">
+                                <blockquote class="blockquote">
+                                    <p>
+                                        Ayúdanos a brindar una mejor experiencia al cliente. ¡Sé un mystery shopper!
+                                    </p>
+                                </blockquote>
+                                <!-- <figcaption class="blockquote-footer mb-0 text-muted">
+                                    Someone famous in
+                                    <cite title="Source Title">Source Title</cite>
+                                </figcaption> -->
+                            </figure>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Motivación del equipo.</h5>
+                                <p class="card-text">
+                                    Los resultados pueden utilizarse para reconocer el buen desempeño de los empleados y
+                                    motivar al equipo a mejorar.
+                                </p>
+                                <!-- <p class="card-text">
+                                    <small class="text-muted">Last updated 3 mins ago</small>
+                                </p> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toggle end "'¿Que es un mystery shopper?" -->
+            <div class="col-lg-3 col-md-6">
+                <div class="mt-3">
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd"
+                        aria-labelledby="offcanvasEndLabel">
+                        <div class="offcanvas-header">
+                            <h5 id="offcanvasEndLabel" class="offcanvas-title">
+                                ¿Qué es un Mystery Shopper?
+                            </h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body my-auto mx-0 flex-grow-0">
+                            <video class="w-100 mb-3 rounded-corners" autoplay loop muted>
+                                <!-- <source src="../assets/media/mujer_califica.mp4" type="video/mp4"> -->
+                                <source
+                                    src="https://firebasestorage.googleapis.com/v0/b/incognitoutn-9b612.appspot.com/o/mujer_califica.mp4?alt=media&token=e266af23-07c1-402f-9c5e-2cb5d2cb4221"
+                                    type="video/mp4" />
+                                Tu navegador no soporta el elemento video.
+                            </video>
+                            <a href="https://www.freepik.es/video-gratis/mujer-negocios-sonrie-mientras-consulta-documentos-trabajo-cafeteria-1_167260#fromView=search&page=1&position=49&uuid=f4fe4725-f995-440c-8abb-9b3cc5987588"
+                                class="invisible">
+                                Vídeo de freepik
+                            </a>
+                            <p class="text-center">
+                                Un mystery shopper, comprador misterioso o cliente incógnito es una persona anónima,
+                                encargada y enviada por una
+                                empresa para comprobar la calidad y el buen funcionamiento de sus servicios comerciales
+                                (vendedores, asesores,
+                                cajeros, etc.) o de información (servicio postventa, por ejemplo).
+                            </p>
+                            <button type="button" class="btn btn-primary mb-2 d-grid w-100" data-bs-dismiss="offcanvas">
+                                ¡Lo tengo!
+                            </button>
+                            <!-- <button type="button" class="btn btn-outline-secondary d-grid w-100" data-bs-dismiss="offcanvas">
+                                    Cancel
+                                </button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end Toggle end -->
+            <!-- Secciones -->
+            <!-- Sección a la que quieres dirigir al usuario -->
+            <div class="seo-section" id="como-funciona">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2>¿Cómo funciona?</h2>
+                            <p>
+                                El Mystery Shopper interactúa con los empleados, haciéndose pasar por un cliente común.
+                                Evalúa la amabilidad, el conocimiento del producto y la capacidad de respuesta.
+                            </p>
+                            <button class="btn btn-primary-home" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasComoFunciona" aria-controls="offcanvasComoFunciona">LEER
+                                MAS</button>
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <img src="../assets/img/resources/manopc.jpg" alt="Imagen 1" class="img-fluid redondeo" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="seo-section" id="beneficios">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="../assets/img/resources/stonks.jpg" alt="Imagen 2" class="img-fluid redondeo" />
+                        </div>
+                        <div class="col-md-6">
+                            <h2>Beneficios</h2>
+                            <p>
+                                - Al evaluar la experiencia de compra, identifica áreas donde el equipo necesita
+                                mejorar.
+                                <br>
+                                - Permite medir aspectos específicos, como la calidad del servicio, de acuerdo con los
+                                objetivos de la empresa.
+                            </p>
+                            <button class="btn btn-primary-home" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasBeneficios" aria-controls="offcanvasBeneficios">LEER
+                                MAS</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End secciones -->
+            <!-- Team Start -->
+            <div class="container-xxl py-5">
+                <div class="container py-5 px-lg-5">
+                    <div class="wow fadeInUp" data-wow-delay="0.1s">
+                        <p class="section-title text-secondary justify-content-center"><span></span>Nuestro
+                            equipo<span></span></p>
+                        <h1 class="text-center mb-5">Los miembros de nuestro equipo</h1>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="team-item bg-light rounded">
+                                <div class="text-center border-bottom p-4">
+                                    <img class="img-fluid rounded-circle mb-4" src="../assets/img/resources/team-1.jpg"
+                                        alt="" />
+                                    <h5>Osvaldo Vilalba</h5>
+                                    <span>Desarrollador Web</span>
+                                </div>
+                                <div class="d-flex justify-content-center p-4">
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-github"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-facebook"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-linkedin"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="team-item bg-light rounded">
+                                <div class="text-center border-bottom p-4">
+                                    <img class="img-fluid rounded-circle mb-4" src="../assets/img/resources/team-2.jpg"
+                                        alt="" />
+                                    <h5>Gabriela Acosta</h5>
+                                    <span>Desarrollador Web</span>
+                                </div>
+                                <div class="d-flex justify-content-center p-4">
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-github"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-facebook"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-linkedin"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                            <div class="team-item bg-light rounded">
+                                <div class="text-center border-bottom p-4">
+                                    <img class="img-fluid rounded-circle mb-4" src="../assets/img/resources/team-3.jpg"
+                                        alt="" />
+                                    <h5>Gabriel Licona</h5>
+                                    <span>Desarrollador Web</span>
+                                </div>
+                                <div class="d-flex justify-content-center p-4">
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-github"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-facebook"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-linkedin"></i></a>
+                                    <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Team End -->
+            <!-- End Offcanvas -->
+            <div class="col-lg-3 col-md-6">
+                <div class="mt-3">
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasComoFunciona"
+                        aria-labelledby="offcanvasEndLabel">
+                        <div class="offcanvas-header">
+                            <h5 id="offcanvasEndLabel" class="offcanvas-title">
+                                ¿Cómo funciona?
+                            </h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body my-auto mx-0 flex-grow-0">
+                            <div style="display: flex; align-items: center;">
+                                <video class="w-50 rounded-corners" autoplay loop muted>
+                                    <source src="../assets/media/perfil.mp4" type="video/mp4" />
+                                    Tu navegador no soporta el elemento video.
+                                </video>
+                                <div>
+                                    <p style="font-size: 15px;">Crea tu cuenta 😃</p>
+                                </div>
+                            </div>
+                            <a href="https://www.flaticon.es/iconos-animados-gratis/usuario"
+                                title="usuario iconos animados" class="invisible">Usuario iconos animados creados por
+                                Freepik - Flaticon</a>
+                            <br>
+                            <div style="display: flex; align-items: center;">
+                                <div>
+                                    <p style="font-size: 15px;">Selecciona una encuesta disponible 🤔</p>
+                                </div>
+                                <video class="w-50 rounded-corners" autoplay loop muted>
+                                    <source src="../assets/media/hacer-clic.mp4" type="video/mp4" />
+                                    Tu navegador no soporta el elemento video.
+                                </video>
+                            </div>
+                            <a href="https://www.flaticon.es/iconos-animados-gratis/dedo" title="dedo iconos animados"
+                                class="invisible">Dedo iconos animados creados por Freepik - Flaticon</a>
+                            <br>
+                            <div style="display: flex; align-items: center;">
+                                <video class="w-50 rounded-corners" autoplay loop muted>
+                                    <source src="../assets/media/cuaderno.mp4" type="video/mp4" />
+                                    Tu navegador no soporta el elemento video.
+                                </video>
+                                <div>
+                                    <p style="font-size: 15px;">Responde de manera sincera y secreta 🤫</p>
+                                </div>
+                            </div>
+                            <a href="https://www.flaticon.es/iconos-animados-gratis/escribir"
+                                title="escribir iconos animados" class="invisible">Escribir iconos animados creados por
+                                Freepik - Flaticon</a>
+                            <br>
+                            <div style="display: flex; align-items: center;">
+                                <div>
+                                    <p style="font-size: 15px;">Obten resultados finales 🤓</p>
+                                </div>
+                                <video class="w-50 rounded-corners" autoplay loop muted>
+                                    <source src="../assets/media/grafico-de-linea.mp4" type="video/mp4" />
+                                    Tu navegador no soporta el elemento video.
+                                </video>
+                            </div>
+                            <a href="https://www.flaticon.es/iconos-animados-gratis/estadisticas"
+                                title="estadísticas iconos animados" class="invisible">Estadísticas iconos animados
+                                creados por Freepik - Flaticon</a>
+                            <button type="button" class="btn btn-primary-home mb-2 d-grid w-100"
+                                data-bs-dismiss="offcanvas">
+                                ¡Lo tengo!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Beneficios -->
+            <div class="col-lg-3 col-md-6">
+                <div class="mt-3">
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasBeneficios"
+                        aria-labelledby="offcanvasEndLabel">
+                        <div class="offcanvas-header">
+                            <h5 id="offcanvasEndLabel" class="offcanvas-title">
+                                Beneficios
+                            </h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body my-auto mx-0 flex-grow-0">
+                            <video class="w-100 mb-3 rounded-corners redondeo" autoplay loop muted>
+                                <source
+                                    src="https://firebasestorage.googleapis.com/v0/b/incognitoutn-9b612.appspot.com/o/resources_app%2Fmedia%2Ftrato.mp4?alt=media&token=3b492d86-6495-42e9-b178-5ebcedf05738"
+                                    type="video/mp4" />
+                                Tu navegador no soporta el elemento video.
+                            </video>
+                            <a href="https://www.freepik.es/video-gratis/dos-personas-sellando-acuerdo_2889975#fromView=search&page=1&position=2&uuid=bb43424b-19b1-4f13-b748-e203541a2c24"
+                                class="invisible">Vídeo de freepik</a>
+                            <p class="text-center">
+                                <b>- Aplicable a cualquier canal de venta y categoría:</b><br> Puede utilizarse en
+                                diversos sectores y canales de venta.
+                            </p>
+                            <p class="text-center">
+                                <b>- Evaluación externa desde la perspectiva del comprador:</b><br> La gestión se evalúa
+                                desde el punto de vista de un shopper.
+                            </p>
+                            <p class="text-center">
+                                <b>- Garantiza la mejora continua en la calidad del servicio:</b><br> Contribuye a
+                                optimizar la experiencia del cliente.
+                            </p>
+                            <button type="button" class="btn btn-primary-home mb-2 d-grid w-100"
+                                data-bs-dismiss="offcanvas">
+                                ¡Lo tengo!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+                <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                    <div class="mb-2 mb-md-0">
+                        ©
+                        <script>
+                            document.write(new Date().getFullYear()); 
+                        </script>
+                        ,
+                        <a href="https://themeselection.com" target="_blank"
+                            class="footer-link fw-bolder">PixelFusion</a>
+                    </div>
+                    <div>
+                        <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd">¿Qué
+                            es un Mystery Shopper?</a>
+                        <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">Sobre
+                            nosotros</a>
+
+                        <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+                            target="_blank" class="footer-link me-4">Aviso de privacidad</a>
+
+                        <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                            target="_blank" class="footer-link me-4">Terminos y condiciones </a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <%- include('scriptsHome') %>
+        <!-- Vendors JS -->
+        <script src="../assets/vendor/libs/masonry/masonry.js"></script>
+        <!-- Scripts -->
+        <script>
+            document.getElementById("hamburger-menu").addEventListener("click", function () {
+                var navMenu = document.getElementById("nav-menu");
+                navMenu.classList.toggle("open");
+            });
+        </script>
+</body>
+
+</html>
