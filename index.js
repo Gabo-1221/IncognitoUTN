@@ -25,6 +25,8 @@ app.use('/admin', require('./src/routes/adminRoutes'));
 app.use('/evaluador', require('./src/routes/evaluerRoutes'));
 app.use('/', require('./src/routes/homeRoutes'));
 
+/* comentario hecho desde valdo :v */
+
 
 // Manejar rutas no encontradas
 app.use((req, res) => {
