@@ -1,0 +1,274 @@
+<!-- src/views/index.ejs -->
+<!DOCTYPE html>
+<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
+
+<head>
+  <%- include('headerHome') %>
+    <!-- <link rel="stylesheet" href="../assets/css/nosotrosStyles.css" /> -->
+</head>
+
+<body>
+  <div class="contenedorHome layout-page-cards-home">
+    <!-- Encabezado -->
+    <header>
+      <div class="logo">
+        <a href="/" class="footer-link fw-bolder">
+          <img src="../assets/img/resources/incognito.ico" alt="Logo de Mystery Shopper" />
+          Incognito UTN
+        </a>
+      </div>
+      <nav id="nav-menu">
+        <ul>
+          <li>
+            <button class="btn btn-nav-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd"
+              aria-controls="offcanvasEnd">
+              ¿Qué es un Mystery Shopper?
+            </button>
+          </li>
+
+          <li>
+            <a href="/sobreNosotros"><button class="btn btn-nav-link">Sobre nosotros</button></a>
+          </li>
+          <li>
+            <a href="/auth/login"><button class="btn btn-nav-link">Iniciar Sesión</button></a>
+          </li>
+          <li>
+            <a href="/auth/register"><button class="btn btn-nav-link">Registrarse</button></a>
+          </li>
+        </ul>
+      </nav>
+      <div class="hamburger-menu" id="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <!-- Sección Hero -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Incognito UTN: Sobre nosotros</h1>
+      </div>
+    </section>
+    <!-- End section hero -->
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+      <div class="d-flex justify-content-center">
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+          <div class="team-item bg-light rounded">
+            <div class="text-center border-bottom p-4">
+              <img class="img-fluid rounded-circle mb-4" src="../assets/img/resources/logo_pixel.jpeg" alt="" />
+              <h3>PixelFusion</h3>
+            </div>
+            <div class="card-body">
+              <p class="card-text">Un equipo de desarrolladores de alto rendimiento, ofreciendo soluciones optimas y seguras. 😉</p>
+            </div>
+            <!-- <ul class="list-group list-group-flush">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Vestibulum at eros</li>
+            </ul> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Toggle end "'¿Que es un mystery shopper?" -->
+      <div class="col-lg-3 col-md-6">
+        <div class="mt-3">
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel">
+            <div class="offcanvas-header">
+              <h5 id="offcanvasEndLabel" class="offcanvas-title">
+                ¿Qué es un Mystery Shopper?
+              </h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body my-auto mx-0 flex-grow-0">
+              <video class="w-100 mb-3 rounded-corners" autoplay loop muted>
+                <!-- <source src="../assets/media/mujer_califica.mp4" type="video/mp4"> -->
+                <source
+                  src="https://firebasestorage.googleapis.com/v0/b/incognitoutn-9b612.appspot.com/o/mujer_califica.mp4?alt=media&token=e266af23-07c1-402f-9c5e-2cb5d2cb4221"
+                  type="video/mp4" />
+                Tu navegador no soporta el elemento video.
+              </video>
+              <a href="https://www.freepik.es/video-gratis/mujer-negocios-sonrie-mientras-consulta-documentos-trabajo-cafeteria-1_167260#fromView=search&page=1&position=49&uuid=f4fe4725-f995-440c-8abb-9b3cc5987588"
+                class="invisible">
+                Vídeo de freepik
+              </a>
+              <p class="text-center">
+                Un mystery shopper, comprador misterioso o cliente incógnito es una persona anónima,
+                encargada y enviada por una
+                empresa para comprobar la calidad y el buen funcionamiento de sus servicios comerciales
+                (vendedores, asesores,
+                cajeros, etc.) o de información (servicio postventa, por ejemplo).
+              </p>
+              <button type="button" class="btn btn-primary mb-2 d-grid w-100" data-bs-dismiss="offcanvas">
+                ¡Lo tengo!
+              </button>
+              <!-- <button type="button" class="btn btn-outline-secondary d-grid w-100" data-bs-dismiss="offcanvas">
+                            Cancel
+                        </button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end Toggle end -->
+      <!-- Quienes somos -->
+      <div class="seo-section" id="beneficios">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <img src="../assets/img/resources/dev.jpg" alt="Imagen 2" class="img-fluid redondeo" />
+            </div>
+            <div class="col-md-6">
+              <h2>¿Quienes somos?</h2>
+              <p>
+                En Incognito UTN hemos creado una aplicación web que permite a las empresas evaluar la calidad de sus servicios a través de la figura del
+                 Mystery Shopper. Nuestro equipo de desarrolladores web se ha encargado de crear una plataforma intuitiva y fácil de usar, que permite a las
+                  empresas contratar los servicios de un Mystery Shopper de forma rápida y sencilla. Nuestra misión es ayudar a las empresas a mejorar la calidad
+                   de sus servicios y a aumentar la satisfacción de sus clientes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end quienes somos -->
+
+      <!-- mision vision  -->
+      <div class="col-md mb-4 mb-md-0">
+        <h3>Nuestra visión y misión</h3>
+        <div class="accordion mt-3" id="accordionExample">
+          <div class="card accordion-item active">
+            <h2 class="accordion-header" id="headingOne">
+              <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne"
+                aria-expanded="true" aria-controls="accordionOne">
+                Visión
+              </button>
+            </h2>
+
+            <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                Nuestra visión es ser la plataforma líder en la contratación de Mystery Shoppers en todo el mundo.
+                Queremos ayudar a las empresas a mejorar la calidad de sus servicios y a aumentar la satisfacción de sus clientes.
+              </div>
+            </div>
+          </div>
+          <div class="card accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
+                Misión
+              </button>
+            </h2>
+            <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                Nuestra misión es ayudar a las empresas a mejorar la calidad de sus servicios a través de la figura del Mystery Shopper.
+                Queremos ser un aliado estratégico para las empresas, ayudándolas a identificar áreas de mejora y a implementar acciones correctivas.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Team Start -->
+      <div class="container-xxl py-5">
+        <div class="container py-5 px-lg-5">
+          <div class="wow fadeInUp" data-wow-delay="0.1s">
+            <p class="section-title text-secondary justify-content-center"><span></span>Nuestro
+              equipo<span></span></p>
+            <h1 class="text-center mb-5">Los miembros de nuestro equipo</h1>
+          </div>
+          <div class="row g-4">
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+              <div class="team-item bg-light rounded">
+                <div class="text-center border-bottom p-4">
+                  <img class="img-fluid rounded-circle mb-4" src="../assets/img/resources/team-1.jpg" alt="" />
+                  <h5>Osvaldo Vilalba</h5>
+                  <span>Desarrollador Web</span>
+                </div>
+                <div class="d-flex justify-content-center p-4">
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-github"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-facebook"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-linkedin"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+              <div class="team-item bg-light rounded">
+                <div class="text-center border-bottom p-4">
+                  <img class="img-fluid rounded-circle mb-4" src="../assets/img/resources/team-2.jpg" alt="" />
+                  <h5>Gabriela Acosta</h5>
+                  <span>Desarrollador Web</span>
+                </div>
+                <div class="d-flex justify-content-center p-4">
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-github"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-facebook"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-linkedin"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+              <div class="team-item bg-light rounded">
+                <div class="text-center border-bottom p-4">
+                  <img class="img-fluid rounded-circle mb-4" src="../assets/img/resources/team-3.jpg" alt="" />
+                  <h5>Gabriel Licona</h5>
+                  <span>Desarrollador Web</span>
+                </div>
+                <div class="d-flex justify-content-center p-4">
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-github"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-facebook"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-linkedin"></i></a>
+                  <a class="btn btn-square mx-1" href=""><i class="fi fi-brands-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Team End -->
+    <!-- Footer -->
+    <footer class="content-footer footer bg-footer-theme">
+      <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+        <div class="mb-2 mb-md-0">
+          ©
+          <script>
+            document.write(new Date().getFullYear()); 
+          </script>
+          ,
+          <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">PixelFusion</a>
+        </div>
+        <div>
+          <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank"
+            data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd">¿Qué
+            es un Mystery Shopper?</a>
+
+          <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/" target="_blank"
+            class="footer-link me-4">Aviso de privacidad</a>
+
+          <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues" target="_blank"
+            class="footer-link me-4">Terminos y condiciones </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  </div>
+
+
+
+  <%- include('scriptsHome') %>
+    <!-- Scripts -->
+    <script>
+      document.getElementById('hamburger-menu').addEventListener('click', function () {
+        var navMenu = document.getElementById('nav-menu');
+        navMenu.classList.toggle('open');
+      });
+    </script>
+</body>
+
+</html>

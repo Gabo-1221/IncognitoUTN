@@ -1,17 +1,28 @@
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
+} */
 
-body {
+/* body {
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
     color: #333;
+} */
+
+html {
+  scroll-behavior: smooth;
 }
 
-header {
-    background-color: #6a0dad; /* Lila */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  padding-top: 70px; /* Ajusta este valor según la altura de tu header */
+}
+
+/* header {
+    background-color: #6a0dad;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -19,9 +30,27 @@ header {
     padding: 10px 20px;
     position: relative;
 }
-
+ */
+ header {
+  background-color: #6a0dad; /* Lila */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  position: fixed; /* Agregar esta línea */
+  top: 0; /* Posicionar el header en la parte superior */
+  left: 0; /* Posicionar el header desde la izquierda */
+  width: 100%; /* Asegurarse de que el header ocupe todo el ancho */
+  z-index: 100; /* Asegurarse de que el header esté por encima de otros elementos */
+}
 header .logo img {
     height: 40px;
+}
+
+.logo-text{
+  text-decoration: none; /* Eliminar la línea subrayada */
+  color: white; /* Cambiar el color del texto a blanco */
 }
 
 nav {
@@ -68,7 +97,8 @@ nav ul li a {
 }
 
 .hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/img/resources/image_hero.jpg') no-repeat center center/cover;
+    /* background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/img/resources/image_hero.jpg') no-repeat center center/cover; */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://firebasestorage.googleapis.com/v0/b/incognitoutn-9b612.appspot.com/o/resources_app%2Fimg%2Fimage_hero.jpg?alt=media&token=d14c442f-3099-4932-8a47-fc0af7cb22a0') no-repeat center center/cover;
     color: white;
     text-align: center;
     padding: 100px 20px;
@@ -90,46 +120,43 @@ nav ul li a {
     display: inline-block;
 }
 
-.manage-shipments {
-    padding: 50px 20px;
-    text-align: center;
-    background-color: white;
+/* .manage-shipments {
+    padding: 80px 50px;
+    background: url('/assets/img/resources/triangulo_morado.jpg') no-repeat center center;
+    background-size: cover;
+    color: white;
+} 
+*/
+
+
+
+/* Estilos para la información adicional */
+.additional-info {
+    display: none;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #555;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s ease, max-height 0.5s ease;
 }
 
-.manage-shipments h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
+/* Mostrar la información adicional al hacer clic */
+.feature-item.active .additional-info {
+    display: block;
+    opacity: 1;
+    max-height: 300px; /* Altura máxima cuando está desplegada */
 }
 
-.features {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.feature-item {
-    background-color: #e6e6fa; /* Fondo lila claro */
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    width: 150px;
-}
-
-.feature-item i {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #89449c; /* Verde */
-}
-
-footer {
-    background-color: #6a0dad; /* Lila */
+/* footer {
+    background-color: #6a0dad; 
     color: white;
     text-align: center;
     padding: 20px;
     margin-top: 20px;
 }
-
+ */
 /* Estilos Responsivos */
 @media (max-width: 768px) {
     header {
@@ -304,3 +331,130 @@ footer {
     border-radius: 5px;
     display: inline-block;
   }
+
+  .contenedorHome{
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .btn-nav-link {
+    color: #fff;
+    background-color: #9b39e1;
+    border-color: #9b39e1;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(182, 3, 236, 0.4);
+  }
+  .btn-nav-link:hover {
+    color: #fff;
+    background-color: #c53fed;
+    border-color: #c53fed;
+    transform: translateY(-1px);
+  }
+  .btn-check:focus + .btn-nav-link, .btn-nav-link:focus, .btn-nav-link.focus {
+    color: #fff;
+    background-color: #c53fed;
+    border-color: #c53fed;
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  .btn-check:checked + .btn-nav-link, .btn-check:active + .btn-nav-link, .btn-nav-link:active, .btn-nav-link.active, .show > .btn-nav-link.dropdown-toggle {
+    color: #fff;
+    background-color: #9b39e1;
+    border-color: #9b39e1;
+  }
+  .btn-check:checked + .btn-nav-link:focus, .btn-check:active + .btn-nav-link:focus, .btn-nav-link:active:focus, .btn-nav-link.active:focus, .show > .btn-nav-link.dropdown-toggle:focus {
+    box-shadow: none;
+  }
+  .btn-nav-link.disabled, .btn-nav-link:disabled {
+    box-shadow: none;
+  }
+  
+  .btn-outline-info {
+    color: #9b39e1;
+    border-color: #9b39e1;
+    background: transparent;
+  }
+  .btn-outline-info:hover {
+    color: #fff;
+    background-color: #c53fed;
+    border-color: #c53fed;
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(3, 195, 236, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .layout-page-cards-home {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: stretch;
+    padding: 0;
+    width: 100vw; /* 90% del ancho de la pantalla */
+    height: 100vh; /* 90% del alto de la pantalla */
+    margin: auto; /* Centrar la página */
+    box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
+    min-width: 0;
+    max-width: 100%;
+    flex-direction: column;
+}
+
+/* Si necesitas eliminar cualquier padding adicional */
+.layout-page-cards-home {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Transiciones suaves para cambios de estado */
+.layout-transitioning.layout-page-cards-home {
+    transition-duration: 0.3s;
+    transition-property: padding-left, padding-right, width, height;
+}
+
+@media (max-width: 1199.98px) {
+    .layout-page-cards-home {
+        padding-top: 0 !important;
+    }
+}
+
+/* Asegura que el video tenga esquinas redondeadas y se ajuste al contenedor */
+.rounded-corners {
+    border-radius: 15px; /* Ajusta el radio de las esquinas según tus necesidades */
+    object-fit: cover; /* Asegura que el video se cubra sin deformarse */
+    width: 100%;
+    height: auto; /* Ajusta la altura del video automáticamente */
+}
+
+/* Opcional: Si necesitas asegurarte de que el video se repita y ajuste al contenedor */
+video {
+    background-size: cover;
+}
+
+.invisible {
+    display: none;
+}
+
+.seo-section {
+  padding: 50px 0; 
+  background-color: #eceaed; 
+  border-radius: 20px; 
+  margin: 30px 0; 
+}
+
+.seo-section .row {
+  align-items: center; 
+}
+
+.seo-section h2 {
+  margin-bottom: 20px; 
+}
+
+.seo-section p {
+  margin-bottom: 30px; 
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.redondeo{
+  border-radius: 20px;
+}
