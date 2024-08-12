@@ -24,3 +24,15 @@ exports.getService = (req , res ) => {
 exports.getFormQuestion = (req , res ) => {
   res.render('forms/formEncuesta',{title: 'Creacion de Encuesta'})
 };
+
+exports.getFormAsk = (req , res ) => {
+  res.render('forms/formPregunta',{title: 'Creacion de Pregunta'})
+};
+
+exports.getCategoria = (req , res ) => {
+  res.render('forms/formCategoria',{title: 'Creacion de Categoria'})
+};
+
+exports.getPerfil = (req , res ) => {
+  res.render('perfil/perfil',{title: 'Mi perfil'})
+};

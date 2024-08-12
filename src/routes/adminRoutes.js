@@ -11,5 +11,8 @@ router.get('/listaEncuesta',adminController.getQuestions);
 router.get('/listaPreguntas',adminController.getAsks);
 router.get('/listaCategorias',adminController.getService);
 router.get('/formEncuesta',adminController.getFormQuestion);
+router.get('/formPregunta',adminController.getFormAsk);
+router.get('/formCategoria',adminController.getCategoria);
+router.get('/perfil', adminController.getPerfil)
 
 module.exports = router;
