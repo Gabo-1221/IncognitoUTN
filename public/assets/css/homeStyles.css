@@ -98,7 +98,7 @@ nav ul li a {
 
 .hero {
     /* background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/img/resources/image_hero.jpg') no-repeat center center/cover; */
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://firebasestorage.googleapis.com/v0/b/incognitoutn-9b612.appspot.com/o/resources_app%2Fimg%2Fimage_hero.jpg?alt=media&token=d14c442f-3099-4932-8a47-fc0af7cb22a0') no-repeat center center/cover;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://firebasestorage.googleapis.com/v0/b/incognitoutn-9b612.appspot.com/o/resources_app%2Fimg%2Fimage_hero_ligero.jpg?alt=media&token=363c4bf2-74b3-4e53-af7d-5b19398533ad') no-repeat center center/cover;
     color: white;
     text-align: center;
     padding: 100px 20px;
