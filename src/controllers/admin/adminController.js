@@ -25,6 +25,10 @@ exports.getFormQuestion = (req , res ) => {
   res.render('forms/formEncuesta',{title: 'Creacion de Encuesta'})
 };
 
+exports.getFormQuestionP2 = (req , res ) => {
+  res.render('forms/formEncuestaP2',{title: 'Creacion de Encuesta'})
+};
+
 exports.getFormAsk = (req , res ) => {
   res.render('forms/formPregunta',{title: 'Creacion de Pregunta'})
 };
