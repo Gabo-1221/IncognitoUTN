@@ -30,7 +30,8 @@ app.use('/', require('./src/routes/homeRoutes'));
 
 // Manejar rutas no encontradas
 app.use((req, res) => {
-  res.status(404).send('No se encuentra la ruta establecida');
+  /* res.status(404).send('No se encuentra la ruta establecida'); */
+  res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c' });
 });
 
 const PORT = process.env.PORT || 5000;
