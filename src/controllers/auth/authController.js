@@ -16,16 +16,14 @@ exports.login = (req, res) => {
 
 // Muestra el formulario de inicio de sesión
 exports.formLogin = (req, res) => {
-  res.render('auth/formLogin', { title: 'Inicio de sesión' });
+  res.render('auth/formLogin', { title: 'Incognito UTN | Iniciar sesión' });
 };
 
 // Maneja el inicio de sesión
 exports.login = (req, res) => {
   const { email, password } = req.body;
-  console.log('Email:', email);
-  console.log('Password:', password);
   // Lógica de autenticación para login
-  res.send('Login exitoso email: ' + email);
+  //res.send('Login exitoso email: ' + email);
 };
 
 // Maneja el registro de usuarios
