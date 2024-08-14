@@ -1,5 +1,8 @@
 // src/controllers/admin/adminController.js
-
+const Pregunta = require('../../models/Pregunta')
+const Categoria = require('../../models/Categoria');
+const Area = require('../../models/Area');
+const Usuario = require('../../models/Usuario');
 // Controlador para renderizar la vista homeAdmin
 exports.getHomeAdmin = (req, res) => {
   const userId = res.locals.userId; // Obtiene el userId de res.locals
@@ -9,20 +12,44 @@ exports.getHomeAdmin = (req, res) => {
   });
 };
   
-exports.getUsers = (req , res ) => {
-    res.render('admin/listaUsuario',{title: 'Lista Usuario'})
+exports.getUsers = async (req , res ) => {
+  try {
+    const usuarios = await Usuario.find()
+    res.render('admin/listaUsuario',{title: 'Lista Usuario',usuarios:usuarios})
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 exports.getQuestions = (req , res ) => {
   res.render('admin/listaEncuesta',{title: 'Lista Encuesta'})
 };
 
-exports.getAsks = (req , res ) => {
-  res.render('admin/listaPreguntas',{title: 'Lista Preguntas'})
+exports.getAsks = async (req , res ) => {
+try {
+  const preguntas = await Pregunta.find()
+  res.render('admin/listaPreguntas',{title: 'Lista Preguntas', preguntas:preguntas})
+} catch (error) {
+  console.log(error)
+}
 };
 
-exports.getService = (req , res ) => {
-  res.render('admin/listaCategorias',{title: 'Lista Servicios'})
+exports.getService = async (req , res ) => {
+try {
+  const categorias = await Categoria.find()
+  res.render('admin/listaCategorias',{title: 'Lista Categoria', categorias:categorias })
+} catch (error) {
+  console.log(error)
+}
+};
+
+exports.getArea = async (req , res ) => {
+try {
+  const areas = await Area.find();
+  res.render('admin/listaAreas',{title: 'Lista Areas', areas: areas})
+} catch (error) {
+  console.log(error)
+}
 };
 
 exports.getFormQuestion = (req , res ) => {

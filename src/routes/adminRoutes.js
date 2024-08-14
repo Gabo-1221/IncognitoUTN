@@ -10,6 +10,7 @@ router.get('/listaUsuario',adminController.getUsers);
 router.get('/listaEncuesta',adminController.getQuestions);
 router.get('/listaPreguntas',adminController.getAsks);
 router.get('/listaCategorias',adminController.getService);
+router.get('/listaAreas',adminController.getArea);
 router.get('/formEncuesta',adminController.getFormQuestion);
 router.get('/formEncuestaP2',adminController.getFormQuestionP2);
 router.get('/formPregunta',adminController.getFormAsk);

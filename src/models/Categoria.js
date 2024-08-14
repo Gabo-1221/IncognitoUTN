@@ -5,4 +5,4 @@ const categoriaSchema = new mongoose.Schema({
   id_creo: { type: Number, default: null },
 });
 
-module.exports = mongoose.model('Categoria', categoriaSchema);
+module.exports = mongoose.model('categorias', categoriaSchema);
