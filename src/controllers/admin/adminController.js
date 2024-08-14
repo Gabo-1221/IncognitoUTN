@@ -2,8 +2,12 @@
 
 // Controlador para renderizar la vista homeAdmin
 exports.getHomeAdmin = (req, res) => {
-    res.render('admin/homeAdmin', { title: 'Página de Administración' });
-  };
+  const userId = res.locals.userId; // Obtiene el userId de res.locals
+  res.render('admin/homeAdmin', { 
+    title: 'Página de Administración', 
+    userId: userId  // Pasa el userId a la vista
+  });
+};
   
 exports.getUsers = (req , res ) => {
     res.render('admin/listaUsuario',{title: 'Lista Usuario'})

@@ -15651,6 +15651,8 @@ html:not(.layout-footer-fixed) .content-wrapper {
 .app-brand-link {
   display: flex;
   align-items: center;
+  gap: 5px;
+  padding: 5px;
 }
 
 .app-brand-logo {
@@ -15659,6 +15661,7 @@ html:not(.layout-footer-fixed) .content-wrapper {
   flex-shrink: 0;
   overflow: hidden;
   min-height: 1px;
+  margin-right: -10px;
 }
 .app-brand-logo img,
 .app-brand-logo svg {

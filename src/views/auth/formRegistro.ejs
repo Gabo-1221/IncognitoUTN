@@ -14,9 +14,19 @@
       <!-- Register Card -->
       <div class="card">
         <div class="card-body" style="border: solid; border-radius: 10px; border-color: blueviolet;">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center">
+            <a href="/" class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">
+                <img src="../assets/img/resources/incognito.ico" alt="Incognito app" width="30%">
+              </span>
+              <span class="app-brand-text demo text-body fw-bolder">Incognito UTN</span>
+            </a>
+          </div>
+          <!-- /Logo -->
 
           <h4 class="mb-2 text-center">Registro</h4>
-          <p class="mb-4 text-center">Crea una nueva cuenta y Ayuda a Evaluador</p>
+          <p class="mb-4 text-center">Crea una nueva cuenta y Ayuda a Evaluar</p>
 
           <form id="" class="mb-3" enctype="application/x-www-form-urlencoded"  action="/auth/register" method="post">
             <div class="mb-3">
@@ -42,13 +52,12 @@
               />
             </div>
             <div class="mb-3">
-              <label for="age" class="form-label">Edad</label>
+              <label for="fecha_nac" class="form-label">Fecha de nacimiento</label>
               <input
-                type="number"
-                pattern=""
+                type="text"
                 class="form-control"
-                id="age"
-                name="age"
+                id="fecha_nac"
+                name="fecha_nac"
                 placeholder="Ingresar Edad"
                 autofocus
               />
@@ -83,16 +92,17 @@
             <div class="d-flex justify-content-center">
               <button class="btn btn-danger w-50 m-1" >
                 <a href="/" style="color: inherit;" >
-                  Cancelar</button>
+                  Cancelar
                 </a>
+              </button>
               <button class="btn btn-primary w-50 m-1" type="submit" >Registrar</button>
             </div>
           </form>
 
           <p class="text-center">
-            <span>ya tienes una cuenta?</span>
-            <a href="">
-              <span>Inicia Sesion</span>
+            <span>¿Ya tienes una cuenta?</span>
+            <a href="/auth/login">
+              <span>Inicia Sesión</span>
             </a>
           </p>
         </div>
