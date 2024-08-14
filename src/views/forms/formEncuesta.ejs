@@ -1,98 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <%- include('../layout/cabecera.ejs') %>
-</head>
-<body>
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-          <!-- Menu -->
-  
 
-          <!-- / Menu -->
-  
-          <!-- Layout container -->
-          <div class="layout-page">
-            <!-- Navbar -->
-  
-            <!-- / Navbar -->
-  
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-              <!-- Content -->
-  
-              <div class="container-xxl flex-grow-1 container-p-y">
-                
-  
-                <!-- Basic Layout -->
-                <div class="row">
-                    <div class="d-flex justify-content-center align-items-center vh-100">
-                        <div class="col-lg-6">
-                          <div class="card mb-4">
-                            <div class="card-header d-flex justify-content-between align-items-center">
-                              <h5 class="mb-0">Nueva Encuesta</h5>
-                            </div>
-                            <div class="card-body">
-                              <form>
-                                <div class="mb-3">
-                                  <label class="form-label" for="basic-default-fullname">Nombre de la Encuesta</label>
-                                  <input type="text" class="form-control" id="basic-default-fullname" placeholder="" />
-                                </div>
-                                <div class="mb-3">
-                                  <label class="form-label" for="basic-default-company">Area dirigida</label>
-                                  <input type="text" class="form-control" id="basic-default-company" placeholder="" />
-                                  <!-- Seleccion -->
-                                </div>
-                                <div class="mb-3">
-                                  <label class="form-label" for="basic-default-email">Creado por..</label>
-                                  <div class="input-group input-group-merge">
-                                    <input
-                                      type="text"
-                                      id="basic-default-email"
-                                      class="form-control"
-                                      placeholder="usuario"
-                                      aria-label="john.doe"
-                                      aria-describedby="basic-default-email2"
-                                    />
+                    <!-- Toggle Between Modals -->
+
+                          <!-- Modal 1-->
+                          <div
+                          class="modal fade"
+                          id="modalToggle"
+                          aria-labelledby="modalToggleLabel"
+                          tabindex="-1"
+                          style="display: none"
+                          aria-hidden="true"
+                        >
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="modalToggleLabel">Modal 1</h5>
+                                <button
+                                  type="button"
+                                  class="btn-close"
+                                  data-bs-dismiss="modal"
+                                  aria-label="Close"
+                                ></button>
+                              </div>
+                                <div class="modal-body">                              
+                                    <form>
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-fullname">Nombre de la Encuesta</label>
+                                      <input type="text" class="form-control" id="basic-default-fullname" placeholder="" />
+                                    </div>
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-company">Area dirigida</label>
+                                      <input type="text" class="form-control" id="basic-default-company" placeholder="" />
+                                      <!-- Seleccion -->
+                                    </div>
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-email">Creado por..</label>
+                                      <div class="input-group input-group-merge">
+                                        <input
+                                          type="text"
+                                          id="basic-default-email"
+                                          class="form-control"
+                                          placeholder="usuario"
+                                          aria-label="john.doe"
+                                          aria-describedby="basic-default-email2"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-phone">Cantidad de personas que podran responder</label>
+                                      <input
+                                        type="number"
+                                        id="basic-default-phone"
+                                        class="form-control phone-mask"
+                                        placeholder="10"
+                                      />
+                                    </div>
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-message">Fecha de termino</label>
+                                      <input class="form-control" type="date" name="" id="">
+                                    </div>
+                                    
+                                  </form>
+                                  <div class="modal-footer">
+                                    <button
+                                      class="btn btn-primary"
+                                      data-bs-target="#modalToggle2"
+                                      data-bs-toggle="modal"
+                                      data-bs-dismiss="modal"
+                                    >
+                                      Siguiente
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Cancelar
+                                    </button>
                                   </div>
                                 </div>
-                                <div class="mb-3">
-                                  <label class="form-label" for="basic-default-phone">Cantidad de personas que podran responder</label>
-                                  <input
-                                    type="number"
-                                    id="basic-default-phone"
-                                    class="form-control phone-mask"
-                                    placeholder="10"
-                                  />
-                                </div>
-                                <div class="mb-3">
-                                  <label class="form-label" for="basic-default-message">Fecha de termino</label>
-                                  <input type="date" name="" id="">
-                                </div>
-                                <a href="/admin/formEncuestaP2"><button type="button" class="btn btn-primary">Siguiente</button></a>
-                                <a href="/admin/listaEncuesta"><button type="button" class="btn btn-danger">Cancelar</button></a>
-                              </form>
+
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                                        
 
-                </div>
-              </div>
-              <!-- / Content -->
-  
+                          <%- include('../forms/formEncuestaP2.ejs') %>
 
-  
-              <div class="content-backdrop fade"></div>
-            </div>
-            <!-- Content wrapper -->
-          </div>
-          <!-- / Layout page -->
-        </div>
-  
-        <!-- Overlay -->
-        <div class="layout-overlay layout-menu-toggle"></div>
-      </div>
-</body>
-</html>
