@@ -33,13 +33,22 @@
                     <div>
                         <h5 class="card-header">Lista Categoria</h5>
                     </div>
-                    <div style="margin-left: auto;" >
-                      <a href="/admin/formCategoria">
-                        <button class="btn btn-primary w-px-100 m-lg-3">
-                            <i class="bx bx-plus"></i>
+                    <div class="col-lg-4 col-md-6" style="margin-left: auto;">
+                      <div class="mt-3">
+                        <!-- Button trigger modal -->
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalCenter"
+                        >
+                          <i class="bx bx-plus"></i>
                         </button>
-                    </a>
-                    </div>
+                        <!-- Modal -->
+                         <%- include('../forms/formCategoria.ejs') %>
+                         <!-- modal -->
+                      </div>
+                  </div>
                 </div>
                     <div class="table-responsive text-nowrap">
                       <table class="table">

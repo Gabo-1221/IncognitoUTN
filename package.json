@@ -14,13 +14,16 @@
   "dependencies": {
     "animate.css": "^4.1.1",
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-myconnection": "^1.0.4",
+    "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
+    "method-override": "^3.0.0",
     "mongoose": "^8.5.2",
     "mysql": "^2.18.1",
     "socket.io": "^4.7.5"

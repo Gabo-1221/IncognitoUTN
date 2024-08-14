@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    // Conectar a MongoDB sin las opciones obsoletas
-    await mongoose.connect(process.env.MONGO_URI);
+    const dbUrl = process.env.MONGO_URI; // Sin barra al final
+    const dbName = process.env.DB_NAME; // Sin barra al inicio
+    await mongoose.connect(`${dbUrl}/${dbName}`);
     console.log('MongoDB connected');
   } catch (error) {
     console.error('Error connecting to MongoDB', error);
