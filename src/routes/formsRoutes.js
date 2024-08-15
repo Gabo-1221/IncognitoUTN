@@ -8,5 +8,7 @@ const formsController = require('../controllers/forms/formsController');
 router.post('/nuevaPregunta', formsController.newQuestion);
 router.post('/nuevaCategoria', formsController.newCategoria);
 router.post('/nuevArea', formsController.newArea);
+router.post('/nuevaEncuesta', formsController.newEncuesta);
+//outer.get('/formEncuestaP2/:categoriaId', formsController.getAsksByCategoria);
 
 module.exports = router;

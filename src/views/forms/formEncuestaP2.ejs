@@ -16,42 +16,34 @@
                             <form>
                             <div class="modal-body">
                                     <div class="mb-3">
-                                        <label for="exampleFormControlSelect1" class="form-label">Categoria</label>
-                                        <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
-                                          <option selected>Seleccionar Categorias</option>
-                                          <option value="1">Categoria 1</option>
-                                          <option value="2">Categoria 2</option>
-                                          <option value="3">Categoria 3</option>
+                                        <label for="categoriaSelect" class="form-label">Categoria</label>
+                                        <select class="form-select" id="categoriaSelect" name="categoria">
+                                          <option >Selecionar una categoria...</option>
+                                          <% categorias.forEach(categoria => { %>
+                                            <option value="<%= categoria._id %>"><%= categoria.nombre %></option>
+                                        <% }) %>
                                         </select>
                                       </div>
-                                  
+                                      <div id="lastRecordContainer"></div>
                                     <!-- Sección para las preguntas con checkboxes -->
                                     <div class="row mb-3">
                                         <div class="text-start-center">
                                             <label class="text-body" style="font-size: 25px;">Preguntas</label>
-                                            <a href="/admin/listaPreguntas"><button class="btn btn-primary" type="button"><i href="" class="bx bx-plus"></i></button></a>
-                                        </div>
+<!--                                             <a href="/admin/listaPreguntas"><button class="btn btn-primary" type="button"><i href="" class="bx bx-plus"></i></button></a>
+ -->                                        </div>
                                         
                                         <div class="col-sm-10">
                                         <br>
-                                        <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="pregunta1" value="opcion1">
-                                          <label class="form-check-label" for="pregunta1">
-                                            Pregunta 1
-                                          </label>
+                                        <div id="preguntaList">
+<!--                                           <div class="form-check" >
+                                            <input class="form-check-input" type="checkbox" id="pregunta1" value="opcion1">
+                                            <label class="form-check-label" for="pregunta1">
+                                              Pregunta 1
+                                            </label>
+                                          </div> -->
+
                                         </div>
-                                        <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="pregunta2" value="opcion2">
-                                          <label class="form-check-label" for="pregunta2">
-                                            Pregunta 2
-                                          </label>
-                                        </div>
-                                        <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" id="pregunta3" value="opcion3">
-                                          <label class="form-check-label" for="pregunta3">
-                                            Pregunta 3
-                                          </label>
-                                        </div>
+
                                         <!-- Agrega más preguntas según sea necesario -->
                                       </div>
                                     </div>
@@ -65,3 +57,65 @@
                           </div>
                         </div>
                       </div>
+                      <script>
+                        document.getElementById('categoriaSelect').addEventListener('change', async function() {
+                  const categoriaId = this.value;
+              
+                  // Realizar la solicitud AJAX a tu API para obtener las preguntas
+                  const response = await fetch(`/admin/listaEncuesta/${categoriaId}`);
+                  const preguntas = await response.json();
+                  // Selecciona el contenedor donde se mostrarán las checkboxes
+                  const preguntaList = document.getElementById('preguntaList');
+                  // Limpia las preguntas anteriores
+                  preguntaList.innerHTML = '';
+              
+                  // Llena el contenedor con las nuevas preguntas
+
+                  preguntas.forEach(pregunta => {
+                      const checkbox = document.createElement('input');
+                      checkbox.type = 'checkbox';
+                      checkbox.id = `pregunta-${pregunta._id}`;
+                      checkbox.name = 'preguntas';
+                      checkbox.value = pregunta._id;
+              
+                      const label = document.createElement('label');
+                      label.htmlFor = `pregunta-${pregunta._id}`;
+                      label.textContent = pregunta.nombre;
+              
+                      const div = document.createElement('div');
+                      div.appendChild(checkbox);
+                      div.appendChild(label);
+              
+                      preguntaList.appendChild(div);
+                  });
+              });              
+                  </script>
+                  <script>
+                    document.getElementById('categoriaSelect').addEventListener('change', async function() {
+                      const idempresa = this.value;
+                      
+                      // Realizar la solicitud AJAX a tu API para obtener un registro
+                      const response = await fetch(`/admin/ultimore/${idempresa}`);
+                      const lastRecord = await response.json();
+                      
+                      // Selecciona el contenedor donde se mostrará el registro
+                      const registroContainer = document.getElementById('lastRecordContainer');
+                      
+                      // Limpia el contenedor de registros anteriores
+                      registroContainer.innerHTML = '';
+
+                      // Verifica si el registro existe
+                      if (registro) {
+                          // Muestra el registro
+                          registroContainer.innerHTML = `
+                              <h3>Registro Único</h3>
+                              <p>ID: ${registro._id}</p>
+                              <p>Nombre: ${registro.nombre}</p>
+                              <p>Fecha: ${registro.fecha}</p>
+                          `;
+                      } else {
+                          registroContainer.innerHTML = '<p>No se encontró ningún registro.</p>';
+                      }
+                  });
+
+                  </script>

@@ -2,6 +2,7 @@
 const Pregunta = require('../../models/Pregunta')
 const Categoria = require('../../models/Categoria')
 const Area = require('../../models/Area')
+const Encuesta = require('../../models/Encuesta')
 //controlador para evaluador
 exports.newQuestion = async (req, res) => {
     try {
@@ -48,6 +49,28 @@ exports.newArea = async (req, res) => {
     await newArea.save()
     res.redirect('/admin/listaAreas')
     } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.newEncuesta = async (req, res) => {
+    try {
+        const {nombre,area, canperson,user,fechat} = req.body;
+        const currentDate = new Date();
+        const utcDate = currentDate.toLocaleDateString('en-CA');
+        const newEncuesta = new Encuesta ({
+            nombre: nombre,
+            id_area: area,
+            id_encargado: user,
+            fecha_creada: utcDate,
+            fecha_limite: fechat,
+            cantidad: canperson
+            
+        })
+    await newEncuesta.save()
+    res.status(200)
+    //res.redirect('/admin/listaAreas')
+    } catch (error) {   
         console.log(error)
     }
 }
