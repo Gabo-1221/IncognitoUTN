@@ -5,12 +5,16 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const connectDB = require('./src/config/db');
 const crypto = require('crypto');
+// Importa cookie-parser
+const cookieParser = require('cookie-parser');
 
 dotenv.config();
 connectDB();
 
 const app = express();
 app.use(methodOverride('_method'));
+app.use(cookieParser());
+/* generar llaves */
 /* const secret = crypto.randomBytes(64).toString('hex'); 
 console.log(secret); */
 // Configura las sesiones
@@ -49,9 +53,39 @@ function guardarUserId(req, res, next) {
   next();
 }
 
-// Usa el middleware en las rutas que necesiten el userId
-app.use('/admin', guardarUserId);
-app.use('/evaluador', guardarUserId);
+// Middleware para verificar la autenticación
+function isAuthenticated(req, res, next) {
+  // Verifica si el usuario está autenticado mediante la sesión
+  if (req.session && req.session.userId) {
+    return next();
+  }
+
+  // Verifica si el usuario tiene una cookie "rememberMeToken"
+  const token = req.cookies.rememberMeToken;
+
+  if (token) {
+    try {
+      // Verifica el token JWT
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      // Guarda el ID del usuario en la sesión
+      req.session.userId = decoded.userId;
+
+      // Continúa con la solicitud
+      return next();
+    } catch (error) {
+      // El token es inválido o ha expirado
+      console.error('Error al verificar el token:', error);
+    }
+  }
+
+  // El usuario no está autenticado
+  res.redirect('/auth/login');
+}
+
+// Usa el middleware isAuthenticated en las rutas protegidas
+app.use('/admin', isAuthenticated, require('./src/routes/adminRoutes'));
+app.use('/evaluador', isAuthenticated, require('./src/routes/evaluerRoutes'));
 
 
 // Manejar rutas no encontradas

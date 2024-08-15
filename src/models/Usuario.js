@@ -7,6 +7,8 @@ const usuarioSchema = new mongoose.Schema({
   correo: { type: String, default: null },
   contrasena: { type: String, default: null },
   rol: { type: Number, default: null },
+  terms: { type: Boolean, default: false },
+  created_at: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model('usuarios', usuarioSchema);
