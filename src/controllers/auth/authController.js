@@ -14,41 +14,33 @@ exports.formLogin = (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     // Busca al usuario por correo electrónico
     const usuario = await Usuario.findOne({ correo: email });
-
     if (!usuario) {
       /* return res.status(401).json({ message: 'Credenciales inválidas' }); */
       return res.render('auth/formLogin', { title: 'Incognito UTN | Iniciar sesión', error: true, message: 'Credenciales inválidas' });
     }
-
     // Compara la contraseña ingresada con la contraseña encriptada
     const match = await bcrypt.compare(password, usuario.contrasena);
-
     if (!match) {
       /* return res.status(401).json({ message: 'Credenciales inválidas' }); */
       return res.render('auth/formLogin', { title: 'Incognito UTN | Iniciar sesión', error: true, message: 'Credenciales inválidas' });
     }
-
     // Guarda el ObjectId del usuario en la sesión
     req.session.userId = usuario._id; 
-
     // Verifica si el usuario marcó la casilla "Recuérdame"
     if (req.body.rememberMe) {
       // Genera un token JWT
       const token = jwt.sign({ userId: usuario._id }, process.env.JWT_SECRET, { expiresIn: '30d' }); // Expira en 30 días
-
       // Guarda el token en una cookie
       res.cookie('rememberMeToken', token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // Expira en 30 días
     }
-
     // Redirige al usuario según su rol
-    if (usuario.rol === 3) {
+    if (usuario.rol === "66be37bf44270796dde41a7a") {
       res.redirect('/admin/home');
-    } else if (usuario.rol === 2) {
+    } else if (usuario.rol === "66be379a44270796dde41a79") {
       res.redirect('/evaluador/home');
-    } else if (usuario.rol === 1) {
+    } else if (usuario.rol === "66be375044270796dde41a76") {
       res.redirect('/mystery/home');
     }
     else {
@@ -116,10 +108,17 @@ exports.selectRolEvaluador = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ message: 'Usuario no autenticado' });
     }
-
     /* ROLES: 1 "MYSTERY" 2 "EVALUADOR" 3 "ADMIN" */
+    /* 
+    Mystery
+    66be375044270796dde41a76
+    Evaluador
+    66be379a44270796dde41a79
+    Admnistrador
+    66be37bf44270796dde41a7a
+     */
     /* /evaluador/home */
-    await Usuario.findByIdAndUpdate(userId, { rol: 2 });
+    await Usuario.findByIdAndUpdate(userId, { rol: "66be379a44270796dde41a79" });
     res.redirect('/evaluador/home');
   } catch (error) {
     console.error('Error al actualizar el rol a evaluador:', error);
@@ -135,7 +134,7 @@ exports.selectRolMystery = async (req, res) => {
       return res.status(400).json({ message: 'Usuario no autenticado' });
     }
 
-    await Usuario.findByIdAndUpdate(userId, { rol: 1 });
+    await Usuario.findByIdAndUpdate(userId, { rol: "66be375044270796dde41a76" });
     res.redirect('/mystery/home');
   } catch (error) {
     console.error('Error al actualizar el rol a mystery:', error);
