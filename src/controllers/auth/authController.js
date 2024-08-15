@@ -2,6 +2,13 @@
 const bcrypt = require('bcrypt');
 const Usuario = require('../../models/Usuario');
 const jwt = require('jsonwebtoken');
+
+// Define los roles como constantes
+const ROL_ADMIN = "66be37bf44270796dde41a7a";
+const ROL_EVALUADOR = "66be379a44270796dde41a79";
+const ROL_MYSTERY = "66be375044270796dde41a76";
+
+
 // Muestra el formulario de inicio de sesión
 exports.formLogin = (req, res) => {
   // Puedes incluir un mensaje de error si está disponible en la sesión o en la solicitud
@@ -147,3 +154,89 @@ exports.selectRolMystery = async (req, res) => {
   const userId = req.session.userId;
   res.render('selectRol', { userId });
 }; */
+ 
+/* exports.logout = (req, res) => {
+  req.session.destroy();
+  res.clearCookie('rememberMeToken');
+  res.redirect('/auth/login');
+}; */
+
+exports.updateUserData = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'Usuario no autenticado' });
+    }
+
+    const { firstName, lastName, email, fecha_nac } = req.body;
+
+    // Validar que el correo electrónico no esté en uso por otro usuario
+    const existingUser = await Usuario.findOne({ correo: email });
+    if (existingUser && existingUser._id.toString() !== userId.toString()) {
+      let errorMessage = 'El correo electrónico ya está en uso';
+      /* if (existingUser.rol === ROL_ADMIN) {
+        return res.redirect('/admin/home');
+      }  else*/ if (existingUser.rol === ROL_EVALUADOR) {
+        return res.render('perfil/perfilEvaluer',{message: null, messageEmail: errorMessage, 
+          title: 'Incognito UTN | Mi perfil', username: existingUser.nombre, rol: existingUser.rol, 
+          apellido: existingUser.apellidos, email: existingUser.correo, fecha_nac: existingUser.fecha_nac});
+      } else if (existingUser.rol === ROL_MYSTERY) {
+        return res.redirect('/mystery/home');
+      } else {
+        // Maneja el caso de un rol inválido
+        res.redirect('/auth/login'); // O a donde quieras redirigir en caso de error
+        console.log('Rol inválido');
+      }
+    }
+
+    // Actualizar los datos del usuario
+    const updatedUser = await Usuario.findByIdAndUpdate(
+      userId,
+      { 
+        nombre: firstName,
+        apellidos: lastName,
+        correo: email,
+        fecha_nac: fecha_nac
+      },
+      { new: true } // Devuelve el usuario actualizado
+    );
+
+    // Redirigir a la página de perfil o a donde sea que desees
+    if (updatedUser.rol === ROL_ADMIN) {
+      res.redirect('/admin/home');
+    } else if (updatedUser.rol === ROL_EVALUADOR) {
+      //return res.render('auth/formRegistro', { title: 'Incognito UTN | Registrate', error: true, message: 'El correo electrónico ya está en uso' });
+      return res.render('perfil/perfilEvaluer',{message: 'Datos actualizados correctamente', title: 'Incognito UTN | Mi perfil'});
+    }
+    else if (updatedUser.rol === ROL_MYSTERY) {
+      res.redirect('/mystery/home');
+    }
+    else {
+      // Maneja el caso de un rol inválido
+      res.redirect('/auth/login'); // O a donde quieras redirigir en caso de error
+      console.log('Rol inválido');
+    }
+    //res.redirect('/perfil/perfilEvaluer'); // Ejemplo
+
+  } catch (error) {
+    console.error('Error al actualizar los datos del usuario:', error);
+    res.status(500).json({ message: 'Error al actualizar los datos', error: error.message });
+  }
+};
+
+
+// Función para cerrar sesión
+exports.logout = (req, res) => {
+  // Destruye la sesión
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+      return res.status(500).json({ message: 'Error al cerrar sesión' });
+    }
+    // Elimina la cookie "rememberMeToken" si existe
+    res.clearCookie('rememberMeToken');
+    // Redirige al usuario a la página de inicio de sesión
+    res.redirect('/');
+  });
+};

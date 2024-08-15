@@ -25,15 +25,16 @@ router.get('/', async (req, res) => {
       // Redirige al usuario a su vista predeterminada según su rol
       const usuario = await Usuario.findById(decoded.userId); // Ahora puedes usar await aquí
       if (usuario) {
-        if (usuario.rol === 3) {
+        if (usuario.rol === "66be37bf44270796dde41a7a") {
           res.redirect('/admin/home');
-        } else if (usuario.rol === 2) {
+        } else if (usuario.rol === "66be379a44270796dde41a79") {
           res.redirect('/evaluador/home');
-        } else if (usuario.rol === 1) {
+        } else if (usuario.rol === "66be375044270796dde41a76") {
           res.redirect('/mystery/home');
         } else {
           // Maneja el caso de un rol inválido
           res.redirect('/auth/login'); // O a donde quieras redirigir en caso de error
+          console.log('Rol inválido');
         }
       } else {
         // Usuario no encontrado
