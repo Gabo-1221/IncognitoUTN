@@ -51,11 +51,11 @@
                         <tbody class="table-border-bottom-0">
                           <% usuarios.forEach( user => { %>
                             <tr>
-                              <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong></strong></td>
-                              <td>lastname</td>
-                              <td> Age   </td>
-                              <td> mail@gmail.com   </td>
-                              <td><span class="badge bg-label-primary me-1">Rol</span></td>
+                              <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><%= user.nombre %></strong></td>
+                              <td><%= user.apellidos %></td>
+                              <td><%= user.fecha_nac %></td>
+                              <td><%= user.correo %></td>
+                              <td><span class="badge bg-label-primary me-1"><%= user.rol %></span></td>
                               <td> N°..  </td>
                               <td> N°..  </td>
                               <td>    
