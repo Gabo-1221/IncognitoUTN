@@ -11,6 +11,8 @@ const usuarioSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now },
   encuestas_creadas: { type: Array, default: [] },
   encuestas_resueltas: { type: Array, default: [] },
+  updated_at: { type: Date, default: Date.now },
+  status: { type: String, default: null }
 });
 
 module.exports = mongoose.model('usuarios', usuarioSchema);
