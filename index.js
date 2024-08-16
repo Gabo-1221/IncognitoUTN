@@ -5,8 +5,9 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const connectDB = require('./src/config/db');
 const crypto = require('crypto');
-// Importa cookie-parser
 const cookieParser = require('cookie-parser');
+// Importa connect-flash
+const flash = require('connect-flash');
 
 dotenv.config();
 connectDB();
@@ -24,6 +25,8 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false } // Configura la seguridad de la cookie según sea necesario
 }));
+// Usa connect-flash
+app.use(flash());
 // Configurar EJS como motor de plantillas
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
