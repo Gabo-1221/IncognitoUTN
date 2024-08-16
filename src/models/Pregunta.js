@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const preguntaSchema = new mongoose.Schema({
-  nombre: { type: Number, default: null },
-  id_categoria: { type: Number, default: null },
+  nombre: { type: String , default: null },
+  id_categoria: { type: String, default: null },
   id_creo: { type: Number, default: null },
 });
 
-module.exports = mongoose.model('Pregunta', preguntaSchema);
+module.exports = mongoose.model('preguntas', preguntaSchema);

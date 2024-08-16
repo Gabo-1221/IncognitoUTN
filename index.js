@@ -42,6 +42,7 @@ const { error } = require('console');
 app.use('/auth', authRoutes);
 app.use('/admin', require('./src/routes/adminRoutes'));
 app.use('/evaluador', require('./src/routes/evaluerRoutes'));
+app.use('/forms', require('./src/routes/formsRoutes'));
 app.use('/', require('./src/routes/homeRoutes'));
 
 // Middleware para almacenar el userId en res.locals

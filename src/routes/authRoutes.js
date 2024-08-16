@@ -26,4 +26,8 @@ router.post('/rol_evaluador', authController.selectRolEvaluador);
 
 router.post('/rol_mystery', authController.selectRolMystery);
 
+router.post('/updateUserData', authController.updateUserData);
+
+router.get('/logout', authController.logout);
+
 module.exports = router;
