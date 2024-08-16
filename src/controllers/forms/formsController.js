@@ -3,6 +3,7 @@ const Pregunta = require('../../models/Pregunta')
 const Categoria = require('../../models/Categoria')
 const Area = require('../../models/Area')
 const Encuesta = require('../../models/Encuesta')
+const EncPre = require('../../models/PreguntaEncuesta')
 //controlador para evaluador
 exports.newQuestion = async (req, res) => {
     try {
@@ -64,8 +65,7 @@ exports.newEncuesta = async (req, res) => {
             id_encargado: user,
             fecha_creada: utcDate,
             fecha_limite: fechat,
-            cantidad: canperson
-            
+            cantidad: canperson 
         })
     await newEncuesta.save()
     res.status(200)
@@ -74,3 +74,20 @@ exports.newEncuesta = async (req, res) => {
         console.log(error)
     }
 }
+
+exports.newEncPreg = async ( req, res) => {
+    const {encuestaId , preguntasSeleccionadas} = req.body;
+    preguntasSeleccionadas.forEach( async (pregunta) => {
+    try {
+        const newEncPre = new EncPre ({
+            id_encuesta: encuestaId,
+            id_pregunta: pregunta
+        });
+        console.log(preguntasSeleccionadas);
+        res.redirect('/admin/listaEncuesta')
+    await newEncPre.save();
+    } catch (error) {
+        console.log(error)
+    }
+});
+} 

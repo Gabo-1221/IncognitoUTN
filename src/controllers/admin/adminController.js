@@ -62,8 +62,8 @@ exports.getQuestionsByCategory = async (req, res) => {
 exports.getlastEnc = async (req, res) => {
   try {
     const lastRecord = await Encuesta.findOne().sort({ _id: -1 }).exec();
-
-    res.json(lastRecord); // Asegúrate de que preguntas no contiene referencias circulares
+    res.json(lastRecord); 
+    // Asegúrate de que preguntas no contiene referencias circulares
 } catch (error) {
     console.log(error);
 }

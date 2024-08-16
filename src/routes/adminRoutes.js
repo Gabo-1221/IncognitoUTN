@@ -10,7 +10,7 @@ router.get('/listaUsuario',adminController.getUsers);
 router.get('/listaEncuesta',adminController.getQuestions);
 
 router.get('/listaEncuesta/:categoriaId', adminController.getQuestionsByCategory);
-router.get('/ultimore/:idempresa', adminController.getlastEnc);
+router.get('/ultimoRegistro', adminController.getlastEnc);
 
 router.get('/listaPreguntas',adminController.getAsks);
 router.get('/listaCategorias',adminController.getService);
