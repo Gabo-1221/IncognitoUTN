@@ -39,6 +39,18 @@ exports.newCategoria = async (req, res) => {
 
 }
 
+exports.deleteCategoria = async (req, res) => {
+    try{
+        const {idcategoria} = req.params;
+        console.log(req.params)
+        await Pregunta.deleteMany({id_categoria: idcategoria})
+        await Categoria.findByIdAndDelete(idcategoria);
+        res.redirect('/admin/listaCategorias')
+    }catch(error){
+        console.log(error)
+    }
+}
+
 exports.newArea = async (req, res) => {
     try {
         const { area, calificacion, user } = req.body;
@@ -54,6 +66,29 @@ exports.newArea = async (req, res) => {
     }
 }
 
+exports.deleteArea = async (req, res) => {
+    try{
+        const {idArea} = req.params;
+        console.log(req.params)
+        const encuestas = await Encuesta.find({id_area: idArea})
+        console.log(encuestas)
+        for (let encu of encuestas) {
+            let idencuesta = encu._id
+            console.log(idencuesta)
+            try {
+                await EncPre.deleteMany({ id_encuesta: idencuesta });
+            } catch (error) {
+                console-log(error)
+            }
+            }
+/*         await Encuesta.deleteMany({id_area: idArea})
+        await Area.findByIdAndDelete(idArea); */
+        res.redirect('/admin/listaAreas')
+    }catch(error){
+        console.log(error)
+    }
+}
+
 exports.newEncuesta = async (req, res) => {
     try {
         const { nombre, area, canperson, user, fechat } = req.body;
@@ -65,7 +100,8 @@ exports.newEncuesta = async (req, res) => {
             id_encargado: user,
             fecha_creada: utcDate,
             fecha_limite: fechat,
-            cantidad: canperson
+            cantidad: canperson,
+            calificacion: 4.9
         })
         await newEncuesta.save()
         res.status(200)
@@ -74,6 +110,33 @@ exports.newEncuesta = async (req, res) => {
         console.log(error)
     }
 }
+
+exports.deleteEncuesta = async (req, res) => {
+    try{
+        const {idEncuesta} = req.params;
+        console.log(req.params)
+
+        await EncPre.deleteMany({ id_encuesta: idEncuesta });
+ 
+        await Encuesta.findByIdAndDelete(idEncuesta); 
+        res.redirect('/admin/listaEncuesta')
+    }catch(error){
+        console.log(error)
+    }
+}
+
+exports.deletePregunta = async (req, res) => {
+    try{
+        const {idpregunta} = req.params;
+        console.log(req.params)
+        await EncPre.deleteMany({id_pregunta:idpregunta})
+        await Pregunta.findByIdAndDelete(idpregunta);
+        res.redirect('/admin/listaPreguntas')
+    }catch(error){
+        console.log(error)
+    }
+}
+
 exports.newEncPreg = async (req, res) => {
     const { encuestaId, preguntasSeleccionadas } = req.body;
   

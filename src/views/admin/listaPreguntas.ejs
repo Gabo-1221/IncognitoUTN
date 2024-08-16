@@ -68,10 +68,10 @@
                               <td> <%= pregunta.id_creo %>   </td>
                               <td>    
                                   <div class="dropdown">
-                                      <a class="m-1" href="" style="color: inherit;"
+                                      <a class="m-1" href="#" style="color: inherit;"
                                       ><i class="bx bx-edit-alt me-1"></i> Edit</a
                                       >
-                                      <a class="m-1" href="" style="color: inherit;"
+                                      <a class="m-1" href="#" onclick="confirmDeletion('<%= pregunta._id %>'); return false;" style="color: inherit;"
                                       ><i class="bx bx-trash me-1"></i> Delete</a
                                       >
                                   </div>
@@ -86,7 +86,13 @@
 
             </div>
             <!-- / Content -->
-
+            <script>
+            function confirmDeletion(id) {
+              if (confirm('¿Estás seguro de que deseas eliminar esta pregunta?')) {
+                window.location.href = '/forms/eliminarPregunta/' + id;
+              }
+            }
+          </script>
             <!-- <%- include('../components/footer') %> -->
 
             <div class="content-backdrop fade"></div>

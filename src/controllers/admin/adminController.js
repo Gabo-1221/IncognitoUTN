@@ -37,7 +37,8 @@ exports.getQuestions = async (req , res ) => {
 exports.getAsks = async (req , res ) => {
 try {
   const preguntas = await Pregunta.find()
-  res.render('admin/listaPreguntas',{title: 'Lista Preguntas', preguntas:preguntas})
+  const categorias = await Categoria.find()
+  res.render('admin/listaPreguntas',{title: 'Lista Preguntas', preguntas:preguntas, categorias:categorias})
 } catch (error) {
   console.log(error)
 }

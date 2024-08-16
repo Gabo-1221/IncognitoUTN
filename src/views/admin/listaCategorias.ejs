@@ -70,7 +70,7 @@
                                       <a class="m-1" href="" style="color: inherit;"
                                       ><i class="bx bx-edit-alt me-1"></i> Edit</a
                                       >
-                                      <a class="m-1" href="" style="color: inherit;"
+                                      <a class="m-1" href="#" onclick="confirmDeletion('<%= categoria._id %>'); return false;" style="color: inherit;"
                                       ><i class="bx bx-trash me-1"></i> Delete</a
                                       >
                                   </div>
@@ -87,7 +87,13 @@
 
             </div>
             <!-- / Content -->
-
+            <script>
+              function confirmDeletion(id) {
+                if (confirm('¿Estás seguro de que deseas eliminar esta categoria?')) {
+                  window.location.href = '/forms/eliminarCategoria/' + id;
+                }
+              }
+            </script>
             <!-- <%- include('../components/footer') %> -->
 
             <div class="content-backdrop fade"></div>
