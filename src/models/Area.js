@@ -6,4 +6,4 @@ const areaSchema = new mongoose.Schema({
   id_creo: { type: Number, default: null },
 });
 
-module.exports = mongoose.model('Area', areaSchema);
+module.exports = mongoose.model('areas', areaSchema);

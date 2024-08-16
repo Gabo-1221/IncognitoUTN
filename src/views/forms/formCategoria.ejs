@@ -11,14 +11,14 @@
                                       ></button>
                                     </div>
                                     <div class="modal-body">
-                                      <form>
+                                      <form action="/forms/nuevaCategoria" method="post">
                                         <div class="mb-3">
-                                            <label class="form-label" for="basic-default-fullname">Nombre</label>
-                                            <input type="text" class="form-control" id="basic-default-fullname" />
+                                            <label class="form-label" for="categoria">Nombre</label>
+                                            <input type="text" class="form-control" id="categoria" name="categoria"/>
                                           </div>
                                           <div class="mb-3">
                                             <label class="form-label" for="basic-default-company">Creado por</label>
-                                            <input type="text" class="form-control" id="basic-default-company" placeholder="Usuario.." readonly/>
+                                            <input type="number" class="form-control" id="user" name="user" placeholder="Usuario.." readonly/>
                                           </div>
           
                                           <div class="modal-footer">
