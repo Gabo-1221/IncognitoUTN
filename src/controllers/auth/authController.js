@@ -231,7 +231,8 @@ exports.updateUserData = async (req, res) => {
         message: result.message,
         MessageNewPassword: null,
         MessageNewPasswordError: null,
-        messageEmail: result.messageEmail
+        messageEmail: result.messageEmail,
+        activeSection: 'perfil'
       });
     }
   } catch (error) {
@@ -271,7 +272,8 @@ exports.updateUserPassword = async (req, res) => {
         message: null,
         MessageNewPassword: null,
         MessageNewPasswordError: 'La contraseña actual es incorrecta',
-        messageEmail: null
+        messageEmail: null,
+        activeSection: 'perfil'
       });
     }
 
@@ -290,7 +292,8 @@ exports.updateUserPassword = async (req, res) => {
         message: null,
         MessageNewPassword: null,
         MessageNewPasswordError: 'La nueva contraseña y la confirmación no coinciden',
-        messageEmail: null
+        messageEmail: null,
+        activeSection: 'perfil'
       });
     }
 
@@ -315,7 +318,8 @@ exports.updateUserPassword = async (req, res) => {
       message: null,
       MessageNewPassword: 'Contraseña actualizada con éxito',
       MessageNewPasswordError: null,
-      messageEmail: null
+      messageEmail: null,
+      activeSection: 'perfil'
     });
 
   } catch (error) {

@@ -97,7 +97,7 @@ app.use('/evaluador', isAuthenticated, require('./src/routes/evaluerRoutes'));
 // Manejar rutas no encontradas
 app.use((req, res) => {
   /* res.status(404).send('No se encuentra la ruta establecida'); */
-  res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida'+ error });
+  res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida'});
 });
 
 const PORT = process.env.PORT || 5000;

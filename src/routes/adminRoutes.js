@@ -11,11 +11,11 @@ router.get('/listaUsuario',authMiddleware,adminController.getUsers);
 router.get('/listaEncuesta',authMiddleware,adminController.getQuestions);
 
 router.get('/listaEncuesta/:categoriaId', adminController.getQuestionsByCategory);
-router.get('/ultimoRegistro', adminController.getlastEnc);
+router.get('/ultimoRegistro',authMiddleware, adminController.getlastEnc);
 
-router.get('/listaPreguntas',adminController.getAsks);
-router.get('/listaCategorias',adminController.getService);
-router.get('/listaAreas',adminController.getArea);
+router.get('/listaPreguntas',authMiddleware, adminController.getAsks);
+router.get('/listaCategorias',authMiddleware,adminController.getService);
+router.get('/listaAreas',authMiddleware,adminController.getArea);
 router.get('/formEncuesta',adminController.getFormQuestion);
 router.get('/formEncuestaP2',adminController.getFormQuestionP2);
 router.get('/formPregunta',adminController.getFormAsk);

@@ -15,7 +15,11 @@ exports.getHomeAdmin = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('admin/homeAdmin', { title: 'Incognito UTN | Administrador', username: userData.username, rol: userData.rol, activeSection: 'dashboard' });
+      if (userData.rol == 'Administrador') {
+        res.render('admin/homeAdmin', { title: 'Incognito UTN | Administrador', username: userData.username, rol: userData.rol, activeSection: 'dashboard' });
+      } else {        
+        res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
+      }
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -34,7 +38,11 @@ exports.getUsers = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('admin/listaUsuario', { title: 'Incognito UTN | Usuarios', username: userData.username, rol: userData.rol, usuarios: usuarios, activeSection: 'usuarios' });
+      if (userData.rol == 'Administrador') {
+        res.render('admin/listaUsuario', { title: 'Incognito UTN | Usuarios', username: userData.username, rol: userData.rol, usuarios: usuarios, activeSection: 'usuarios' });
+      } else {        
+        res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
+      }
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -45,14 +53,6 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getQuestions = async (req, res) => {
-  /* try{
-    const encuestas =  await Encuesta.find()
-    const categorias = await Categoria.find()
-    const areas = await Area.find()
-    res.render('admin/listaEncuesta',{title: 'Lista Encuesta', encuestas:encuestas, categorias: categorias, areas:areas})
-  }catch(error){
-    console.log(error)
-  } */
   try {
     const userId = req.session.userId;
     const encuestas = await Encuesta.find()
@@ -63,7 +63,11 @@ exports.getQuestions = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('admin/listaEncuesta', { title: 'Incognito UTN | Lista Encuesta', username: userData.username, rol: userData.rol, categorias: categorias, areas: areas, activeSection: 'encuestas' });
+      if (userData.rol == 'Administrador') {
+        res.render('admin/listaEncuesta', { title: 'Incognito UTN | Lista Encuesta', username: userData.username, rol: userData.rol, categorias: categorias, areas: areas, activeSection: 'encuestas' });
+      } else {        
+        res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
+      }
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -74,13 +78,6 @@ exports.getQuestions = async (req, res) => {
 };
 
 exports.getAsks = async (req, res) => {
-  /* try {
-    const preguntas = await Pregunta.find()
-    res.render('admin/listaPreguntas',{title: 'Lista Preguntas', preguntas:preguntas})
-  } catch (error) {
-    console.log(error)
-  } */
-
   try {
     const userId = req.session.userId;
     const preguntas = await Pregunta.find()
@@ -90,7 +87,11 @@ exports.getAsks = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('admin/listaPreguntas', { title: 'Incognito UTN | Lista Preguntas', username: userData.username, rol: userData.rol, preguntas: preguntas, activeSection: 'preguntas' });
+      if (userData.rol == 'Administrador') {
+        res.render('admin/listaPreguntas', { title: 'Incognito UTN | Lista Preguntas', username: userData.username, rol: userData.rol, preguntas: preguntas, activeSection: 'preguntas' });
+      } else {        
+        res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
+      }
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -127,12 +128,6 @@ exports.getlastEnc = async (req, res) => {
 }
 
 exports.getService = async (req, res) => {
-  /* try {
-    const categorias = await Categoria.find()
-    res.render('admin/listaCategorias',{title: 'Lista Categoria', categorias:categorias })
-  } catch (error) {
-    console.log(error)
-  } */
   try {
     const categorias = await Categoria.find()
     const userId = req.session.userId;
@@ -141,7 +136,11 @@ exports.getService = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('admin/listaCategorias', { title: 'Incognito UTN | Lista Categorias', username: userData.username, rol: userData.rol, categorias: categorias, activeSection: 'categorias' });
+      if (userData.rol == 'Administrador') {
+        res.render('admin/listaCategorias', { title: 'Incognito UTN | Lista Categorias', username: userData.username, rol: userData.rol, categorias: categorias, activeSection: 'categorias' });
+      } else {        
+        res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
+      }
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -152,22 +151,19 @@ exports.getService = async (req, res) => {
 };
 
 exports.getArea = async (req, res) => {
-  /* try {
-    const areas = await Area.find();
-    res.render('admin/listaAreas', { title: 'Lista Areas', areas: areas })
-  } catch (error) {
-    console.log(error)
-  } */
-
   try {
     const areas = await Area.find();
     const userId = req.session.userId;
     if (!userId) {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });
     }
-    const userData = await userHelper.getUserData(userId); 
+    const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('admin/listaAreas', { title: 'Incognito UTN | Lista Areas', username: userData.username, rol: userData.rol,areas: areas, activeSection: 'areas' });
+      if (userData.rol == 'Administrador') {
+        res.render('admin/listaAreas', { title: 'Incognito UTN | Lista Areas', username: userData.username, rol: userData.rol, areas: areas, activeSection: 'areas' });
+      } else {      
+        res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
+      }
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -201,15 +197,18 @@ exports.getPerfil = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('perfil/perfilAdmin', {
-        title: 'Incognito UTN | Mi perfil', username: userData.username, rol: userData.rol,
-        apellido: userData.apellidos, email: userData.correo, fecha_nac: userData.fecha_nac, message: null, messageEmail: null,
-         MessageNewPassword: null, MessageNewPasswordError: null,activeSection: "perfil"
-      });
+      if (userData.rol == 'Administrador') {
+        res.render('perfil/perfilAdmin', {
+          title: 'Incognito UTN | Mi perfil', username: userData.username, rol: userData.rol,
+          apellido: userData.apellidos, email: userData.correo, fecha_nac: userData.fecha_nac, message: null, messageEmail: null,
+          MessageNewPassword: null, MessageNewPasswordError: null, activeSection: "perfil"
+        });
+      } else {        
+        res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
+      }
     } else {
-      res.status(404).json({ message: 'Usuario no encontrado' });
+      res.status(404).json({ message: 'Usuario no encontrado' });      
     }
-
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: 'Error 2', error: error.message });
