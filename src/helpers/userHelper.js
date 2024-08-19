@@ -11,7 +11,8 @@ async function getUserData(userId) {
         rol: rol.nombre,
         apellidos: usuario.apellidos,
         correo: usuario.correo,
-        fecha_nac: usuario.fecha_nac
+        fecha_nac: usuario.fecha_nac,
+        contrasena: usuario.contrasena // <-- Agrega esta línea para incluir la contraseña
       };
     } else {
       return null;
@@ -47,4 +48,5 @@ async function updateUserData(userId, updatedData) {
   }
 }
 
-module.exports = { getUserData, updateUserData };
+
+module.exports = { getUserData, updateUserData}; 

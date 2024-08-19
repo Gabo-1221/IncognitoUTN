@@ -38,13 +38,16 @@ app.use(express.urlencoded({ extended: true })); // Para solicitudes URL-encoded
 app.use(express.static(path.join(__dirname, 'public')));
 
 const authRoutes = require('./src/routes/authRoutes'); // Verifica la ruta correcta
+const mysteryRoutes = require('./src/routes/mysteryRoutes');
 const { error } = require('console');
+const { moveMessagePortToContext } = require('worker_threads');
 
 // Importar y usar rutas
 /* app.use('/auth', require('./src/routes/authRoutes')); */
 app.use('/auth', authRoutes);
 app.use('/admin', require('./src/routes/adminRoutes'));
 app.use('/evaluador', require('./src/routes/evaluerRoutes'));
+app.use('/mystery', mysteryRoutes);
 app.use('/forms', require('./src/routes/formsRoutes'));
 app.use('/', require('./src/routes/homeRoutes'));
 

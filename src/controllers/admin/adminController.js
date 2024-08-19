@@ -5,13 +5,29 @@ const Area = require('../../models/Area');
 const Usuario = require('../../models/Usuario');
 const Encuesta = require('../../models/Encuesta');
 const express = require('express');
+const userHelper = require('../../helpers/userHelper'); // Importa la función auxiliar
 // Controlador para renderizar la vista homeAdmin
-exports.getHomeAdmin = (req, res) => {
-  const userId = res.locals.userId; // Obtiene el userId de res.locals
+exports.getHomeAdmin =async (req, res) => {
+  /* const userId = res.locals.userId; // Obtiene el userId de res.locals
   res.render('admin/homeAdmin', { 
     title: 'Página de Administración', 
     userId: userId  // Pasa el userId a la vista
-  });
+  }); */
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(400).json({ message: 'Usuario no autenticado' + userId });
+    }
+    const userData = await userHelper.getUserData(userId); 
+    if (userData) {
+      res.render('admin/homeAdmin', { title: 'Adminstrador', username: userData.username, rol: userData.rol });
+    } else {
+      res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error 2', error: error.message });
+  }
 };
   
 exports.getUsers = async (req , res ) => {
@@ -103,6 +119,23 @@ exports.getCategoria = (req , res ) => {
   res.render('forms/formCategoria',{title: 'Creacion de Categoria'})
 };
 
-exports.getPerfil = (req , res ) => {
-  res.render('perfil/perfil',{title: 'Mi perfil'})
+exports.getPerfil = async (req , res ) => {
+  try{
+    const userId = req.session.userId;
+    if(!userId){
+      return res.status(400).json({ message: 'Usuario no autenticado' + userId });
+    }
+    const userData = await userHelper.getUserData(userId);
+    if (userData) {
+      res.render('perfil/perfilAdmin', { title: 'Incognito UTN | Mi perfil', username: userData.username, rol: userData.rol,
+         apellido: userData.apellidos, email: userData.correo, fecha_nac: userData.fecha_nac, message: null, messageEmail: null, MessageNewPassword: null,MessageNewPasswordError: null, });
+    } else {
+      res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+  }catch(error){
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error 2', error: error.message });
+  }
+  //res.render('perfil/perfilAdmin',{title: 'Mi perfil'})
 };
