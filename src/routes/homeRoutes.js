@@ -1,58 +1,64 @@
 const express = require('express');
 const router = express.Router();
-// Importa el módulo jsonwebtoken
 const jwt = require('jsonwebtoken');
-// Importa el modelo Usuario
 const Usuario = require('../models/Usuario');
 
-/* router.get('/', (req, res) => {
-  res.render('home/home', { title: 'Incognito UTN' });
-}); */
+// Define la constante para el estado activo
+const STATUS_ACTIVO = "66bf97d6d94dc47ae564b7d7";
 
 // Ruta raíz
 router.get('/', async (req, res) => {
-  // Verifica si el usuario tiene una cookie "rememberMeToken"
   const token = req.cookies.rememberMeToken;
 
   if (token) {
     try {
-      // Verifica el token JWT
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Guarda el ID del usuario en la sesión
       req.session.userId = decoded.userId;
 
-      // Redirige al usuario a su vista predeterminada según su rol
-      const usuario = await Usuario.findById(decoded.userId); // Ahora puedes usar await aquí
+      // Busca al usuario para verificar su estado
+      const usuario = await Usuario.findById(decoded.userId);
+
       if (usuario) {
-        if (usuario.rol === "66be37bf44270796dde41a7a") {
-          res.redirect('/admin/home');
-        } else if (usuario.rol === "66be379a44270796dde41a79") {
-          res.redirect('/evaluador/home');
-        } else if (usuario.rol === "66be375044270796dde41a76") {
-          res.redirect('/mystery/home');
+        // Verifica el estado del usuario
+        if (usuario.status === STATUS_ACTIVO) {
+          // Redirige al usuario a su vista predeterminada según su rol
+          if (usuario.rol === "66be37bf44270796dde41a7a") {
+            res.redirect('/admin/home');
+          } else if (usuario.rol === "66be379a44270796dde41a79") {
+            res.redirect('/evaluador/home');
+          } else if (usuario.rol === "66be375044270796dde41a76") {
+            res.redirect('/mystery/home');
+          } else {
+            // Maneja el caso de un rol inválido
+            res.clearCookie('rememberMeToken'); // Elimina la cookie
+            res.redirect('/auth/login');
+            console.log('Rol inválido');
+          }
         } else {
-          // Maneja el caso de un rol inválido
-          res.redirect('/auth/login'); // O a donde quieras redirigir en caso de error
-          console.log('Rol inválido');
+          // Usuario no activo, elimina la cookie y redirige
+          res.clearCookie('rememberMeToken');
+          res.redirect('/auth/login');
+          console.log('Usuario no activo');
         }
       } else {
         // Usuario no encontrado
-        res.redirect('/auth/login'); // O a donde quieras redirigir en caso de error
+        res.clearCookie('rememberMeToken'); // Elimina la cookie
+        res.redirect('/auth/login');
       }
     } catch (error) {
       // El token es inválido o ha expirado
       console.error('Error al verificar el token:', error);
-      res.render('home/home',{ title: 'Incognito UTN' }); // Renderiza la landing page si hay un error
+      res.render('home/home', { title: 'Incognito UTN' });
     }
   } else {
     // El usuario no tiene una cookie "rememberMeToken"
-    res.render('home/home',{ title: 'Incognito UTN' }); // Renderiza la landing page
+    res.render('home/home', { title: 'Incognito UTN' });
   }
 });
 
 router.get('/sobreNosotros', (req, res) => {
-    res.render('home/sobreNosotros', { title: 'Incognito UTN | Sobre nosotros' });
-  });
+  res.render('home/sobreNosotros', { title: 'Incognito UTN | Sobre nosotros' });
+});
+
 
 module.exports = router;
