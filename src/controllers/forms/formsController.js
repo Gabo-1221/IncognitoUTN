@@ -70,19 +70,17 @@ exports.deleteArea = async (req, res) => {
     try{
         const {idArea} = req.params;
         console.log(req.params)
-        const encuestas = await Encuesta.find({id_area: idArea})
-        console.log(encuestas)
+        const encuestas = await Encuesta.find({id_area: idArea}, { nombre: 1, _id: 1 })
+        console.log(encuestas);
         for (let encu of encuestas) {
-            let idencuesta = encu._id
-            console.log(idencuesta)
             try {
-                await EncPre.deleteMany({ id_encuesta: idencuesta });
+                await EncPre.deleteMany({ id_encuesta: encu._id })
             } catch (error) {
-                console-log(error)
+                console.log(error)
             }
-            }
-/*         await Encuesta.deleteMany({id_area: idArea})
-        await Area.findByIdAndDelete(idArea); */
+        }
+        await Encuesta.deleteMany({id_area: idArea})
+        await Area.findByIdAndDelete(idArea);
         res.redirect('/admin/listaAreas')
     }catch(error){
         console.log(error)
