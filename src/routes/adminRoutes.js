@@ -7,8 +7,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 // Definir la ruta para la página de administración
 router.get('/home',authMiddleware, adminController.getHomeAdmin);
-router.get('/listaUsuario',adminController.getUsers);
-router.get('/listaEncuesta',adminController.getQuestions);
+router.get('/listaUsuario',authMiddleware,adminController.getUsers);
+router.get('/listaEncuesta',authMiddleware,adminController.getQuestions);
 
 router.get('/listaEncuesta/:categoriaId', adminController.getQuestionsByCategory);
 router.get('/ultimoRegistro', adminController.getlastEnc);
