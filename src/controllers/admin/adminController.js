@@ -8,11 +8,6 @@ const express = require('express');
 const userHelper = require('../../helpers/userHelper'); // Importa la función auxiliar
 // Controlador para renderizar la vista homeAdmin
 exports.getHomeAdmin =async (req, res) => {
-  /* const userId = res.locals.userId; // Obtiene el userId de res.locals
-  res.render('admin/homeAdmin', { 
-    title: 'Página de Administración', 
-    userId: userId  // Pasa el userId a la vista
-  }); */
   try {
     const userId = req.session.userId;
     if (!userId) {
