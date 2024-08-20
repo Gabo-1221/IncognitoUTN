@@ -56,6 +56,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-// ... (resto del código)
+router.get('/sobreNosotros', (req, res) => {
+  res.render('home/sobreNosotros', { title: 'Incognito UTN | Sobre nosotros' });
+});
+
 
 module.exports = router;

@@ -5,8 +5,9 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const connectDB = require('./src/config/db');
 const crypto = require('crypto');
-// Importa cookie-parser
 const cookieParser = require('cookie-parser');
+// Importa connect-flash
+const flash = require('connect-flash');
 
 dotenv.config();
 connectDB();
@@ -24,6 +25,8 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false } // Configura la seguridad de la cookie según sea necesario
 }));
+// Usa connect-flash
+app.use(flash());
 // Configurar EJS como motor de plantillas
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));
@@ -35,13 +38,16 @@ app.use(express.urlencoded({ extended: true })); // Para solicitudes URL-encoded
 app.use(express.static(path.join(__dirname, 'public')));
 
 const authRoutes = require('./src/routes/authRoutes'); // Verifica la ruta correcta
+const mysteryRoutes = require('./src/routes/mysteryRoutes');
 const { error } = require('console');
+const { moveMessagePortToContext } = require('worker_threads');
 
 // Importar y usar rutas
 /* app.use('/auth', require('./src/routes/authRoutes')); */
 app.use('/auth', authRoutes);
 app.use('/admin', require('./src/routes/adminRoutes'));
 app.use('/evaluador', require('./src/routes/evaluerRoutes'));
+app.use('/mystery', mysteryRoutes);
 app.use('/forms', require('./src/routes/formsRoutes'));
 app.use('/', require('./src/routes/homeRoutes'));
 
