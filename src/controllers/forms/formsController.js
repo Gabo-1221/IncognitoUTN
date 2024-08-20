@@ -4,6 +4,7 @@ const Categoria = require('../../models/Categoria')
 const Area = require('../../models/Area')
 const Encuesta = require('../../models/Encuesta')
 const EncPre = require('../../models/PreguntaEncuesta')
+const Usu = require('../../models/Usuario')
 //controlador para evaluador
 exports.newQuestion = async (req, res) => {
     try {
@@ -19,6 +20,37 @@ exports.newQuestion = async (req, res) => {
         res.redirect('/admin/listaPreguntas')
     } catch (error) {
         console.log("algo salio mal")
+        console.log(error)
+    }
+}
+
+exports.findOnePregunta = async(req, res) => {
+    const {idPregunta} = req.params 
+    console.log(idPregunta)
+    try{
+        const pregunta = await Pregunta.findById(idPregunta);
+        console.log(pregunta)
+        // Renderizas el formulario con los datos de la pregunta y la categoría
+        res.json({
+            title:" Editor Pregunta",
+            pregunta: pregunta.nombre,
+            categoria: pregunta.id_categoria,  // ID de la categoría seleccionada
+            creadoPor: pregunta.id_creo
+          });
+    }catch(error){
+        console.log(error)
+    }
+}
+
+
+exports.deletePregunta = async (req, res) => {
+    try{
+        const {idpregunta} = req.params;
+        console.log(req.params)
+        await EncPre.deleteMany({id_pregunta:idpregunta})
+        await Pregunta.findByIdAndDelete(idpregunta);
+        res.redirect('/admin/listaPreguntas')
+    }catch(error){
         console.log(error)
     }
 }
@@ -118,18 +150,6 @@ exports.deleteEncuesta = async (req, res) => {
  
         await Encuesta.findByIdAndDelete(idEncuesta); 
         res.redirect('/admin/listaEncuesta')
-    }catch(error){
-        console.log(error)
-    }
-}
-
-exports.deletePregunta = async (req, res) => {
-    try{
-        const {idpregunta} = req.params;
-        console.log(req.params)
-        await EncPre.deleteMany({id_pregunta:idpregunta})
-        await Pregunta.findByIdAndDelete(idpregunta);
-        res.redirect('/admin/listaPreguntas')
     }catch(error){
         console.log(error)
     }
