@@ -28,7 +28,7 @@ exports.getPerfilEvaluer = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       res.render('perfil/perfilEvaluer', { title: 'Incognito UTN | Mi perfil', username: userData.username, rol: userData.rol,
-         apellido: userData.apellidos, email: userData.correo, fecha_nac: userData.fecha_nac, message: null, messageEmail: null });
+         apellido: userData.apellidos, email: userData.correo, fecha_nac: userData.fecha_nac, message: null, messageEmail: null, MessageNewPassword: null,MessageNewPasswordError: null, });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }

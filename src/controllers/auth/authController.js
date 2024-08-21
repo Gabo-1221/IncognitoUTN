@@ -9,6 +9,17 @@ const ROL_ADMIN = "66be37bf44270796dde41a7a";
 const ROL_EVALUADOR = "66be379a44270796dde41a79";
 const ROL_MYSTERY = "66be375044270796dde41a76";
 
+// Función auxiliar para determinar la vista según el rol
+function getViewForRole(rol) {
+  if (rol === 'Administrador') {
+    return 'perfil/perfilAdmin';
+  } else if (rol === 'Evaluador') {
+    return 'perfil/perfilEvaluer';
+  } else {
+    return 'perfil/perfilMystery';
+  }
+}
+
 
 // Muestra el formulario de inicio de sesión
 exports.formLogin = (req, res) => {
@@ -185,7 +196,7 @@ exports.updateUserData = async (req, res) => {
 
     if (result.success) {
       const userData = await userHelper.getUserData(userId);
-      const view = (userData.rol === 'Admin') ? 'perfil/perfilAdmin' :
+      const view = (userData.rol === 'Administrador') ? 'perfil/perfilAdmin' :
         (userData.rol === 'Evaluador') ? 'perfil/perfilEvaluer' :
           'perfil/perfilMystery';
 
@@ -197,11 +208,20 @@ exports.updateUserData = async (req, res) => {
         email: userData.correo,
         fecha_nac: userData.fecha_nac,
         message: result.message,
+        MessageNewPassword: null,
+        MessageNewPasswordError: null,
         messageEmail: null
       });
     } else {
       const userData = await userHelper.getUserData(userId);
-      res.render('perfil/perfilEvaluer', {
+      if (userData.rol === 'Administrador') {
+        errorView = 'perfil/perfilAdmin'; // Vista de error para Admin
+      } else if (userData.rol === 'Evaluador') {
+        errorView = 'perfil/perfilEvaluer'; // Vista de error para Evaluador
+      } else {
+        errorView = 'perfil/perfilMystery'; // Vista de error para Mystery
+      }
+      res.render(errorView, {
         title: 'Incognito UTN | Mi perfil',
         username: userData.username,
         rol: userData.rol,
@@ -209,6 +229,8 @@ exports.updateUserData = async (req, res) => {
         email: userData.correo,
         fecha_nac: userData.fecha_nac,
         message: result.message,
+        MessageNewPassword: null,
+        MessageNewPasswordError: null,
         messageEmail: result.messageEmail
       });
     }
@@ -217,7 +239,93 @@ exports.updateUserData = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar los datos', error: error.message });
   }
 };
-// Función para cerrar sesión
+
+exports.updateUserPassword = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(400).json({ message: 'Usuario no autenticado' });
+    }
+
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    // 1. Obtener el usuario de la base de datos
+    const usuario = await Usuario.findById(userId);
+    if (!usuario) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // 2. Comparar la contraseña actual con la contraseña almacenada
+    const match = await bcrypt.compare(currentPassword, usuario.contrasena);
+    if (!match) {
+      // Contraseña actual incorrecta
+      const userData = await userHelper.getUserData(userId);
+      const view = getViewForRole(userData.rol); // Usar la función auxiliar para obtener la vista correcta
+      return res.render(view, {
+        title: 'Incognito UTN | Mi perfil',
+        username: userData.username,
+        rol: userData.rol,
+        apellido: userData.apellidos,
+        email: userData.correo,
+        fecha_nac: userData.fecha_nac,
+        message: null,
+        MessageNewPassword: null,
+        MessageNewPasswordError: 'La contraseña actual es incorrecta',
+        messageEmail: null
+      });
+    }
+
+    // 3. Verificar si la nueva contraseña y la confirmación coinciden
+    if (newPassword !== confirmPassword) {
+      // Las contraseñas no coinciden
+      const userData = await userHelper.getUserData(userId);
+      const view = getViewForRole(userData.rol);
+      return res.render(view, {
+        title: 'Incognito UTN | Mi perfil',
+        username: userData.username,
+        rol: userData.rol,
+        apellido: userData.apellidos,
+        email: userData.correo,
+        fecha_nac: userData.fecha_nac,
+        message: null,
+        MessageNewPassword: null,
+        MessageNewPasswordError: 'La nueva contraseña y la confirmación no coinciden',
+        messageEmail: null
+      });
+    }
+
+    // 4. Encriptar la nueva contraseña
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // 5. Actualizar la contraseña en la base de datos
+    usuario.contrasena = hashedPassword;
+    await usuario.save();
+
+    // 6. Redirigir al usuario a su perfil con un mensaje de éxito
+    const userData = await userHelper.getUserData(userId);
+    const view = getViewForRole(userData.rol);
+    res.render(view, {
+      title: 'Incognito UTN | Mi perfil',
+      username: userData.username,
+      rol: userData.rol,
+      apellido: userData.apellidos,
+      email: userData.correo,
+      fecha_nac: userData.fecha_nac,
+      message: null,
+      MessageNewPassword: 'Contraseña actualizada con éxito',
+      MessageNewPasswordError: null,
+      messageEmail: null
+    });
+
+  } catch (error) {
+    console.error('Error al actualizar la contraseña:', error);
+    res.status(500).json({ message: 'Error al actualizar la contraseña', error: error.message });
+  } 
+};
+
+
+  // Función para cerrar sesión
 exports.logout = (req, res) => {
   // Destruye la sesión
   req.session.destroy(err => {

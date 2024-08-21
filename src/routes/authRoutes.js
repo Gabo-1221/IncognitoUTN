@@ -28,6 +28,8 @@ router.post('/rol_mystery', authController.selectRolMystery);
 
 router.post('/updateUserData', authController.updateUserData);
 
+router.post('/updateUserPassword', authController.updateUserPassword);
+
 router.get('/logout', authController.logout);
 
 module.exports = router;
