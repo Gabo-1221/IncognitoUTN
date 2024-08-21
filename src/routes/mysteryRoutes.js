@@ -1,10 +1,10 @@
-//
-const express = require('express');
+// src/routes/mysteryRoutes.js
+import express from 'express';
 const router = express.Router();
-const mysteryController = require('../controllers/mystery/mysteryController'); // Ajusta el nombre si es necesario
-const authMiddleware = require('../middleware/authMiddleware'); // Importa el middleware
+import mysteryController from '../controllers/mystery/mysteryController.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
-router.get('/home', authMiddleware, mysteryController.getHomeMystery); // Aplica el middleware
+router.get('/home', authMiddleware, mysteryController.getHomeMystery);
 router.get('/perfil', authMiddleware, mysteryController.getPerfilMystery);
 
-module.exports = router;
+export default router;

@@ -1,11 +1,11 @@
-//src /controllers/formsController.js
-const Pregunta = require('../../models/Pregunta')
-const Categoria = require('../../models/Categoria')
-const Area = require('../../models/Area')
-const Encuesta = require('../../models/Encuesta')
-const EncPre = require('../../models/PreguntaEncuesta')
+// src/controllers/forms/formsController.js
+import Pregunta from '../../models/Pregunta.js';
+import Categoria from '../../models/Categoria.js';
+import Area from '../../models/Area.js';
+import Encuesta from '../../models/Encuesta.js';
+import EncPre from '../../models/PreguntaEncuesta.js';
 //controlador para evaluador
-exports.newQuestion = async (req, res) => {
+export const newQuestion = async (req, res) => {
     try {
         const { pregunta, categoria, user } = req.body;
         const newQuestion = new Pregunta({
@@ -23,7 +23,7 @@ exports.newQuestion = async (req, res) => {
     }
 }
 
-exports.newCategoria = async (req, res) => {
+export const newCategoria = async (req, res) => {
     try {
         const { categoria, user } = req.body;
         const newCategoria = new Categoria({
@@ -39,7 +39,7 @@ exports.newCategoria = async (req, res) => {
 
 }
 
-exports.newArea = async (req, res) => {
+export const newArea = async (req, res) => {
     try {
         const { area, calificacion, user } = req.body;
         const newArea = new Area({
@@ -54,7 +54,7 @@ exports.newArea = async (req, res) => {
     }
 }
 
-exports.newEncuesta = async (req, res) => {
+export const newEncuesta = async (req, res) => {
     try {
         const { nombre, area, canperson, user, fechat } = req.body;
         const currentDate = new Date();
@@ -74,7 +74,7 @@ exports.newEncuesta = async (req, res) => {
         console.log(error)
     }
 }
-exports.newEncPreg = async (req, res) => {
+export const newEncPreg = async (req, res) => {
     const { encuestaId, preguntasSeleccionadas } = req.body;
   
     try {
@@ -96,3 +96,13 @@ exports.newEncPreg = async (req, res) => {
       return res.status(500).json({ error: 'Error en el servidor' });
     }
   };
+
+  const formsController = {
+    newQuestion,
+    newCategoria,
+    newArea,
+    newEncuesta,
+    newEncPreg
+  };
+  
+  export default formsController;

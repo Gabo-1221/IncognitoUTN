@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import Usuario from '../models/Usuario.js';
+
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const Usuario = require('../models/Usuario');
 
 // Define la constante para el estado activo
 const STATUS_ACTIVO = "66bf97d6d94dc47ae564b7d7";
@@ -61,4 +62,4 @@ router.get('/sobreNosotros', (req, res) => {
 });
 
 
-module.exports = router;
+export default router;

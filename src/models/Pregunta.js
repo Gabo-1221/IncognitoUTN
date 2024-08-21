@@ -1,9 +1,12 @@
-const mongoose = require('mongoose');
+// models/Pregunta.js (o el nombre del archivo)
+import mongoose from 'mongoose';
 
 const preguntaSchema = new mongoose.Schema({
-  nombre: { type: String , default: null },
+  nombre: { type: String, default: null },
   id_categoria: { type: String, default: null },
   id_creo: { type: Number, default: null },
 });
 
-module.exports = mongoose.model('preguntas', preguntaSchema);
+const Pregunta = mongoose.model('preguntas', preguntaSchema);
+
+export default Pregunta; 

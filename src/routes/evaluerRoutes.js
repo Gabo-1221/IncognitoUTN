@@ -1,12 +1,12 @@
 // src/routes/evaluerRoutes.js
 
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const evaluerController = require('../controllers/evaluador/evaluerController'); // Ajusta el nombre si es necesario
-const authMiddleware = require('../middleware/authMiddleware'); // Importa el middleware
+import evaluerController from '../controllers/evaluador/evaluerController.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 // Definir la ruta para la página de evaluador
-router.get('/home', authMiddleware, evaluerController.getHomeEvaluer); // Aplica el middleware
+router.get('/home', authMiddleware, evaluerController.getHomeEvaluer); 
 router.get('/perfil', authMiddleware, evaluerController.getPerfilEvaluer);
 
-module.exports = router;
+export default router; 

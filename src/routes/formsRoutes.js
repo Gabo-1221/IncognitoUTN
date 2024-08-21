@@ -1,8 +1,8 @@
 // src/routes/formsRoutes.js
 
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const formsController = require('../controllers/forms/formsController');
+import formsController from '../controllers/forms/formsController.js'; // Importar con ES Modules
 
 // Definir la ruta para la página de evaluador
 router.post('/nuevaPregunta', formsController.newQuestion);
@@ -11,7 +11,6 @@ router.post('/nuevArea', formsController.newArea);
 router.post('/nuevaEncuesta', formsController.newEncuesta);
 router.post('/nuevaEncPreg', formsController.newEncPreg);
 
-
 //outer.get('/formEncuestaP2/:categoriaId', formsController.getAsksByCategoria);
 
-module.exports = router;
+export default router; // Exportar el router usando ES Modules

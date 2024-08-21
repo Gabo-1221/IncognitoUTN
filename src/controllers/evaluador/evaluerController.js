@@ -1,7 +1,7 @@
 // controllers/evaluador/evaluerController.js
-const userHelper = require('../../helpers/userHelper'); // Importa la función auxiliar
+import userHelper from '../../helpers/userHelper.js';
 
-exports.getHomeEvaluer = async (req, res) => {
+export const getHomeEvaluer = async (req, res) => {
   try {
     const userId = req.session.userId;
     if (!userId) {
@@ -19,7 +19,7 @@ exports.getHomeEvaluer = async (req, res) => {
   }
 };
 
-exports.getPerfilEvaluer = async (req, res) => {
+export const getPerfilEvaluer = async (req, res) => {
   try {
     const userId = req.session.userId;
     if (!userId) {
@@ -37,3 +37,10 @@ exports.getPerfilEvaluer = async (req, res) => {
     res.status(500).json({ message: 'Error 2', error: error.message });
   }
 };
+
+const evaluerController = {
+  getHomeEvaluer,
+  getPerfilEvaluer
+};
+
+export default evaluerController;
