@@ -16,7 +16,7 @@ export const getHomeAdmin = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/homeAdmin', { title: 'Incognito UTN | Administrador', username: userData.username, rol: userData.rol, activeSection: 'dashboard' });
+        res.render('admin/homeAdmin', { title: 'Incognito UTN | Administrador', username: userData.username, rol: userData.rol, activeSection: 'dashboard',imagen: userData.imagen });
       } else {        
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
@@ -39,7 +39,7 @@ export const getUsers = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaUsuario', { title: 'Incognito UTN | Usuarios', username: userData.username, rol: userData.rol, usuarios: usuarios, activeSection: 'usuarios' });
+        res.render('admin/listaUsuario', { title: 'Incognito UTN | Usuarios', username: userData.username, rol: userData.rol, usuarios: usuarios, activeSection: 'usuarios',imagen: userData.imagen });
       } else {        
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
@@ -64,7 +64,7 @@ export const getQuestions = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaEncuesta', { title: 'Incognito UTN | Lista Encuesta', username: userData.username, rol: userData.rol, categorias: categorias, areas: areas, activeSection: 'encuestas' });
+        res.render('admin/listaEncuesta', { title: 'Incognito UTN | Lista Encuesta', username: userData.username, rol: userData.rol, categorias: categorias, areas: areas, activeSection: 'encuestas' , encuestas: encuestas,imagen: userData.imagen});
       } else {        
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
@@ -81,14 +81,14 @@ export const getAsks = async (req, res) => {
   try {
     const userId = req.session.userId;
     const preguntas = await Pregunta.find()
-    const areas = await Area.find()
+    const categorias = await Categoria.find()
     if (!userId) {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaPreguntas', { title: 'Incognito UTN | Lista Preguntas', username: userData.username, rol: userData.rol, preguntas: preguntas, activeSection: 'preguntas' });
+        res.render('admin/listaPreguntas', { title: 'Incognito UTN | Lista Preguntas', username: userData.username, rol: userData.rol, preguntas: preguntas, activeSection: 'preguntas', categorias: categorias, imagen: userData.imagen });
       } else {        
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
@@ -137,7 +137,7 @@ export const getService = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaCategorias', { title: 'Incognito UTN | Lista Categorias', username: userData.username, rol: userData.rol, categorias: categorias, activeSection: 'categorias' });
+        res.render('admin/listaCategorias', { title: 'Incognito UTN | Lista Categorias', username: userData.username, rol: userData.rol, categorias: categorias, activeSection: 'categorias', imagen: userData.imagen});
       } else {        
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
@@ -160,7 +160,7 @@ export const getArea = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaAreas', { title: 'Incognito UTN | Lista Areas', username: userData.username, rol: userData.rol, areas: areas, activeSection: 'areas' });
+        res.render('admin/listaAreas', { title: 'Incognito UTN | Lista Areas', username: userData.username, rol: userData.rol, areas: areas, activeSection: 'areas',imagen: userData.imagen });
       } else {      
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
@@ -201,7 +201,7 @@ export const getPerfil = async (req, res) => {
         res.render('perfil/perfilAdmin', {
           title: 'Incognito UTN | Mi perfil', username: userData.username, rol: userData.rol,
           apellido: userData.apellidos, email: userData.correo, fecha_nac: userData.fecha_nac, message: null, messageEmail: null,
-          MessageNewPassword: null, MessageNewPasswordError: null, activeSection: "perfil"
+          MessageNewPassword: null, MessageNewPasswordError: null, activeSection: "perfil",imagen: userData.imagen
         });
       } else {        
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });

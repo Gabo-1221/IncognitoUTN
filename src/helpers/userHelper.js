@@ -13,7 +13,8 @@ async function getUserData(userId) {
         apellidos: usuario.apellidos,
         correo: usuario.correo,
         fecha_nac: usuario.fecha_nac,
-        contrasena: usuario.contrasena // <-- Agrega esta línea para incluir la contraseña
+        contrasena: usuario.contrasena, // <-- Agrega esta línea para incluir la contraseña
+        imagen: usuario.profilePicture
       };
     } else {
       return null;

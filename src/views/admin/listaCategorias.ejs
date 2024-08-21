@@ -67,10 +67,10 @@
 
                               <td>    
                                   <div class="dropdown">
-                                      <a class="m-1" href="" style="color: inherit;"
-                                      ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                      >
-                                      <a class="m-1" href="" style="color: inherit;"
+                                    <button class="m-1 btn" type="button" onclick="abrirModalEditar('<%= categoria._id %>')"
+                                      ><i class="bx bx-edit-alt me-1"></i> Edit</button>
+                                      <%- include('../forms/formEditarCategoria.ejs') %>
+                                      <a class="m-1" href="#" onclick="confirmDeletion('<%= categoria._id %>'); return false;" style="color: inherit;"
                                       ><i class="bx bx-trash me-1"></i> Delete</a
                                       >
                                   </div>
@@ -87,7 +87,29 @@
 
             </div>
             <!-- / Content -->
-
+            <script>
+              function confirmDeletion(id) {
+                if (confirm('¿Estás seguro de que deseas eliminar esta categoria?')) {
+                  window.location.href = '/forms/eliminarCategoria/' + id;
+                }
+              }
+            </script>
+             <script>
+              function abrirModalEditar(idCategoria) {
+                    fetch(`/admin/listaCategorias/${idCategoria}`)  // Hacer la solicitud para obtener la pregunta por su ID
+                    .then(response => response.json())
+                    .then(data => {
+                        // Rellenar los campos del formulario con los datos recibidos
+                        document.querySelector('#modalEditarC  #id').value = data.id;
+                        document.querySelector('#modalEditarC #categoria').value = data.categoria;
+                        document.querySelector('#modalEditarC #user').value = data.creadoPor; // Establecer el ID de la pregunta en el campo oculto
+            
+                        // Mostrar el modal
+                        new bootstrap.Modal(document.getElementById('modalEditarC')).show();
+                    })
+                    .catch(error => console.error('Error al obtener los datos de la categoria:', error));
+                }
+              </script>
             <!-- <%- include('../components/footer') %> -->
 
             <div class="content-backdrop fade"></div>
