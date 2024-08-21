@@ -33,6 +33,7 @@ exports.findOnePregunta = async(req, res) => {
         // Renderizas el formulario con los datos de la pregunta y la categoría
         res.json({
             title:" Editor Pregunta",
+            id: pregunta._id,
             pregunta: pregunta.nombre,
             categoria: pregunta.id_categoria,  // ID de la categoría seleccionada
             creadoPor: pregunta.id_creo
@@ -42,6 +43,16 @@ exports.findOnePregunta = async(req, res) => {
     }
 }
 
+exports.updateAsk = async (req, res) => {
+    const {id, pregunta, categoria, user} = req.body;
+    console.log(req.body)
+    await Pregunta.findByIdAndUpdate(id,{
+        nombre: pregunta, 
+        id_categoria: categoria, 
+        id_creo: user
+    })
+    res.redirect('/admin/listaPreguntas')
+}
 
 exports.deletePregunta = async (req, res) => {
     try{
@@ -71,6 +82,34 @@ exports.newCategoria = async (req, res) => {
 
 }
 
+exports.findOneCategoria = async(req, res) => {
+    const {idCategoria} = req.params 
+    console.log(idCategoria)
+    try{
+        const categoria = await Categoria.findById(idCategoria);
+        console.log(categoria)
+        // Renderizas el formulario con los datos de la pregunta y la categoría
+        res.json({
+            title:" Editor Categoria",
+            id: categoria._id,
+            categoria: categoria.nombre, 
+            creadoPor: categoria.id_creo
+          });
+    }catch(error){
+        console.log(error)
+    }
+}
+
+exports.updateCategoria = async (req, res) => {
+    const {id, categoria, user} = req.body;
+    console.log(req.body)
+    await Categoria.findByIdAndUpdate(id,{
+        nombre: categoria, 
+        id_creo: user
+    })
+    res.redirect('/admin/listaCategorias')
+}
+
 exports.deleteCategoria = async (req, res) => {
     try{
         const {idcategoria} = req.params;
@@ -96,6 +135,36 @@ exports.newArea = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+exports.findOneArea = async(req, res) => {
+    const {idArea} = req.params 
+    console.log(idArea)
+    try{
+        const area = await Area.findById(idArea);
+        console.log(area)
+        // Renderizas el formulario con los datos de la pregunta y la categoría
+        res.json({
+            title:" Editor Area",
+            id: area._id,
+            area: area.nombre, 
+            promedio: area.promedio, 
+            creadoPor: area.id_creo
+          });
+    }catch(error){
+        console.log(error)
+    }
+}
+
+exports.updateArea= async (req, res) => {
+    const {id, area, promedio, user} = req.body;
+    console.log(req.body)
+    await Area.findByIdAndUpdate(id,{
+        nombre: area, 
+        promedio: promedio, 
+        id_creo: user
+    })
+    res.redirect('/admin/listaAreas')
 }
 
 exports.deleteArea = async (req, res) => {

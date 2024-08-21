@@ -23,6 +23,8 @@ router.get('/formPregunta',adminController.getFormAsk);
 router.get('/formCategoria',adminController.getCategoria);
 //router.get('/perfil', adminController.getPerfil)
 router.get('/listaPreguntas/:idPregunta', formsController.findOnePregunta);
+router.get('/listaCategorias/:idCategoria', formsController.findOneCategoria);
+router.get('/listaAreas/:idArea', formsController.findOneArea);
 router.get('/perfil',authMiddleware, adminController.getPerfil)
 
 

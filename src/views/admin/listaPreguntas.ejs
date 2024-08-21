@@ -94,22 +94,22 @@
             }
           </script>
           <script>
-           function abrirModalEditar(idPregunta) {
-    fetch(`/admin/listaPreguntas/${idPregunta}`)  // Hacer la solicitud para obtener la pregunta por su ID
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            // Rellenar los campos del formulario con los datos recibidos
-            document.getElementById('pregunta').value = data.pregunta;
-            document.getElementById('categoria').value = data.categoria;
-            document.getElementById('user').value = data.creadoPor; // Establecer el ID de la pregunta en el campo oculto
-
-            // Mostrar el modal
-            new bootstrap.Modal(document.getElementById('modalEditarP')).show();
-        })
-        .catch(error => console.error('Error al obtener los datos de la pregunta:', error));
-}
-          </script>
+            function abrirModalEditar(idPregunta) {
+                  fetch(`/admin/listaPreguntas/${idPregunta}`)  // Hacer la solicitud para obtener la pregunta por su ID
+                  .then(response => response.json())
+                  .then(data => {
+                      // Rellenar los campos del formulario con los datos recibidos
+                      document.querySelector('#modalEditarP  #id').value = data.id;
+                      document.querySelector('#modalEditarP  #pregunta').value = data.pregunta;
+                      document.querySelector('#modalEditarP #categoria').value = data.categoria;
+                      document.querySelector('#modalEditarP #user').value = data.creadoPor; // Establecer el ID de la pregunta en el campo oculto
+          
+                      // Mostrar el modal
+                      new bootstrap.Modal(document.getElementById('modalEditarP')).show();
+                  })
+                  .catch(error => console.error('Error al obtener los datos de la pregunta:', error));
+              }
+            </script>
             <!-- <%- include('../components/footer') %> -->
 
             <div class="content-backdrop fade"></div>

@@ -85,13 +85,13 @@ exports.getAsks = async (req, res) => {
   try {
     const userId = req.session.userId;
     const preguntas = await Pregunta.find()
-    const areas = await Area.find()
+    const categorias = await Categoria.find()
     if (!userId) {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('admin/listaPreguntas', { title: 'Incognito UTN | Lista Preguntas', username: userData.username, rol: userData.rol, preguntas: preguntas, activeSection: 'preguntas' });
+      res.render('admin/listaPreguntas', { title: 'Incognito UTN | Lista Preguntas', username: userData.username, rol: userData.rol, preguntas: preguntas, activeSection: 'preguntas', categorias: categorias });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }

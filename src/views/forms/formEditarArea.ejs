@@ -2,11 +2,11 @@
 
                     <!-- Vertically Centered Modal -->
 
-                    <div class="modal fade" id="modalEditarP" tabindex="-1" aria-hidden="true" aria-labelledby="modalCenterPe">
+                    <div class="modal fade" id="modalEditarA" tabindex="-1" aria-hidden="true" aria-labelledby="modalCenterPe">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h5 class="modal-title" id="modalEditarP">Modal title</h5>
+                              <h5 class="modal-title" id="modalCenterA">Modal title</h5>
                               <button
                                 type="button"
                                 class="btn-close"
@@ -14,26 +14,20 @@
                                 aria-label="Close"
                               ></button>
                             </div>
-                            <form action="/forms/editarPregunta" method="post">
+                            <form action="/forms/editarArea" method="post">
                             <div class="modal-body">
                                   <input type="hidden" name="id" id="id">
                                   <div class="mb-3">
-                                    <label class="form-label" for="pregunta">Pregunta</label>
-                                    <input type="text" class="form-control" id="pregunta" name="pregunta" value="" placeholder="Ingresa una pregunta nueva" />
+                                    <label class="form-label" for="area">Area</label>
+                                    <input type="text" class="form-control" id="area" name="area" placeholder="Ingresa una pregunta nueva" />
                                   </div>
                                   <div class="mb-3">
-
-                                    <label class="form-label" for="categoria">Categoria</label>
-                                    <select class="form-control" name="categoria" id="categoria">
-                                      <option value="1">Seleccionar una categoaria</option>
-                                      <% categorias.forEach( categoria => { %>
-                                        <option value="<%= categoria._id %>"> <%= categoria.nombre %></option>
-                                      <% }) %>
-                                    </select>
+                                    <label class="form-label" for="calificacion">Calificacion</label>
+                                    <input type="text" class="form-control" id="calificacion" value="0.0" name="calificacion" placeholder="0.0" readonly />
                                   </div>
                                   <div class="mb-3">
                                     <label class="form-label" for="user">Creado por...</label>
-                                    <input type="number" class="form-control" id="user" name="user"  placeholder="Usuario..." readonly/>
+                                    <input type="number" class="form-control" id="user" name="user" value="234" placeholder="Usuario..." readonly/>
                                   </div>
   
                                   <div class="modal-footer">

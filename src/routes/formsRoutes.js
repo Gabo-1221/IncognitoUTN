@@ -14,7 +14,9 @@ router.get('/eliminarPregunta/:idpregunta', formsController.deletePregunta);
 router.get('/eliminarCategoria/:idcategoria', formsController.deleteCategoria);
 router.get('/eliminarArea/:idArea', formsController.deleteArea);
 router.get('/eliminarEncuesta/:idEncuesta', formsController.deleteEncuesta);
-//router.get('/editarPregunta/:idPregunta', formsController.findOnePregunta)
+router.post('/editarPregunta', formsController.updateAsk);
+router.post('/editarCategoria', formsController.updateCategoria);
+router.post('/editarArea', formsController.updateArea);
 
 //outer.get('/formEncuestaP2/:categoriaId', formsController.getAsksByCategoria);
 
