@@ -116,7 +116,8 @@ export const Register = async (req, res) => {
       contrasena: hashedPassword,
       rol: null,
       terms: true,
-      status: "66bf97d6d94dc47ae564b7d7"
+      status: "66bf97d6d94dc47ae564b7d7",
+      profilePicture: null
     });
 
     await nuevoUsuario.save();
@@ -212,7 +213,9 @@ export const updateUserData = async (req, res) => {
         message: result.message,
         MessageNewPassword: null,
         MessageNewPasswordError: null,
-        messageEmail: null
+        messageEmail: null,
+        activeSection: 'perfil',
+        imagen: userData.imagen
       });
     } else {
       const userData = await userHelper.getUserData(userId);
@@ -234,7 +237,8 @@ export const updateUserData = async (req, res) => {
         MessageNewPassword: null,
         MessageNewPasswordError: null,
         messageEmail: result.messageEmail,
-        activeSection: 'perfil'
+        activeSection: 'perfil',
+        imagen: userData.imagen
       });
     }
   } catch (error) {
@@ -275,7 +279,8 @@ export const updateUserPassword = async (req, res) => {
         MessageNewPassword: null,
         MessageNewPasswordError: 'La contraseña actual es incorrecta',
         messageEmail: null,
-        activeSection: 'perfil'
+        activeSection: 'perfil',
+        imagen: userData.imagen
       });
     }
 
@@ -295,7 +300,8 @@ export const updateUserPassword = async (req, res) => {
         MessageNewPassword: null,
         MessageNewPasswordError: 'La nueva contraseña y la confirmación no coinciden',
         messageEmail: null,
-        activeSection: 'perfil'
+        activeSection: 'perfil',
+        imagen: userData.imagen
       });
     }
 
@@ -321,7 +327,8 @@ export const updateUserPassword = async (req, res) => {
       MessageNewPassword: 'Contraseña actualizada con éxito',
       MessageNewPasswordError: null,
       messageEmail: null,
-      activeSection: 'perfil'
+      activeSection: 'perfil',
+      imagen: userData.imagen
     });
 
   } catch (error) {
@@ -358,7 +365,27 @@ export const updateProfilePicture = async (req, res) => {
     // Actualizar la URL de la imagen en el documento del usuario
     await Usuario.findByIdAndUpdate(userId, { profilePicture: downloadURL });
 
-    res.redirect('/admin/perfil');
+    // Obtener los datos del usuario
+    const userData = await userHelper.getUserData(userId);
+
+    // Determinar la vista según el rol
+    const view = getViewForRole(userData.rol);
+
+    // Renderizar la vista con la nueva imagen
+    res.render(view, {
+      title: 'Incognito UTN | Mi perfil',
+      username: userData.username,
+      rol: userData.rol,
+      apellido: userData.apellidos,
+      email: userData.correo,
+      fecha_nac: userData.fecha_nac,
+      message: null,
+      MessageNewPassword: null,
+      MessageNewPasswordError: null,
+      messageEmail: null,
+      activeSection: 'perfil',
+      imagen: userData.imagen
+    });
 
   } catch (error) {
     console.error('Error al actualizar la foto de perfil:', error);
