@@ -1,8 +1,10 @@
 // controllers/auth/authController.js
-const bcrypt = require('bcrypt');
-const Usuario = require('../../models/Usuario');
-const jwt = require('jsonwebtoken');
-const userHelper = require('../../helpers/userHelper');
+import bcrypt from 'bcrypt';
+import Usuario from '../../models/Usuario.js'; // Agrega la extensión .js
+import jwt from 'jsonwebtoken';
+import userHelper from '../../helpers/userHelper.js'; // Agrega la extensión .js
+import { storage } from '../../config/firebase.js';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 // Define los roles como constantes
 const ROL_ADMIN = "66be37bf44270796dde41a7a";
@@ -22,7 +24,7 @@ function getViewForRole(rol) {
 
 
 // Muestra el formulario de inicio de sesión
-exports.formLogin = (req, res) => {
+export const formLogin = (req, res) => {
   // Puedes incluir un mensaje de error si está disponible en la sesión o en la solicitud
   const error = req.query.error || null; // Usar parámetros de consulta para mensajes de error
   const message = req.query.message || ''; // Mensaje de error si hay
@@ -30,7 +32,7 @@ exports.formLogin = (req, res) => {
 };
 
 // Maneja el inicio de sesión
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     // Busca al usuario por correo electrónico
@@ -53,7 +55,7 @@ exports.login = async (req, res) => {
     const STATUS_ACTIVO = "66bf97d6d94dc47ae564b7d7"; // Define la constante para el estado activo
     if (usuario.status !== STATUS_ACTIVO) {
       return res.render('auth/formLogin', { title: 'Incognito UTN | Iniciar sesión', error: true, message: 'Credenciales inválidas' });
-    }    
+    }
     // Guarda el ObjectId del usuario en la sesión
     req.session.userId = usuario._id;
     // Verifica si el usuario marcó la casilla "Recuérdame"
@@ -84,7 +86,7 @@ exports.login = async (req, res) => {
 };
 
 // Muestra el formulario de registro
-exports.formRegistrar = (req, res) => {
+export const formRegistrar = (req, res) => {
   // Puedes incluir un mensaje de error si está disponible en la sesión o en la solicitud
   const error = req.query.error || null; // Usar parámetros de consulta para mensajes de error
   const message = req.query.message || ''; // Mensaje de error si hay
@@ -92,7 +94,7 @@ exports.formRegistrar = (req, res) => {
   res.render('auth/formRegistro', { title: 'Registro', error, message });
 };
 
-exports.Register = async (req, res) => {
+export const Register = async (req, res) => {
   try {
     const { username, lastname, fecha_nac, email, password } = req.body;
 
@@ -130,7 +132,7 @@ exports.Register = async (req, res) => {
 
 
 
-exports.selectRolEvaluador = async (req, res) => {
+export const selectRolEvaluador = async (req, res) => {
   try {
     const userId = req.session.userId;
 
@@ -155,7 +157,7 @@ exports.selectRolEvaluador = async (req, res) => {
   }
 };
 
-exports.selectRolMystery = async (req, res) => {
+export const selectRolMystery = async (req, res) => {
   try {
     const userId = req.session.userId;
 
@@ -177,7 +179,7 @@ exports.selectRolMystery = async (req, res) => {
   res.render('selectRol', { userId });
 }; */
 
-exports.updateUserData = async (req, res) => {
+export const updateUserData = async (req, res) => {
   try {
     const userId = req.session.userId;
     if (!userId) {
@@ -241,7 +243,7 @@ exports.updateUserData = async (req, res) => {
   }
 };
 
-exports.updateUserPassword = async (req, res) => {
+export const updateUserPassword = async (req, res) => {
   try {
     const userId = req.session.userId;
     if (!userId) {
@@ -325,12 +327,48 @@ exports.updateUserPassword = async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar la contraseña:', error);
     res.status(500).json({ message: 'Error al actualizar la contraseña', error: error.message });
-  } 
+  }
+};
+
+export const updateProfilePicture = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'Usuario no autenticado' });
+    }
+
+    // Verificar si se ha subido un archivo
+    if (!req.file) {
+      return res.status(400).json({ message: 'No se ha subido ninguna imagen' });
+    }
+
+    // Crear una referencia en Firebase Storage
+    const storageRef = ref(storage, 'imagesUser/' + req.file.originalname);
+    const metadata = {
+      contentType: req.file.mimetype
+    };
+
+    // Subir la imagen a Firebase Storage
+    await uploadBytes(storageRef, req.file.buffer, metadata);
+
+    // Obtener la URL de la imagen
+    const downloadURL = await getDownloadURL(storageRef);
+
+    // Actualizar la URL de la imagen en el documento del usuario
+    await Usuario.findByIdAndUpdate(userId, { profilePicture: downloadURL });
+
+    res.redirect('/admin/perfil');
+
+  } catch (error) {
+    console.error('Error al actualizar la foto de perfil:', error);
+    res.status(500).json({ message: 'Error al actualizar la foto de perfil' });
+  }
 };
 
 
-  // Función para cerrar sesión
-exports.logout = (req, res) => {
+// Función para cerrar sesión
+export const logout = (req, res) => {
   // Destruye la sesión
   req.session.destroy(err => {
     if (err) {
@@ -343,3 +381,20 @@ exports.logout = (req, res) => {
     res.redirect('/');
   });
 };
+
+// Crea un objeto con todas las funciones del controlador
+const authController = {
+  formLogin,
+  login,
+  formRegistrar,
+  Register,
+  selectRolEvaluador,
+  selectRolMystery,
+  updateUserData,
+  updateUserPassword,
+  updateProfilePicture,
+  logout
+};
+
+// Exporta el objeto como valor por defecto
+export default authController;

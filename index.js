@@ -1,13 +1,24 @@
-const express = require('express');
-const path = require('path');
-const methodOverride = require('method-override');
-const session = require('express-session');
-const dotenv = require('dotenv');
-const connectDB = require('./src/config/db');
-const crypto = require('crypto');
-const cookieParser = require('cookie-parser');
-// Importa connect-flash
-const flash = require('connect-flash');
+import express from 'express';
+import path from 'path';
+import methodOverride from 'method-override';
+import session from 'express-session';
+import dotenv from 'dotenv';
+import connectDB from './src/config/db.js';
+import crypto from 'crypto';
+import cookieParser from 'cookie-parser';
+import flash from 'connect-flash';
+import authRoutes from './src/routes/authRoutes.js';
+import mysteryRoutes from './src/routes/mysteryRoutes.js';
+import adminRoutes from './src/routes/adminRoutes.js';
+import evaluerRoutes from './src/routes/evaluerRoutes.js';
+import formsRoutes from './src/routes/formsRoutes.js';
+import homeRoutes from './src/routes/homeRoutes.js';
+import jwt from 'jsonwebtoken';
+import { fileURLToPath } from 'url';
+
+// Obtener la ruta del directorio actual
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename); 
 
 dotenv.config();
 connectDB();
@@ -29,27 +40,25 @@ app.use(session({
 app.use(flash());
 // Configurar EJS como motor de plantillas
 app.set('view engine', 'ejs');
+//app.set('views', path.join(__dirname, 'src/views'));
 app.set('views', path.join(__dirname, 'src/views'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware para analizar cuerpos de solicitud
 app.use(express.json()); // Para solicitudes JSON
 app.use(express.urlencoded({ extended: true })); // Para solicitudes URL-encoded
 
-app.use(express.static(path.join(__dirname, 'public')));
 
-const authRoutes = require('./src/routes/authRoutes'); // Verifica la ruta correcta
-const mysteryRoutes = require('./src/routes/mysteryRoutes');
-const { error } = require('console');
-const { moveMessagePortToContext } = require('worker_threads');
+//app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Importar y usar rutas
-/* app.use('/auth', require('./src/routes/authRoutes')); */
 app.use('/auth', authRoutes);
-app.use('/admin', require('./src/routes/adminRoutes'));
-app.use('/evaluador', require('./src/routes/evaluerRoutes'));
+app.use('/admin', adminRoutes);
+app.use('/evaluador', evaluerRoutes);
 app.use('/mystery', mysteryRoutes);
-app.use('/forms', require('./src/routes/formsRoutes'));
-app.use('/', require('./src/routes/homeRoutes'));
+app.use('/forms', formsRoutes);
+app.use('/', homeRoutes);
 
 // Middleware para almacenar el userId en res.locals
 function guardarUserId(req, res, next) {
@@ -90,8 +99,9 @@ function isAuthenticated(req, res, next) {
 }
 
 // Usa el middleware isAuthenticated en las rutas protegidas
-app.use('/admin', isAuthenticated, require('./src/routes/adminRoutes'));
-app.use('/evaluador', isAuthenticated, require('./src/routes/evaluerRoutes'));
+// Usa el middleware isAuthenticated en las rutas protegidas
+app.use('/admin', isAuthenticated, adminRoutes); 
+app.use('/evaluador', isAuthenticated, evaluerRoutes); // Haz lo mismo para 
 
 
 // Manejar rutas no encontradas

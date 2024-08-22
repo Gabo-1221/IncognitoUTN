@@ -1,13 +1,13 @@
 // src/controllers/admin/adminController.js
-const Pregunta = require('../../models/Pregunta');
-const Categoria = require('../../models/Categoria');
-const Area = require('../../models/Area');
-const Usuario = require('../../models/Usuario');
-const Encuesta = require('../../models/Encuesta');
-const express = require('express');
-const userHelper = require('../../helpers/userHelper'); // Importa la función auxiliar
+import Pregunta from '../../models/Pregunta.js';
+import Categoria from '../../models/Categoria.js';
+import Area from '../../models/Area.js';
+import Usuario from '../../models/Usuario.js';
+import Encuesta from '../../models/Encuesta.js';
+import express from 'express';
+import userHelper from '../../helpers/userHelper.js'; 
 // Controlador para renderizar la vista homeAdmin
-exports.getHomeAdmin = async (req, res) => {
+export const getHomeAdmin = async (req, res) => {
   try {
     const userId = req.session.userId;
     if (!userId) {
@@ -29,7 +29,7 @@ exports.getHomeAdmin = async (req, res) => {
   }
 };
 
-exports.getUsers = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
     const userId = req.session.userId;
     const usuarios = await Usuario.find()
@@ -52,7 +52,7 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-exports.getQuestions = async (req, res) => {
+export const getQuestions = async (req, res) => {
   try {
     const userId = req.session.userId;
     const encuestas = await Encuesta.find()
@@ -77,7 +77,7 @@ exports.getQuestions = async (req, res) => {
   }
 };
 
-exports.getAsks = async (req, res) => {
+export const getAsks = async (req, res) => {
   try {
     const userId = req.session.userId;
     const preguntas = await Pregunta.find()
@@ -101,7 +101,7 @@ exports.getAsks = async (req, res) => {
   }
 };
 
-exports.getQuestionsByCategory = async (req, res) => {
+export const getQuestionsByCategory = async (req, res) => {
   try {
     const { categoriaId } = req.params;
 
@@ -117,7 +117,7 @@ exports.getQuestionsByCategory = async (req, res) => {
   }
 }
 
-exports.getlastEnc = async (req, res) => {
+export const getlastEnc = async (req, res) => {
   try {
     const lastRecord = await Encuesta.findOne().sort({ _id: -1 }).exec();
     res.json(lastRecord);
@@ -127,7 +127,7 @@ exports.getlastEnc = async (req, res) => {
   }
 }
 
-exports.getService = async (req, res) => {
+export const getService = async (req, res) => {
   try {
     const categorias = await Categoria.find()
     const userId = req.session.userId;
@@ -150,7 +150,7 @@ exports.getService = async (req, res) => {
   }
 };
 
-exports.getArea = async (req, res) => {
+export const getArea = async (req, res) => {
   try {
     const areas = await Area.find();
     const userId = req.session.userId;
@@ -173,23 +173,23 @@ exports.getArea = async (req, res) => {
   }
 };
 
-exports.getFormQuestion = (req, res) => {
+export const getFormQuestion = (req, res) => {
   res.render('forms/formEncuesta', { title: 'Creacion de Encuesta' })
 };
 
-exports.getFormQuestionP2 = (req, res) => {
+export const getFormQuestionP2 = (req, res) => {
   res.render('forms/formEncuestaP2', { title: 'Creacion de Encuesta' })
 };
 
-exports.getFormAsk = (req, res) => {
+export const getFormAsk = (req, res) => {
   res.render('forms/formPregunta', { title: 'Creacion de Pregunta' })
 };
 
-exports.getCategoria = (req, res) => {
+export const getCategoria = (req, res) => {
   res.render('forms/formCategoria', { title: 'Creacion de Categoria' })
 };
 
-exports.getPerfil = async (req, res) => {
+export const getPerfil = async (req, res) => {
   try {
     const userId = req.session.userId;
     if (!userId) {
@@ -215,3 +215,22 @@ exports.getPerfil = async (req, res) => {
   }
   //res.render('perfil/perfilAdmin',{title: 'Mi perfil'})
 };
+
+const adminController = {
+  getHomeAdmin,
+  getUsers,
+  getQuestions,
+  getAsks,
+  getQuestionsByCategory,
+  getlastEnc,
+  getService,
+  getArea,
+  getFormQuestion,
+  getFormQuestionP2,
+  getFormAsk,
+  getCategoria,
+  getPerfil
+};
+
+// Exporta el objeto como valor por defecto
+export default adminController;

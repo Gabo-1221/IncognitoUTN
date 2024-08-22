@@ -1,5 +1,6 @@
-const Usuario = require('../models/Usuario');
-const Rol = require('../models/Rol'); // Asegúrate de tener un modelo Rol
+// helpers/userHelper.js
+import Usuario from '../models/Usuario.js';
+import Rol from '../models/Rol.js';
 
 async function getUserData(userId) {
   try {
@@ -48,5 +49,11 @@ async function updateUserData(userId, updatedData) {
   }
 }
 
+const userHelper = {
+  getUserData,
+  updateUserData
+};
 
-module.exports = { getUserData, updateUserData}; 
+
+// Exporta el objeto como valor por defecto
+export default userHelper;
