@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import dotenv from 'dotenv';
+dotenv.config(); // Esto debería ir al principio
 import { initializeApp } from "firebase/app";
 import { getStorage,ref } from 'firebase/storage';
 // TODO: Add SDKs for Firebase products that you want to use
