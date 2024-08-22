@@ -64,7 +64,7 @@ export const getQuestions = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaEncuesta', { title: 'Incognito UTN | Lista Encuesta', username: userData.username, rol: userData.rol, categorias: categorias, areas: areas, activeSection: 'encuestas' });
+        res.render('admin/listaEncuesta', { title: 'Incognito UTN | Lista Encuesta', username: userData.username, rol: userData.rol, categorias: categorias, areas: areas, activeSection: 'encuestas' , encuestas: encuestas});
       } else {        
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
@@ -88,7 +88,7 @@ export const getAsks = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaPreguntas', { title: 'Incognito UTN | Lista Preguntas', username: userData.username, rol: userData.rol, preguntas: preguntas, activeSection: 'preguntas' });
+        res.render('admin/listaPreguntas', { title: 'Incognito UTN | Lista Preguntas', username: userData.username, rol: userData.rol, preguntas: preguntas, activeSection: 'preguntas', categorias: categorias });
       } else {        
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
