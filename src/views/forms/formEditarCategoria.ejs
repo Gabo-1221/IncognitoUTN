@@ -1,0 +1,41 @@
+                              <div class="modal fade" id="modalEditarC" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="modalCategoriaTitle">Modal title</h5>
+                                      <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                      ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form action="/forms/editarCategoria" method="post">
+                                            <input type="hidden" name="id" id="id">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="categoria">Nombre</label>
+                                            <input type="text" class="form-control" id="categoria" name="categoria"/>
+                                          </div>
+                                          <div class="mb-3">
+                                            <label class="form-label" for="basic-default-company">Creado por</label>
+                                            <input type="text" class="form-control" id="user" name="user" placeholder="Usuario.." readonly/>
+                                          </div>
+          
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                              <button type="submit" class="btn btn-primary">Enviar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+          
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              
+
+
+
+                                

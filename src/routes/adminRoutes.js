@@ -4,6 +4,7 @@ import express from 'express';
 const router = express.Router();
 import adminController from '../controllers/admin/adminController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
+import formsController from '../controllers/forms/formsController';
 
 // Definir la ruta para la página de administración
 router.get('/home', authMiddleware, adminController.getHomeAdmin);

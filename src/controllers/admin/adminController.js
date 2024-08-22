@@ -81,7 +81,7 @@ export const getAsks = async (req, res) => {
   try {
     const userId = req.session.userId;
     const preguntas = await Pregunta.find()
-    const areas = await Area.find()
+    const categorias = await Categoria.find()
     if (!userId) {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });
     }
