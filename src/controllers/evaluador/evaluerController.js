@@ -9,7 +9,8 @@ export const getHomeEvaluer = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId); 
     if (userData) {
-      res.render('evaluer/homeEvaluer', { title: 'Evaluador', username: userData.username, rol: userData.rol, imagen: userData.imagen });
+      res.render('evaluer/homeEvaluer', { title: 'Evaluador', username: userData.username, rol: userData.rol,
+         imagen: userData.imagen, activeSection: 'dashboard' });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -29,7 +30,7 @@ export const getPerfilEvaluer = async (req, res) => {
     if (userData) {
       res.render('perfil/perfilEvaluer', { title: 'Incognito UTN | Mi perfil', username: userData.username, rol: userData.rol,
          apellido: userData.apellidos, email: userData.correo, fecha_nac: userData.fecha_nac, message: null, messageEmail: null,
-          MessageNewPassword: null,MessageNewPasswordError: null, imagen: userData.imagen });
+          MessageNewPassword: null,MessageNewPasswordError: null, imagen: userData.imagen, activeSection: 'perfil' });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
