@@ -9,7 +9,7 @@ export const getHomeMystery = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('mystery/homeMystery', { title: 'Mystery', username: userData.username, rol: userData.rol,
+      res.render('mystery/homeMystery', { title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
           imagen: userData.imagen, activeSection: 'dashboard'
        });
     } else {
@@ -44,9 +44,53 @@ export const getPerfilMystery = async (req, res) => {
   }
 };
 
+/* getListaEncuestasPendientes */
+export const getListaEncuestasPendientes = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(400).json({ message: 'Usuario no autenticado' + userId });
+    }
+    const userData = await userHelper.getUserData(userId);
+    if (userData) {
+      res.render('mystery/listaEncuestasPendientes', { title: 'Incognito UTN | Encuestas pendientes', username: userData.username, rol: userData.rol,
+          imagen: userData.imagen, activeSection: 'encuestasPendientes'
+       });
+    } else {
+      res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error 2', error: error.message });
+  }
+}
+
+/* getListaEncuestasRealizadas */
+export const getListaEncuestasRealizadas = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(400).json({ message: 'Usuario no autenticado' + userId });
+    }
+    const userData = await userHelper.getUserData(userId);
+    if (userData) {
+      res.render('mystery/listaEncuestasRealizadas', { title: 'Incognito UTN | Encuestas realizadas', username: userData.username, rol: userData.rol,
+          imagen: userData.imagen, activeSection: 'encuestasRealizadas'
+       });
+    } else {
+      res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error 2', error: error.message });
+  }
+}
+
 const mysteryController = {
   getHomeMystery,
-  getPerfilMystery
+  getPerfilMystery,
+  getListaEncuestasPendientes,
+  getListaEncuestasRealizadas
 };
 
 export default mysteryController;
