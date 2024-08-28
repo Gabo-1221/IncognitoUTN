@@ -58,7 +58,7 @@
                         </div>
                       </div>
                       <script>
-                        const selectedaPreguntas = {};
+                        const selectedPreguntas = {};
 
                     document.getElementById('categoriaSelect').addEventListener('change', async function() {
                         const categoriaId = this.value;
@@ -82,22 +82,22 @@
                             checkbox.value = pregunta._id;
 
                             // Restaurar selección si la pregunta ya estaba seleccionada
-                            if (selectedaPreguntas[categoriaId] && selectedaPreguntas[categoriaId].includes(pregunta._id)) {
+                            if (selectedPreguntas[categoriaId] && selectedPreguntas[categoriaId].includes(pregunta._id)) {
                                 checkbox.checked = true;
                             }
 
                             // Actualizar el objeto de selecciones al marcar/desmarcar una pregunta
                             checkbox.addEventListener('change', function() {
-                                if (!selectedaPreguntas[categoriaId]) {
-                                  selectedaPreguntas[categoriaId] = [];
+                                if (!selectedPreguntas[categoriaId]) {
+                                    selectedPreguntas[categoriaId] = [];
                                 }
 
                                 if (this.checked) {
                                     // Añadir pregunta seleccionada
-                                    selectedaPreguntas[categoriaId].push(pregunta._id);
+                                    selectedPreguntas[categoriaId].push(pregunta._id);
                                 } else {
                                     // Eliminar pregunta deseleccionada
-                                    selectedaPreguntas[categoriaId] = selectedaPreguntas[categoriaId].filter(id => id !== pregunta._id);
+                                    selectedPreguntas[categoriaId] = selectedPreguntas[categoriaId].filter(id => id !== pregunta._id);
                                 }
                             });
 
@@ -144,7 +144,7 @@
                             function handleSubmit() {
                                 // Combinar todas las selecciones de todas las categorías en un solo array
                                 const encuestaId = document.getElementById('idEncuesta').value;
-                                const allSelectedPreguntas = Object.values(selectedaPreguntas).flat();
+                                const allSelectedPreguntas = Object.values(selectedPreguntas).flat();
 
                                 // Asegúrate de que el array no esté vacío
                                 if (allSelectedPreguntas.length === 0) {

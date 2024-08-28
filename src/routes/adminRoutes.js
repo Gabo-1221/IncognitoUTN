@@ -25,6 +25,7 @@ router.get('/formCategoria', adminController.getCategoria);
 router.get('/listaPreguntas/:idPregunta', formsController.findOnePregunta);
 router.get('/listaCategorias/:idCategoria', formsController.findOneCategoria);
 router.get('/listaAreas/:idArea', formsController.findOneArea);
+router.get('/listaEncuesta/:idEncuesta', formsController.findOneEncuesta);
 router.get('/perfil', authMiddleware, adminController.getPerfil);
 
 
