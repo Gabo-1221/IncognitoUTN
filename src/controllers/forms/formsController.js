@@ -277,12 +277,36 @@ export const newEncuesta = async (req, res) => {
     });
 
     await newEncuesta.save();
-    res.status(200).json({ message: 'Encuesta guardada correctamente' }); 
+    //res.status(200).json({ message: 'Encuesta guardada correctamente' }); 
   } catch (error) {
     console.error("Error al guardar la encuesta:", error);
     res.status(500).json({ error: 'Error al guardar la encuesta' });
   }
 };
+
+export const findOneEncuesta = async(req, res ) => {
+  const {idEncuesta} = req.params;
+  console.log(idEncuesta);
+  try {
+
+    const encuesta = await Encuesta.findById(idEncuesta);
+    console.log(encuesta);
+    res.json({
+      title: "Editor Encuesta",
+      id: encuesta._id,
+      nombre: encuesta.nombre,
+      area: encuesta.id_area,
+      encargo: encuesta.id_encargado,
+      cantidad: encuesta.cantidad
+    
+    });
+    if(!encuesta){
+      return res.status(404).json({message:'Encuesta no encontrada'})
+    }
+  } catch (error) {
+    console.log('Error al obyener la Encuesta deseada')
+  }
+}
 
 // Controlador para eliminar una encuesta
 export const deleteEncuesta = async (req, res) => {
@@ -341,6 +365,7 @@ const formsController = {
     updateArea,
     deleteArea,
     newEncuesta,
+    findOneEncuesta,
     deleteEncuesta,
     newEncPreg
 };

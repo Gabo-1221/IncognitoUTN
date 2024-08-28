@@ -76,9 +76,9 @@
                               <td><i class="bx bx-star"></i> <%= encuesta.calificacion %> </td>
                               <td>    
                                   <div class="dropdown">
-                                      <a class="m-1" href="" style="color: inherit;"
-                                      ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                      >
+                                    <button class="m-1 btn" type="button" onclick="abrirModalEditarE('<%= encuesta._id %>')"
+                                      ><i class="bx bx-edit-alt me-1"></i> Edit</button>
+                                      <%- include('../forms/formEditarEncuesta.ejs') %>
                                       <a class="m-1" href="#" onclick="confirmDeletion('<%= encuesta._id %>'); return false;" style="color: inherit;"
                                       ><i class="bx bx-trash me-1"></i> Delete</a
                                       >
@@ -100,6 +100,27 @@
                   window.location.href = '/forms/eliminarEncuesta/' + id;
                 }
               }
+            </script>
+            <script>
+              function abrirModalEditarE(idEncuesta) {
+                // Cargar los datos de la encuesta para editar
+                fetch(`/admin/listaEncuesta/${idEncuesta}`)
+                .then(response => response.json())
+                .then(data => {
+                      console.log(data);
+                // Llenar el formulario con los datos de la encuesta
+                document.querySelector('#modalToggleEditar #nombre').value = data.nombre;
+                document.querySelector('#modalToggleEditar #areaSelect').value = data.area;
+                document.querySelector('#modalToggleEditar #fechat').value = data.encargo;
+                document.querySelector('#modalToggleEditar #canperson').value = data.cantidad;
+
+                new bootstrap.Modal(document.getElementById('modalToggleEditar')).show();
+
+            })
+            .catch(error => {
+                console.error('Error al cargar los datos de la encuesta:', error);
+            });
+          }
             </script>
             <!-- <%- include('../components/footer') %> -->
 
