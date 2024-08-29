@@ -3,12 +3,16 @@ import mongoose from 'mongoose';
 
 const encuestaSchema = new mongoose.Schema({
   nombre: { type: String, default: null },
-  id_area: { type: String, default: null },
+  id_area: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'areas' // Referencia al modelo 'areas'
+  },
   id_encargado: { type: String, default: null },
   cantidad: { type: Number, default: null },
   fecha_creada: { type: Date, default: null },
   fecha_limite: { type: Date, default: null },
-  calificacion: { type: Number, default: null },
+  calificacion: { type: Number, default: null },  
+  id_usuarios_respondieron: { type: Array, default: [] },
 });
 
 const Encuesta = mongoose.model('encuestas', encuestaSchema);

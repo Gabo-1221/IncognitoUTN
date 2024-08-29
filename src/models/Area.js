@@ -5,6 +5,7 @@ const areaSchema = new mongoose.Schema({
   nombre: { type: String, default: null },
   promedio: { type: Number, default: null },
   id_creo: { type: Number, default: null },
+  color_hover: { type: String, default: null },
 });
 
 const Area = mongoose.model('areas', areaSchema);
