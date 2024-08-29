@@ -21,7 +21,8 @@
                                 ></button>
                               </div>
                                 <div class="modal-body">                              
-                                    <form action="/forms/EditarEncuesta" method="post">
+                                    <form >
+                                      <input type="hidden" id="id" name="id">
                                     <div class="mb-3">
                                       <label class="form-label" for="nombre">Nombre de la Encuesta</label>
                                       <input type="text" class="form-control" id="nombre" name="nombre"/>
@@ -66,15 +67,7 @@
                                     </div>
                                     
                                     <div class="modal-footer">
-                                      <button
-                                      type="submit"
-                                      class="btn btn-primary"
-                                      data-bs-target="#modalToggle2"
-                                      data-bs-toggle="modal"
-                                      data-bs-dismiss="modal"
-                                      >
-                                      Siguiente
-                                    </button>
+                                    <button type="button" class="btn btn-primary" id="abrirModal2">Siguiente</button> 
                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                       Cancelar
                                     </button>
@@ -88,3 +81,15 @@
 
                           <%- include('../forms/formEditarEncuestaP2.ejs') %>
 
+                          <script>
+                            // Event listener para abrir el Modal 2
+                            document.getElementById('abrirModal2').addEventListener('click', function() {
+                              // Cerrar el Modal 1
+                              const modal1 = bootstrap.Modal.getInstance(document.getElementById('modalToggleEditar'));
+                              modal1.hide(); 
+                          
+                              // Abrir el Modal 2
+                              const modal2 = new bootstrap.Modal(document.getElementById('modalTogglEditar2')); 
+                              modal2.show(); 
+                            });
+                          </script>

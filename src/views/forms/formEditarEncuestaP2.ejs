@@ -1,7 +1,4 @@
-
-
-                        
-                        <div class="modal fade" id="modalToggle2" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
+                        <div class="modal fade" id="modalTogglEditar2" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -16,8 +13,8 @@
                             <form id="encpreg" >
                             <div class="modal-body">
                                     <div class="mb-3">
-                                        <label for="categoriaSelect" class="form-label">Categoria</label>
-                                        <select class="form-select" id="categoriaSelect" name="categoria">
+                                        <label for="categoriaSelec" class="form-label">Categoria</label>
+                                        <select class="form-select" id="categoriaSelects" name="categoria">
                                           <option >Selecionar una categoria...</option>
                                           <% categorias.forEach(categoria => { %>
                                             <option value="<%=categoria._id %>"><%= categoria.nombre %></option>
@@ -29,21 +26,10 @@
                                     <div class="row mb-3">
                                         <div class="text-start-center">
                                             <label class="text-body" style="font-size: 25px;">Preguntas</label>
-<!--                                             <a href="/admin/listaPreguntas"><button class="btn btn-primary" type="button"><i href="" class="bx bx-plus"></i></button></a>
- -->                                        </div>
-                                        
                                         <div class="col-sm-10">
                                         <br>
-                                        <div id="preguntaList">
-<!--                                           <div class="form-check" >
-                                            <input class="form-check-input" type="checkbox" id="pregunta1" value="opcion1">
-                                            <label class="form-check-label" for="pregunta1">
-                                              Pregunta 1
-                                            </label>
-                                          </div> -->
-
+                                        <div id="preguntaList2">
                                         </div>
-
                                         <!-- Agrega más preguntas según sea necesario -->
                                       </div>
                                     </div>
@@ -51,94 +37,87 @@
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                  <button type="button" class="btn btn-primary"  onclick="handleSubmit()">Crear</button>
-                                </div>
+<!--                                   <button type="button" class="btn btn-primary"  onclick="handleSubmit()">Crear</button>
+ -->                                </div>
                               </form>
                           </div>
                         </div>
                       </div>
+
                       <script>
-                        const selectedPreguntas = {};
-
-                    document.getElementById('categoriaSelect').addEventListener('change', async function() {
+                        document.getElementById('categoriaSelects').addEventListener('change', async function() {
                         const categoriaId = this.value;
+                        const encuestaId = '66ce2a15204b900b416d0b84'
+                        const response = await fetch(`/admin/listaEncuestas/${encuestaId}`); // Ajustar la ruta 
+                        const {encuesta, categorias, preguntas, encpre}= await response.json();
+                        
+                        console.log('consultar encuesta')
+                        console.log(encuesta);
 
-                        // Realizar la solicitud AJAX a tu API para obtener las preguntas
-                        const response = await fetch(`/admin/listaEncuesta/${categoriaId}`);
-                        const preguntas = await response.json();
+                        console.log('conulstar preguntas')
+                        console.log(preguntas)
+                        
+                        console.log('encuesta pregunta');
+                        console.log(encpre)
+                        const idCategoriaP = preguntas.map(pregunta => pregunta.id_categoria)
+                        
 
-                        // Selecciona el contenedor donde se mostrarán las checkboxes
-                        const preguntaList = document.getElementById('preguntaList');
+                        console.log('ids categorias')
+                        console.log(idCategoriaP);
+                        
+                        const preguntasFiltradas = idCategoriaP.filter(id => 
+                          id === categoriaId
+                        ); 
 
-                        // Limpia las preguntas anteriores
+                        
+                        console.log('Catgegorias con preguna seleccionadas')
+                        console.log(preguntasFiltradas);
+                        const preguntaList = document.getElementById('preguntaList2');
                         preguntaList.innerHTML = '';
 
-                        // Llena el contenedor con las nuevas preguntas
-                        preguntas.forEach(pregunta => {
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.id = `pregunta-${pregunta._id}`;
-                            checkbox.name = 'preguntas';
-                            checkbox.value = pregunta._id;
+                        preguntasFiltradas.forEach(pregunta => {
+                          const checkbox = document.createElement('input');
+                          // ... (configuración del checkbox) ...
 
-                            // Restaurar selección si la pregunta ya estaba seleccionada
-                            if (selectedPreguntas[categoriaId] && selectedPreguntas[categoriaId].includes(pregunta._id)) {
-                                checkbox.checked = true;
-                            }
+                          // Verificar si la pregunta ya está seleccionada (usando IDs de categoría y pregunta)
+                          const estaSeleccionada = encpre.some(preguntaEncuesta => 
+                            preguntaEncuesta.id_encuesta === encuesta._id 
+                          );
 
-                            // Actualizar el objeto de selecciones al marcar/desmarcar una pregunta
-                            checkbox.addEventListener('change', function() {
-                                if (!selectedPreguntas[categoriaId]) {
-                                    selectedPreguntas[categoriaId] = [];
-                                }
+                          if (estaSeleccionada) {
+                            checkbox.checked = true;
+                          }
 
-                                if (this.checked) {
-                                    // Añadir pregunta seleccionada
-                                    selectedPreguntas[categoriaId].push(pregunta._id);
-                                } else {
-                                    // Eliminar pregunta deseleccionada
-                                    selectedPreguntas[categoriaId] = selectedPreguntas[categoriaId].filter(id => id !== pregunta._id);
-                                }
-                            });
+                          preguntasFiltradas.forEach(pregunta => {
+                      // Crear el checkbox
+                      const checkbox = document.createElement('input');
+                      checkbox.type = 'checkbox';
+                      checkbox.id = `pregunta-${pregunta._id}`;
+                      checkbox.name = 'preguntas[]'; // Usar [] para enviar un array de IDs al servidor
+                      checkbox.value = pregunta._id;
 
-                            const label = document.createElement('label');
-                            label.htmlFor = `pregunta-${pregunta._id}`;
-                            label.textContent = pregunta.nombre;
+                      // Crear el label
+                      const label = document.createElement('label');
+                      label.htmlFor = `pregunta-${pregunta._id}`;
+                      label.textContent = pregunta.nombre;
+                      label.classList.add('form-check-label'); // Agregar clase para estilos (opcional)
 
-                            const div = document.createElement('div');
-                            div.appendChild(checkbox);
-                            div.appendChild(label);
+                      // Crear un div contenedor (opcional, para mejorar el diseño)
+                      const div = document.createElement('div');
+                      div.classList.add('form-check'); // Agregar clase para estilos (opcional)
 
-                            preguntaList.appendChild(div);
+                      // Agregar el checkbox y el label al div contenedor
+                      div.appendChild(checkbox);
+                      div.appendChild(label);
+
+                      // Agregar el div contenedor al preguntaList
+                      preguntaList.appendChild(div); 
                         });
-                    });          
-                      </script>
-                      <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-        async function fetchLastRecord() {
-            try {
-                const response = await fetch('/admin/ultimoRegistro');
-                const lastRecord = await response.json();
-
-                const registroContainer = document.getElementById('registroContainer');
-
-                if (lastRecord) {
-                    registroContainer.innerHTML = `
-                        <input class="form-control" type="hidden" id="idEncuesta" name="idEncuesta" value="${lastRecord._id}" readonly>
-                        <label class="form-label" for="nombre">Nombre de la Encuesta</label>
-                        <input class="form-control" type="text" id="nombre" value=" ${lastRecord.nombre}" readonly>
-                    `;
-                } else {
-                    registroContainer.innerHTML = '<p>No se encontró ningún registro.</p>';
-                }
-            } catch (error) {
-                console.error('Error al obtener el último registro:', error);
-            }
-        }
-
-        // Llamar a la función fetchLastRecord cada 5 segundos
-        setInterval(fetchLastRecord, 1000);
-    });
+                       
+                        // Filtrar preguntas por categoría
+                        });
+                      
+                        })
                       </script>
                       <script>
                             function handleSubmit() {
@@ -148,8 +127,8 @@
 
                                 // Asegúrate de que el array no esté vacío
                                 if (allSelectedPreguntas.length === 0) {
-                                    alert('Por favor, selecciona al menos una pregunta.');
-                                    return;
+                                  alert('Por favor, selecciona al menos una pregunta.');
+                                  return;
                                 }
 
                                 // Opcional: Convertir a JSON si el servidor espera este formato
@@ -160,21 +139,22 @@
 
                                 // Enviar la solicitud al servidor
                                 fetch('/forms/nuevaEncPreg', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: dataToSend
+                                  method: 'POST',
+                                  headers: {
+                                    'Content-Type': 'application/json'
+                                  },
+                                  body: dataToSend
                                 })
                                 .then(response => response.json())
                                 .then(data => {
-                                    //console.log('Registro exitoso:' );
-                                    //recargar la pagina
-                                    location.reload();
+                                  //console.log('Registro exitoso:' );
+                                  //recargar la pagina
+                                  location.reload();
                                 })
                                 .catch(error => {
-                                    console.error('Error al registrar las preguntas:', error);
-                                    alert('Ocurrió un error al guardar las preguntas.');
+                                  console.error('Error al registrar las preguntas:', error);
+                                  alert('Ocurrió un error al guardar las preguntas.');
                                 });
-                            }
+                              }
+                            
                       </script>

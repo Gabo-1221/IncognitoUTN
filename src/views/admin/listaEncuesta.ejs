@@ -85,7 +85,7 @@
                                   </div>
                               </td>
                               </tr>
-                         <% }) %>
+                          <% }) %>
 
                         </tbody>
                       </table>
@@ -102,13 +102,14 @@
               }
             </script>
             <script>
-              function abrirModalEditarE(idEncuesta) {
+              function abrirModalEditarE(idEncuesta) {  
                 // Cargar los datos de la encuesta para editar
-                fetch(`/admin/listaEncuesta/${idEncuesta}`)
+                fetch(`/admin/listaEncuestas/${idEncuesta}`)
                 .then(response => response.json())
                 .then(data => {
-                      console.log(data);
+                
                 // Llenar el formulario con los datos de la encuesta
+                document.querySelector('#modalToggleEditar #id').value = data.id;
                 document.querySelector('#modalToggleEditar #nombre').value = data.nombre;
                 document.querySelector('#modalToggleEditar #areaSelect').value = data.area;
                 document.querySelector('#modalToggleEditar #fechat').value = data.encargo;
@@ -116,12 +117,13 @@
 
                 new bootstrap.Modal(document.getElementById('modalToggleEditar')).show();
 
-            })
-            .catch(error => {
-                console.error('Error al cargar los datos de la encuesta:', error);
-            });
-          }
+                  })
+                  .catch(error => {
+                      console.error('Error al cargar los datos de la encuesta:', error);
+                  });
+                }
             </script>
+
             <!-- <%- include('../components/footer') %> -->
 
             <div class="content-backdrop fade"></div>

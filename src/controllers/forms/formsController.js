@@ -5,6 +5,7 @@ import Area from '../../models/Area.js';
 import Encuesta from '../../models/Encuesta.js';
 import EncPre from '../../models/PreguntaEncuesta.js';
 import Usu from '../../models/Usuario.js'; // Importa el modelo Usuario
+import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
 
 
 // Controlador para agregar una nueva pregunta
@@ -286,27 +287,91 @@ export const newEncuesta = async (req, res) => {
 
 export const findOneEncuesta = async(req, res ) => {
   const {idEncuesta} = req.params;
-  console.log(idEncuesta);
+  
   try {
 
     const encuesta = await Encuesta.findById(idEncuesta);
-    console.log(encuesta);
+    if(!encuesta){
+      return res.status(404).json({message:'Encuesta no encontrada'})
+    }
     res.json({
       title: "Editor Encuesta",
       id: encuesta._id,
       nombre: encuesta.nombre,
       area: encuesta.id_area,
       encargo: encuesta.id_encargado,
-      cantidad: encuesta.cantidad
+      cantidad: encuesta.cantidad,
+      fechaT: encuesta.fecha_limite
     
     });
-    if(!encuesta){
-      return res.status(404).json({message:'Encuesta no encontrada'})
-    }
   } catch (error) {
-    console.log('Error al obyener la Encuesta deseada')
+    console.log('Error al obener la Encuesta deseada')
+  }
+};
+
+export const obtenerDatosEncuesta = async (req, res) => {
+  const { idEncuesta } = req.params;
+  try {
+    const encuesta = await Encuesta.findById('66ce2a15204b900b416d0b84');
+    const categorias = await Categoria.find();
+    const preguntas = await Pregunta.find(); // Todas las preguntas
+    const encpre = await EncPre.find();
+
+    res.json({ encuesta, categorias, preguntas, encpre }); 
+    } catch (error) {
+    // Manejar el error
+    console.error(error);
+    res.status(500).send('Error al obtener los datos de la encuesta');
+  }
+};
+
+export const preguntasSelects = async (req,res) => {
+  const { idEncuesta } = req.body;
+
+  try {
+    // Paso 1: Buscar las entradas de PreguntaEncuesta
+    const relaciones = await PreguntaEncuesta.find({ id_encuesta: idEncuesta });
+
+    if (!relaciones || relaciones.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron preguntas relacionadas a la encuesta' });
+    }
+
+    // Extraer los IDs de preguntas y categorías
+    const idPreguntas = relaciones.map(rel => rel.id_pregunta);
+
+    // Paso 2: Buscar los detalles de las preguntas usando los IDs
+    const preguntas = await Pregunta.find({ _id: { $in: idPreguntas } });
+
+    // Buscar todas las categorías disponibles
+    const categorias = await Categoria.find({});
+
+    if (!preguntas || preguntas.length === 0) {
+      return res.status(404).json({ message: 'Preguntas no encontradas' });
+    }
+
+    // Devolver las preguntas y las categorías
+    res.json({ preguntas, categorias });
+  } catch (error) {
+    console.error('Error al obtener las preguntas:', error);
+    res.status(500).json({ message: 'Error al obtener las preguntas' });
   }
 }
+//consulat ejemplo
+export const preguntasCategoria = async (req,res) => {
+  const { idEncuesta } = req.body;
+
+  try {
+    // Paso 1: Buscar las entradas de PreguntaEncuesta
+    const encpre = await EncPre.find({id_encuesta: '66ce2a15204b900b416d0b84'});
+    console.log(encpre);
+    res.json({encpre});
+
+  } catch (error) {
+    console.error('Error al obtener las preguntas:', error);
+    res.status(500).json({ message: 'Error al obtener las preguntas' });
+  }
+}
+
 
 // Controlador para eliminar una encuesta
 export const deleteEncuesta = async (req, res) => {
@@ -366,6 +431,9 @@ const formsController = {
     deleteArea,
     newEncuesta,
     findOneEncuesta,
+    obtenerDatosEncuesta,
+    preguntasSelects,
+    preguntasCategoria,
     deleteEncuesta,
     newEncPreg
 };
