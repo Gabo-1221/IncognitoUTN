@@ -92,10 +92,17 @@ export const deletePregunta = async (req, res) => {
 // Controlador para agregar una nueva categoría
 export const newCategoria = async (req, res) => {
   try {
-    const { categoria, user } = req.body;
+    const { categoria } = req.body; // No necesitas "user" en req.body
+    const userId = req.session.userId; // Obtener el ID del usuario loggeado
+
+    // Verificar si el usuario está loggeado
+    if (!userId) {
+      return res.status(401).json({ error: 'Debes iniciar sesión para crear una categoría' }); 
+    }
+
     const newCategoria = new Categoria({
       nombre: categoria,
-      id_creo: user
+      id_creo: userId  // Asignar el ID del usuario loggeado
     });
 
     await newCategoria.save();
@@ -130,12 +137,19 @@ export const findOneCategoria = async (req, res) => {
 
 // Controlador para actualizar una categoría
 export const updateCategoria = async (req, res) => {
-  const { id, categoria, user } = req.body;
+  const { id, categoria } = req.body; // No necesitas "user" en req.body
+  const userId = req.session.userId; // Obtener el ID del usuario loggeado
+
   try {
+    // Verificar si el usuario está loggeado
+    if (!userId) {
+      return res.status(401).json({ error: 'Debes iniciar sesión para actualizar una categoría' }); 
+    }
+
     const updatedCategoria = await Categoria.findByIdAndUpdate(id, {
       nombre: categoria,
-      id_creo: user
-    }, { new: true }); // Devuelve el documento actualizado
+      id_creo: userId // Asignar el ID del usuario loggeado
+    }, { new: true }); 
 
     if (!updatedCategoria) {
       return res.status(404).json({ message: 'Categoría no encontrada' });
