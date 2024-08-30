@@ -1,41 +1,39 @@
+<!-- Vertically Centered Modal -->
 
+<div class="modal fade" id="modalCenterP" tabindex="-1" aria-hidden="true" aria-labelledby="modalCenterPe">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCenterPe">Nueva área</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/forms/nuevArea" method="post">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label" for="area">Area</label>
+            <input type="text" class="form-control" id="area" name="area" placeholder="Ingresa una pregunta nueva" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="color">Color:</label>
+            <input type="text" class="form-control jscolor" id="color" name="color" > 
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="calificacion">Calificacion</label>
+            <input type="text" class="form-control" id="calificacion" value="0.0" name="calificacion" placeholder="0.0"
+              readonly />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="user">Creado por...</label>
+            <input type="number" class="form-control" id="user" name="user" placeholder="<%= username %>" readonly />
+          </div>
 
-                    <!-- Vertically Centered Modal -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
 
-                    <div class="modal fade" id="modalCenterP" tabindex="-1" aria-hidden="true" aria-labelledby="modalCenterPe">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="modalCenterPe">Nueva área</h5>
-                              <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                              ></button>
-                            </div>
-                            <form action="/forms/nuevArea" method="post">
-                            <div class="modal-body">
-                                  <div class="mb-3">
-                                    <label class="form-label" for="area">Area</label>
-                                    <input type="text" class="form-control" id="area" name="area" placeholder="Ingresa una pregunta nueva" />
-                                  </div>
-                                  <div class="mb-3">
-                                    <label class="form-label" for="calificacion">Calificacion</label>
-                                    <input type="text" class="form-control" id="calificacion" value="0.0" name="calificacion" placeholder="0.0" readonly />
-                                  </div>
-                                  <div class="mb-3">
-                                    <label class="form-label" for="user">Creado por...</label>
-                                    <input type="number" class="form-control" id="user" name="user"  placeholder="<%= username %>" readonly/>
-                                  </div>
-  
-                                  <div class="modal-footer">
-                                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                      <button type="submit" class="btn btn-primary">Guardar</button>
-                                    </div>
-                                  
-                            </div>
-                          </form>
-                          </div>
-                        </div>
-                      </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

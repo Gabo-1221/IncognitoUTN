@@ -199,7 +199,7 @@ export const deleteCategoria = async (req, res) => {
 // Controlador para agregar una nueva area
 export const newArea = async (req, res) => {
   try {
-    const { area, calificacion } = req.body;
+    const { area, calificacion,color } = req.body;
     const userId = req.session.userId; // Obtener el ID del usuario loggeado
 
     if (!userId) {
@@ -210,7 +210,8 @@ export const newArea = async (req, res) => {
     const newArea = new Area({
       nombre: area,
       promedio: calificacion,
-      id_creo: userId 
+      id_creo: userId,
+      color_hover: color
     });
 
     await newArea.save();
@@ -235,6 +236,7 @@ export const findOneArea = async (req, res) => {
       title: "Editor Area",
       id: area._id,
       area: area.nombre,
+      color_hover: area.color_hover,
       promedio: area.promedio.toString(), // Convertir Decimal128 a string 
       creadoPor: area.id_creo
     });
@@ -246,7 +248,7 @@ export const findOneArea = async (req, res) => {
 
 // Controlador para actualizar un área
 export const updateArea = async (req, res) => {
-  const { id, area, promedio } = req.body; // No necesitas "user" en req.body
+  const { id, area, promedio, color } = req.body; // No necesitas "user" en req.body
   const userId = req.session.userId; // Obtener el ID del usuario loggeado
 
   try {
@@ -257,6 +259,7 @@ export const updateArea = async (req, res) => {
 
     const updatedArea = await Area.findByIdAndUpdate(id, {
       nombre: area,
+      color_hover: color,
       id_creo: userId // Asignar el ID del usuario loggeado
     }, { new: true }); 
 
