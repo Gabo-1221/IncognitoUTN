@@ -10,11 +10,18 @@ import Usu from '../../models/Usuario.js'; // Importa el modelo Usuario
 // Controlador para agregar una nueva pregunta
 export const newQuestion = async (req, res) => {
   try {
-    const { pregunta, categoria, user } = req.body;
+    const { pregunta, categoria } = req.body; // No necesitas "user" en req.body
+    const userId = req.session.userId; // Obtener el ID del usuario loggeado
+
+    // Verificar si el usuario está loggeado
+    if (!userId) {
+      return res.status(401).json({ error: 'Debes iniciar sesión para crear una pregunta' }); 
+    }
+
     const newQuestion = new Pregunta({
       nombre: pregunta,
       id_categoria: categoria,
-      id_creo: user
+      id_creo: userId // Asignar el ID del usuario loggeado
     });
 
     await newQuestion.save();
@@ -51,17 +58,25 @@ export const findOnePregunta = async (req, res) => {
 
 // Controlador para actualizar una pregunta
 export const updateAsk = async (req, res) => {
-  const { id, pregunta, categoria, user } = req.body;
+  const { id, pregunta, categoria } = req.body; // No necesitas "user" en req.body
+  const userId = req.session.userId; // Obtener el ID del usuario loggeado
+
   try {
+    // Verificar si el usuario está loggeado
+    if (!userId) {
+      return res.status(401).json({ error: 'Debes iniciar sesión para actualizar una pregunta' }); 
+    }
+
     const updatedPregunta = await Pregunta.findByIdAndUpdate(id, {
       nombre: pregunta,
       id_categoria: categoria,
-      id_creo: user
-    }, { new: true }); // Devuelve el documento actualizado
+      id_creo: userId // Asignar el ID del usuario loggeado
+    }, { new: true }); 
 
     if (!updatedPregunta) {
       return res.status(404).json({ message: 'Pregunta no encontrada' });
     }
+
     res.redirect('/admin/listaPreguntas');
   } catch (error) {
     console.error("Error al actualizar la pregunta:", error);
