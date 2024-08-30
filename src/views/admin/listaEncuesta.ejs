@@ -104,7 +104,7 @@
             <script>
               function abrirModalEditarE(idEncuesta) {  
                 // Cargar los datos de la encuesta para editar
-                fetch(`/admin/listaEncuestas/${idEncuesta}`)
+                fetch(`/admin/listaEncuesta/${idEncuesta}`)
                 .then(response => response.json())
                 .then(data => {
                 
@@ -123,7 +123,7 @@
                   });
                 }
             </script>
-
+            
             <!-- <%- include('../components/footer') %> -->
 
             <div class="content-backdrop fade"></div>
@@ -137,7 +137,7 @@
     
     </div>
 
-
+    
     <%- include('../components/scriptsBody') %>
 
   </body>

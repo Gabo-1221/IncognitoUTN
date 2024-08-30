@@ -312,7 +312,7 @@ export const findOneEncuesta = async(req, res ) => {
 export const obtenerDatosEncuesta = async (req, res) => {
   const { idEncuesta } = req.params;
   try {
-    const encuesta = await Encuesta.findById('66ce2a15204b900b416d0b84');
+    const encuesta = await Encuesta.findById(idEncuesta);
     const categorias = await Categoria.find();
     const preguntas = await Pregunta.find(); // Todas las preguntas
     const encpre = await EncPre.find();

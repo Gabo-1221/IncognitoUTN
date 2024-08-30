@@ -93,3 +93,80 @@
                               modal2.show(); 
                             });
                           </script>
+                               <script>
+                                document.getElementById('categoriaSelects').addEventListener('change', async function() {
+                                const categoriaId = this.value;
+                                const encuestaId = '66ce2a15204b900b416d0b84'
+                                const response = await fetch(`/admin/listaEncuestas/${encuestaId}`); // Ajustar la ruta 
+                                const {encuesta, categorias, preguntas, encpre}= await response.json();
+                                
+                                //Separa todo de pregunta para colar en un arreglo
+                                const preguntasCat = preguntas.map(pregunta => {
+                                return{
+                                  id: pregunta._id,
+                                  id_categoria: pregunta.id_categoria,
+                                  nombre: pregunta.nombre
+                                }
+                                });
+                                
+                                //filtro y separo todas la pregunta con su categoria correspondiente
+                                const preguntasFiltradas = preguntasCat.filter(pregunta => 
+                                  pregunta.id_categoria === categoriaId
+                                ); 
+                                
+                                const encpreFilter = encpre.filter(encpreu =>
+                                  encpreu.id_encuesta === encuesta._id
+                                )
+
+                                /* console.log('Catgegorias con preguna seleccionadas')
+                                console.log(preguntasFiltradas); */
+                                const preguntaList = document.getElementById('preguntaList2');
+                                preguntaList.innerHTML = '';
+                                
+                                //mostrar la pregunta con su categori desde un checkbox
+                                preguntasFiltradas.forEach(pregunta => {
+                                  // ... (configuración del checkbox) ...
+        
+                                  // Verificar si la pregunta ya está seleccionada (usando IDs de categoría y pregunta
+                                  const estaSeleccionada = encpreFilter.some(preguntaEncuesta => 
+                                    preguntaEncuesta.id_encuesta === encuesta._id && preguntaEncuesta.id_pregunta === pregunta.id
+                                  );
+                                  
+                                  
+                                  // Crear el checkbox
+                                  const checkbox = document.createElement('input');
+                                  checkbox.type = 'checkbox';
+                                  checkbox.id = `pregunta-${pregunta.id}`;
+                                  checkbox.name = 'preguntas[]'; // Usar [] para enviar un array de IDs al servidor
+                                  checkbox.value = pregunta.id;
+
+
+                                  encpreFilter.forEach(element => {  
+                                    if(element.id_pregunta === pregunta.id){
+                                      checkbox.checked = true;
+                                    }
+
+                                  });
+        
+                              
+                                  // Crear el label
+                                  const label = document.createElement('label');
+                                  label.htmlFor = `pregunta-${pregunta.id}`;
+                                  label.textContent = pregunta.nombre;
+                                  label.classList.add('form-check-label'); // Agregar clase para estilos (opcional)
+            
+                                  // Crear un div contenedor (opcional, para mejorar el diseño)
+                                  const div = document.createElement('div');
+                                  div.classList.add('form-check'); // Agregar clase para estilos (opcional)
+            
+                              // Agregar el checkbox y el label al div contenedor
+                                  div.appendChild(checkbox);
+                                  div.appendChild(label);
+            
+                                  // Agregar el div contenedor al preguntaList
+                                  preguntaList.appendChild(div); 
+                                    
+                                });
+                              
+                                })
+                              </script>
