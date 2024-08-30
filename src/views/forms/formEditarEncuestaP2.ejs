@@ -59,14 +59,19 @@
                         
                         console.log('encuesta pregunta');
                         console.log(encpre)
-                        const idCategoriaP = preguntas.map(pregunta => pregunta.id_categoria)
+                        const preguntasCat = preguntas.map(pregunta => {
+                        return{
+                          id: pregunta.id_categoria,
+                          name: pregunta.nombre
+                        }
+                      })
                         
 
-                        console.log('ids categorias')
-                        console.log(idCategoriaP);
+                        console.log('preguntas categorias')
+                        console.log(preguntasCat);
                         
-                        const preguntasFiltradas = idCategoriaP.filter(id => 
-                          id === categoriaId
+                        const preguntasFiltradas = preguntasCat.filter(pregunta => 
+                          pregunta.id === categoriaId
                         ); 
 
                         
@@ -88,7 +93,7 @@
                             checkbox.checked = true;
                           }
 
-                          preguntasFiltradas.forEach(pregunta => {
+                      preguntasFiltradas.forEach(pregunta => {
                       // Crear el checkbox
                       const checkbox = document.createElement('input');
                       checkbox.type = 'checkbox';
@@ -99,7 +104,7 @@
                       // Crear el label
                       const label = document.createElement('label');
                       label.htmlFor = `pregunta-${pregunta._id}`;
-                      label.textContent = pregunta.nombre;
+                      label.textContent = pregunta.name;
                       label.classList.add('form-check-label'); // Agregar clase para estilos (opcional)
 
                       // Crear un div contenedor (opcional, para mejorar el diseño)
