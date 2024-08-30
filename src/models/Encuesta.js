@@ -7,7 +7,10 @@ const encuestaSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'areas' // Referencia al modelo 'areas'
   },
-  id_encargado: { type: String, default: null },
+  id_encargado: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'usuarios' // Referencia al modelo 'usuarios' (nombre del modelo Usuario)
+  },
   cantidad: { type: Number, default: null },
   fecha_creada: { type: Date, default: null },
   fecha_limite: { type: Date, default: null },

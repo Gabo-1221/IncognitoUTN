@@ -29,7 +29,7 @@
                                         <div class="ag-courses_box">
                                             <% encuestas.forEach(encuesta=> { %>
                                                 <div class="ag-courses_item">
-                                                    <a href="/mystery/home" class="ag-courses-item_link">
+                                                    <a href="/mystery/responderEncuesta/<%= encuesta._id %>" class="ag-courses-item_link">
                                                         <!-- Añadir un data-attribute con el color -->
                                                         <div class="ag-courses-item_bg"
                                                             data-color-hover="<%= encuesta.id_area ? encuesta.id_area.color_hover : 'white' %>">                                                            

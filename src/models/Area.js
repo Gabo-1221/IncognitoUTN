@@ -3,8 +3,11 @@ import mongoose from 'mongoose';
 
 const areaSchema = new mongoose.Schema({
   nombre: { type: String, default: null },
-  promedio: { type: Number, default: null },
-  id_creo: { type: Number, default: null },
+  promedio: { type: mongoose.Schema.Types.Decimal128, default: null },
+  id_creo: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'usuarios' // Referencia al modelo de usuarios (opcional)
+  },
   color_hover: { type: String, default: null },
 });
 

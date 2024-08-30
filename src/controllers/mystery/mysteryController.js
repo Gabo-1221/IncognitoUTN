@@ -3,6 +3,7 @@ import userHelper from '../../helpers/userHelper.js'; //Importa la función auxi
 import Encuesta from '../../models/Encuesta.js';
 import Area from '../../models/Area.js';
 import Categoria from '../../models/Categoria.js';
+import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
 
 export const getHomeMystery = async (req, res) => {
   try {
@@ -12,9 +13,10 @@ export const getHomeMystery = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
-      res.render('mystery/homeMystery', { title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
-          imagen: userData.imagen, activeSection: 'dashboard'
-       });
+      res.render('mystery/homeMystery', {
+        title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
+        imagen: userData.imagen, activeSection: 'dashboard'
+      });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -35,8 +37,8 @@ export const getPerfilMystery = async (req, res) => {
       res.render('perfil/perfilMystery', {
         title: 'Incognito UTN | Mi perfil', username: userData.username, rol: userData.rol,
         apellido: userData.apellidos, email: userData.correo, fecha_nac: userData.fecha_nac,
-         message: null, messageEmail: null, MessageNewPassword: null, MessageNewPasswordError: null,
-         imagen: userData.imagen, activeSection: 'perfil'
+        message: null, messageEmail: null, MessageNewPassword: null, MessageNewPasswordError: null,
+        imagen: userData.imagen, activeSection: 'perfil'
       });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
@@ -57,7 +59,7 @@ export const getListaEncuestasPendientes = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       // Obtener las encuestas resueltas por el usuario
-      const encuestasResueltas = userData.encuestas_resueltas; 
+      const encuestasResueltas = userData.encuestas_resueltas;
 
       // Usamos populate y $nin para filtrar las encuestas
       const encuestas = await Encuesta.find({
@@ -67,13 +69,13 @@ export const getListaEncuestasPendientes = async (req, res) => {
         select: 'color_hover nombre' // Agregar el campo nombre a la selección
       });
 
-       // Filtrar encuestas por fecha_limite, usuarios que han respondido y cantidad
+      // Filtrar encuestas por fecha_limite, usuarios que han respondido y cantidad
       const fechaActual = new Date();
       const encuestasFiltradas = encuestas.filter(encuesta => {
         const fechaLimite = new Date(encuesta.fecha_limite);
         if (fechaLimite > fechaActual) {
           // Validación 1: El usuario no ha respondido la encuesta
-          if (!encuesta.id_usuarios_respondieron.includes(userId)) { 
+          if (!encuesta.id_usuarios_respondieron.includes(userId)) {
             // Validación 2: La cantidad de usuarios que han respondido es menor que la cantidad máxima
             if (encuesta.id_usuarios_respondieron.length < encuesta.cantidad) {
               // Calcular la diferencia en días
@@ -87,9 +89,10 @@ export const getListaEncuestasPendientes = async (req, res) => {
         return false; // Excluir la encuesta del resultado
       });
 
-      res.render('mystery/listaEncuestasPendientes', { title: 'Incognito UTN | Encuestas pendientes', username: userData.username, rol: userData.rol,
-          imagen: userData.imagen, activeSection: 'encuestasPendientes', encuestas: encuestasFiltradas
-       });
+      res.render('mystery/listaEncuestasPendientes', {
+        title: 'Incognito UTN | Encuestas pendientes', username: userData.username, rol: userData.rol,
+        imagen: userData.imagen, activeSection: 'encuestasPendientes', encuestas: encuestasFiltradas
+      });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -107,7 +110,7 @@ export const getListaEncuestasRealizadas = async (req, res) => {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });
     }
     const userData = await userHelper.getUserData(userId);
-    if (userData) {      
+    if (userData) {
       // Obtener las encuestas resueltas por el usuario
       const encuestasResueltas = userData.encuestas_resueltas;
 
@@ -118,9 +121,10 @@ export const getListaEncuestasRealizadas = async (req, res) => {
         path: 'id_area',
         select: 'color_hover nombre'
       });
-      res.render('mystery/listaEncuestasRealizadas', { title: 'Incognito UTN | Encuestas realizadas', username: userData.username, rol: userData.rol,
-          imagen: userData.imagen, activeSection: 'encuestasRealizadas', encuestas: encuestas
-       });
+      res.render('mystery/listaEncuestasRealizadas', {
+        title: 'Incognito UTN | Encuestas realizadas', username: userData.username, rol: userData.rol,
+        imagen: userData.imagen, activeSection: 'encuestasRealizadas', encuestas: encuestas
+      });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -130,11 +134,46 @@ export const getListaEncuestasRealizadas = async (req, res) => {
   }
 }
 
+export const responderEncuesta = async (req, res) => {
+  const encuestaId = req.params.id;
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.status(400).json({ message: 'Usuario no autenticado' + userId });
+    }
+    const userData = await userHelper.getUserData(userId);
+    if (userData) {
+      const preguntas = await PreguntaEncuesta.find({ id_encuesta: encuestaId })
+        .populate('id_pregunta') // Obtiene la información completa de la pregunta
+        .populate({
+          path: 'id_pregunta',
+          populate: {
+            path: 'id_categoria' // Obtiene la información completa de la categoría
+          }
+        });
+      res.render('mystery/responderEncuesta', {
+        title: 'Incognito UTN | Encuestas pendientes', username: userData.username, rol: userData.rol,
+        imagen: userData.imagen, activeSection: 'encuestasPendientes', encuestaId: encuestaId, // Pasar el ID de la encuesta
+        preguntas: preguntas // Pasar las preguntas a la vista
+      });
+      console.log('Preguntas:', preguntas);
+    }
+    else {
+      res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error 2', error: error.message });
+  }
+}
+
+
 const mysteryController = {
   getHomeMystery,
   getPerfilMystery,
   getListaEncuestasPendientes,
-  getListaEncuestasRealizadas
+  getListaEncuestasRealizadas,
+  responderEncuesta
 };
 
 export default mysteryController;

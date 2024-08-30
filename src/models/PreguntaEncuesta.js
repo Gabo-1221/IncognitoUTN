@@ -2,10 +2,16 @@
 import mongoose from 'mongoose';
 
 const preguntaEncuestaSchema = new mongoose.Schema({
-  id_encuesta: { type: String, default: null },
-  id_pregunta: { type: String, default: null },
+  id_encuesta: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'encuestas' 
+  },
+  id_pregunta: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'preguntas' 
+  },
 });
 
-const PreguntaEncuesta = mongoose.model('PreguntaEncuesta', preguntaEncuestaSchema);
+const PreguntaEncuesta = mongoose.model('preguntaencuestas', preguntaEncuestaSchema);
 
 export default PreguntaEncuesta; 

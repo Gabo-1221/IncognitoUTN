@@ -170,11 +170,18 @@ export const deleteCategoria = async (req, res) => {
 // Controlador para agregar una nueva area
 export const newArea = async (req, res) => {
   try {
-    const { area, calificacion, user } = req.body;
+    const { area, calificacion } = req.body;
+    const userId = req.session.userId; // Obtener el ID del usuario loggeado
+
+    if (!userId) {
+      // Manejar el caso en que el usuario no está loggeado
+      return res.status(401).json({ error: 'Debes iniciar sesión para crear un área' }); 
+    }
+
     const newArea = new Area({
       nombre: area,
       promedio: calificacion,
-      id_creo: user
+      id_creo: userId 
     });
 
     await newArea.save();
@@ -186,7 +193,6 @@ export const newArea = async (req, res) => {
   }
 };
 
-// Controlador para obtener un área
 export const findOneArea = async (req, res) => {
   const { idArea } = req.params;
   try {
@@ -195,12 +201,12 @@ export const findOneArea = async (req, res) => {
     if (!area) {
       return res.status(404).json({ message: 'Área no encontrada' });
     }
-    
+
     res.json({
       title: "Editor Area",
       id: area._id,
       area: area.nombre,
-      promedio: area.promedio,
+      promedio: area.promedio.toString(), // Convertir Decimal128 a string 
       creadoPor: area.id_creo
     });
   } catch (error) {
@@ -211,13 +217,19 @@ export const findOneArea = async (req, res) => {
 
 // Controlador para actualizar un área
 export const updateArea = async (req, res) => {
-  const { id, area, promedio, user } = req.body;
+  const { id, area, promedio } = req.body; // No necesitas "user" en req.body
+  const userId = req.session.userId; // Obtener el ID del usuario loggeado
+
   try {
+    // Verificar si el usuario está loggeado
+    if (!userId) {
+      return res.status(401).json({ error: 'Debes iniciar sesión para actualizar un área' }); 
+    }
+
     const updatedArea = await Area.findByIdAndUpdate(id, {
       nombre: area,
-      promedio: promedio,
-      id_creo: user
-    }, { new: true }); // Devuelve el documento actualizado
+      id_creo: userId // Asignar el ID del usuario loggeado
+    }, { new: true }); 
 
     if (!updatedArea) {
       return res.status(404).json({ message: 'Área no encontrada' });
@@ -284,7 +296,7 @@ export const newEncuesta = async (req, res) => {
   }
 };
 
-export const findOneEncuesta = async(req, res ) => {
+/* export const findOneEncuesta = async(req, res ) => {
   const {idEncuesta} = req.params;
   console.log(idEncuesta);
   try {
@@ -306,7 +318,36 @@ export const findOneEncuesta = async(req, res ) => {
   } catch (error) {
     console.log('Error al obyener la Encuesta deseada')
   }
-}
+} */
+
+  export const findOneEncuesta = async (req, res) => {
+    const { idEncuesta } = req.params;
+    console.log(idEncuesta);
+    try {
+      const encuesta = await Encuesta.findById(idEncuesta)
+        .populate('id_area', 'nombre') // Populate para el campo id_area
+        .populate('id_encargado', 'nombre apellidos')  // Si id_encargado es una referencia a un usuario, por ejemplo
+        ;
+  
+      console.log(encuesta);
+  
+      if (!encuesta) {
+        return res.status(404).json({ message: 'Encuesta no encontrada' });
+      }
+  
+      res.json({
+        title: "Editor Encuesta",
+        id: encuesta._id,
+        nombre: encuesta.nombre,
+        area: encuesta.id_area.nombre, // Acceder al nombre del área a través de la propiedad populada
+        encargo: encuesta.id_encargado ? `${encuesta.id_encargado.nombre} ${encuesta.id_encargado.apellidos}` : 'Sin Encargado',
+        cantidad: encuesta.cantidad
+      });
+    } catch (error) {
+      console.log('Error al obtener la Encuesta deseada:', error); // Mostrar el error en la consola
+      res.status(500).json({ message: 'Error al obtener la encuesta' }); // Devolver un error 500 al cliente
+    }
+  };
 
 // Controlador para eliminar una encuesta
 export const deleteEncuesta = async (req, res) => {
@@ -335,8 +376,8 @@ export const newEncPreg = async (req, res) => {
     for (const pregunta of preguntasSeleccionadas) {
       try {
         const newEncPre = new EncPre({
-          id_encuesta: encuestaId,
-          id_pregunta: pregunta,
+          id_encuesta: mongoose.Types.ObjectId(encuestaId), // Convertir a ObjectId
+          id_pregunta: mongoose.Types.ObjectId(pregunta), // Convertir a ObjectId
         });
         await newEncPre.save();
       } catch (error) {

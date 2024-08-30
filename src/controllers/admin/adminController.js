@@ -152,7 +152,7 @@ export const getService = async (req, res) => {
 
 export const getArea = async (req, res) => {
   try {
-    const areas = await Area.find();
+    const areas = await Area.find().populate('id_creo', 'nombre');
     const userId = req.session.userId;
     if (!userId) {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });
