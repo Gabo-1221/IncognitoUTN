@@ -7,13 +7,19 @@ const usuarioSchema = new mongoose.Schema({
   fecha_nac: { type: String, default: null },
   correo: { type: String, default: null },
   contrasena: { type: String, default: null },
-  rol: { type: String, default: null }, // Considera usar ObjectId y referenciar al modelo Rol
+  rol: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'roles' // Referencia al modelo 'roles'
+  },
   terms: { type: Boolean, default: false },
   created_at: { type: Date, default: Date.now },
   encuestas_creadas: { type: Array, default: [] }, // Considera usar ObjectId y referenciar al modelo Encuesta
   encuestas_resueltas: { type: Array, default: [] }, // Considera usar ObjectId y referenciar al modelo Encuesta
   updated_at: { type: Date, default: Date.now },
-  status: { type: String, default: null },
+  status: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'estatususers' // Referencia al modelo 'status'
+  },
   profilePicture: { type: String, default: null }
 });
 

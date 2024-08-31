@@ -1,11 +1,10 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import Usuario from '../models/Usuario.js';
+import EstatusD from '../models/EstadosUser.js'; // Importa el modelo de estados
+import Rol from '../models/Rol.js'; // Importa el modelo de roles
 
 const router = express.Router();
-
-// Define la constante para el estado activo
-const STATUS_ACTIVO = "66bf97d6d94dc47ae564b7d7";
 
 // Ruta raíz
 router.get('/', async (req, res) => {
@@ -16,18 +15,21 @@ router.get('/', async (req, res) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.session.userId = decoded.userId;
 
-      // Busca al usuario para verificar su estado
-      const usuario = await Usuario.findById(decoded.userId);
+      // Busca al usuario para verificar su estado y rol
+      const usuario = await Usuario.findById(decoded.userId)
+        .populate('status') // Populate el campo status
+        .populate('rol'); // Populate el campo rol
 
       if (usuario) {
         // Verifica el estado del usuario
-        if (usuario.status === STATUS_ACTIVO) {
+        const estadoActivo = await EstatusD.findOne({ nombre: 'Activo' });
+        if (usuario.status.equals(estadoActivo._id)) { 
           // Redirige al usuario a su vista predeterminada según su rol
-          if (usuario.rol === "66be37bf44270796dde41a7a") {
+          if (usuario.rol.nombre === 'Administrador') {
             res.redirect('/admin/home');
-          } else if (usuario.rol === "66be379a44270796dde41a79") {
+          } else if (usuario.rol.nombre === 'Evaluador') {
             res.redirect('/evaluador/home');
-          } else if (usuario.rol === "66be375044270796dde41a76") {
+          } else if (usuario.rol.nombre === 'Mystery Shopper') {
             res.redirect('/mystery/home');
           } else {
             // Maneja el caso de un rol inválido
@@ -60,6 +62,5 @@ router.get('/', async (req, res) => {
 router.get('/sobreNosotros', (req, res) => {
   res.render('home/sobreNosotros', { title: 'Incognito UTN | Sobre nosotros' });
 });
-
 
 export default router;

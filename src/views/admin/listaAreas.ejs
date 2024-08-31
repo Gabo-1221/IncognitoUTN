@@ -90,6 +90,7 @@
 
               </div>
               <!-- / Content -->
+               <%- include('../components/footer') %>              
               <script>
                 function confirmDeletion(id) {
                   if (confirm('¿Estás seguro de que deseas eliminar esta Area?')) {
@@ -124,8 +125,6 @@
                     .catch(error => console.error('Error al obtener los datos del Area:', error));
                 }
               </script>
-              <!-- <%- include('../components/footer') %> -->
-
               <div class="content-backdrop fade"></div>
             </div>
             <!-- Content wrapper -->
