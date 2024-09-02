@@ -1,122 +1,110 @@
-<div class="modal fade" id="modalToggleNewEncuestaPreguntas" aria-hidden="true" aria-labelledby="modalToggleLabelNewEncuestaPreguntas" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalToggleLabel2">Eliga las preguntas para la encuesta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="encpreg">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="categoriaSelect" class="form-label">Categoria</label>
-            <select class="form-select" id="categoriaSelect" name="categoria">
-              <option>Selecionar una categoria...</option>
-              <% categorias.forEach(categoria=> { %>
-                <option value="<%=categoria._id %>">
-                  <%= categoria.nombre %>
-                </option>
-                <% }) %>
-            </select>
-          </div>
-          <div id="registroContainer"></div>
-          <!-- Sección para las preguntas con checkboxes -->
-          <div class="row mb-3">
-            <div class="text-start-center">
-              <label class="text-body" style="font-size: 25px;">Preguntas</label>
-              <!--                                             <a href="/admin/listaPreguntas"><button class="btn btn-primary" type="button"><i href="" class="bx bx-plus"></i></button></a>
- -->
-            </div>
 
-            <div class="col-sm-10">
-              <br>
-              <div id="preguntaList">
-                <!--                                           <div class="form-check" >
-                                            <input class="form-check-input" type="checkbox" id="pregunta1" value="opcion1">
-                                            <label class="form-check-label" for="pregunta1">
-                                              Pregunta 1
-                                            </label>
-                                          </div> -->
 
-              </div>
+                        
+                        <div class="modal fade" id="modalToggle2" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="modalToggleLabel2">Parte 2</h5>
+                              <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              ></button>
+                            </div>
+                            <form id="encpreg" >
+                            <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="categoriaSelect" class="form-label">Categoria</label>
+                                        <select class="form-select" id="categoriaSelect" name="categoria">
+                                          <option >Selecionar una categoria...</option>
+                                          <% categorias.forEach(categoria => { %>
+                                            <option value="<%=categoria._id %>"><%= categoria.nombre %></option>
+                                        <% }) %>
+                                        </select>
+                                      </div>
+                                      <div id="registroContainer"></div>
+                                    <!-- Sección para las preguntas con checkboxes -->
+                                    <div class="row mb-3">
+                                        <div class="text-start-center">
+                                            <label class="text-body" style="font-size: 25px;">Preguntas</label>
+<!--                                             <a href="/admin/listaPreguntas"><button class="btn btn-primary" type="button"><i href="" class="bx bx-plus"></i></button></a>
+ -->                                        </div>
+                                        
+                                        <div class="col-sm-10">
+                                        <br>
+                                        <div id="preguntaList">
+                                        </div>
+                                        <!-- Agrega más preguntas según sea necesario -->
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                  <button type="button" class="btn btn-primary"  onclick="handleSubmit()">Crear</button>
+                                </div>
+                              </form>
+                          </div>
+                        </div>
+                      </div>
+                      <script>
+                        const selectedaPreguntas = {};
+                    document.getElementById('categoriaSelect').addEventListener('change', async function() {
+                        const categoriaId = this.value;
+                        // Realizar la solicitud AJAX a tu API para obtener las preguntas
+                        const response = await fetch(`/admin/listaEncuesta/${categoriaId}`);
+                        const preguntas = await response.json();
+                        // Selecciona el contenedor donde se mostrarán las checkboxes
+                        const preguntaList = document.getElementById('preguntaList');
+                        // Limpia las preguntas anteriores
+                        preguntaList.innerHTML = '';
+                        // Llena el contenedor con las nuevas preguntas
+                        preguntas.forEach(pregunta => {
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.id = `pregunta-${pregunta._id}`;
+                            checkbox.name = 'preguntas';
+                            checkbox.value = pregunta._id;
 
-              <!-- Agrega más preguntas según sea necesario -->
-            </div>
-          </div>
+                            // Restaurar selección si la pregunta ya estaba seleccionada
+                            if (selectedaPreguntas[categoriaId] && selectedaPreguntas[categoriaId].includes(pregunta._id)) {
+                                checkbox.checked = true;
+                            }
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" onclick="handleSubmit()">Crear</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<script>
-  const selectedaPreguntas = {};
+                            // Actualizar el objeto de selecciones al marcar/desmarcar una pregunta
+                            checkbox.addEventListener('change', function() {
+                                if (!selectedaPreguntas[categoriaId]) {
+                                  selectedaPreguntas[categoriaId] = [];
+                                }
 
-  document.getElementById('categoriaSelect').addEventListener('change', async function () {
-    const categoriaId = this.value;
-  
-    // Realizar la solicitud AJAX a tu API para obtener las preguntas
-    const response = await fetch(`/admin/listaEncuestaCategoria/${categoriaId}`);
-    const preguntas = await response.json();
-  
-    // Selecciona el contenedor donde se mostrarán las checkboxes
-    const preguntaList = document.getElementById('preguntaList');
-  
-    // Limpia las preguntas anteriores
-    preguntaList.innerHTML = '';
-  
-    // Llena el contenedor con las nuevas preguntas
-    preguntas.forEach(pregunta => {
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = `pregunta-${pregunta._id}`;
-      checkbox.name = 'preguntas';
-      checkbox.value = pregunta._id;
-  
-      // Restaurar selección si la pregunta ya estaba seleccionada
-      if (selectedaPreguntas[categoriaId] && selectedaPreguntas[categoriaId].includes(pregunta._id)) {
-        checkbox.checked = true;
-      }
-  
-      // Actualizar el objeto de selecciones al marcar/desmarcar una pregunta
-      checkbox.addEventListener('change', function () {
-        if (!selectedaPreguntas[categoriaId]) {
-          selectedaPreguntas[categoriaId] = [];
-        }
-  
-        if (this.checked) {
-          // Añadir pregunta seleccionada si no existe ya en la lista
-          if (!selectedaPreguntas[categoriaId].includes(pregunta._id)) {
-            selectedaPreguntas[categoriaId].push(pregunta._id);
-          }
-        } else {
-          // Eliminar pregunta deseleccionada
-          selectedaPreguntas[categoriaId] = selectedaPreguntas[categoriaId].filter(id => id !== pregunta._id);
-        }
-      });
-  
-      const label = document.createElement('label');
-      label.htmlFor = `pregunta-${pregunta._id}`;
-      label.textContent = pregunta.nombre;
-  
-      const div = document.createElement('div');
-      div.appendChild(checkbox);
-      div.appendChild(label);
-  
-      preguntaList.appendChild(div);
-    });
-  });
-      
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    async function fetchLastRecord() {
-      try {
-        const response = await fetch('/admin/ultimoRegistro');
-        const lastRecord = await response.json();
+                                if (this.checked) {
+                                    // Añadir pregunta seleccionada
+                                    selectedaPreguntas[categoriaId].push(pregunta._id);
+                                } else {
+                                    // Eliminar pregunta deseleccionada
+                                    selectedaPreguntas[categoriaId] = selectedaPreguntas[categoriaId].filter(id => id !== pregunta._id);
+                                }
+                            });
+
+                            const label = document.createElement('label');
+                            label.htmlFor = `pregunta-${pregunta._id}`;
+                            label.textContent = pregunta.nombre;
+
+                            const div = document.createElement('div');
+                            div.appendChild(checkbox);
+                            div.appendChild(label);
+
+                            preguntaList.appendChild(div);
+                        });
+                    });          
+                      </script>
+                      <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+        async function fetchLastRecord() {
+            try {
+                const response = await fetch('/admin/ultimoRegistro');
+                const lastRecord = await response.json();
 
         const registroContainer = document.getElementById('registroContainer');
 
