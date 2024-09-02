@@ -2,170 +2,166 @@
 
                         
                         <div class="modal fade" id="modalToggle2" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="modalToggleLabel2">Parte 2</h5>
-                              <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                              ></button>
-                            </div>
-                            <form id="encpreg" >
-                            <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="categoriaSelect" class="form-label">Categoria</label>
-                                        <select class="form-select" id="categoriaSelect" name="categoria">
-                                          <option >Selecionar una categoria...</option>
-                                          <% categorias.forEach(categoria => { %>
-                                            <option value="<%=categoria._id %>"><%= categoria.nombre %></option>
-                                        <% }) %>
-                                        </select>
-                                      </div>
-                                      <div id="registroContainer"></div>
-                                    <!-- Sección para las preguntas con checkboxes -->
-                                    <div class="row mb-3">
-                                        <div class="text-start-center">
-                                            <label class="text-body" style="font-size: 25px;">Preguntas</label>
-<!--                                             <a href="/admin/listaPreguntas"><button class="btn btn-primary" type="button"><i href="" class="bx bx-plus"></i></button></a>
- -->                                        </div>
-                                        
-                                        <div class="col-sm-10">
-                                        <br>
-                                        <div id="preguntaList">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="modalToggleLabel2">Parte 2</h5>
+                                <button
+                                  type="button"
+                                  class="btn-close"
+                                  data-bs-dismiss="modal"
+                                  aria-label="Close"
+                                ></button>
+                              </div>
+                              <form id="encpreg" >
+                              <div class="modal-body">
+                                      <div class="mb-3">
+                                          <label for="categoriaSelect" class="form-label">Categoria</label>
+                                          <select class="form-select" id="categoriaSelect" name="categoria">
+                                            <option >Selecionar una categoria...</option>
+                                            <% categorias.forEach(categoria => { %>
+                                              <option value="<%=categoria._id %>"><%= categoria.nombre %></option>
+                                          <% }) %>
+                                          </select>
                                         </div>
-                                        <!-- Agrega más preguntas según sea necesario -->
+                                        <div id="registroContainer"></div>
+                                      <!-- Sección para las preguntas con checkboxes -->
+                                      <div class="row mb-3">
+                                          <div class="text-start-center">
+                                              <label class="text-body" style="font-size: 25px;">Preguntas</label>
+  <!--                                             <a href="/admin/listaPreguntas"><button class="btn btn-primary" type="button"><i href="" class="bx bx-plus"></i></button></a>
+   -->                                        </div>
+                                          
+                                          <div class="col-sm-10">
+                                          <br>
+                                          <div id="preguntaList">
+                                          </div>
+                                          <!-- Agrega más preguntas según sea necesario -->
+                                        </div>
                                       </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                  <button type="button" class="btn btn-primary"  onclick="handleSubmit()">Crear</button>
-                                </div>
-                              </form>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary"  onclick="handleSubmit()">Crear</button>
+                                  </div>
+                                </form>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <script>
-                        const selectedaPreguntas = {};
-                    document.getElementById('categoriaSelect').addEventListener('change', async function() {
-                        const categoriaId = this.value;
-                        // Realizar la solicitud AJAX a tu API para obtener las preguntas
-                        const response = await fetch(`/admin/listaEncuesta/${categoriaId}`);
-                        const preguntas = await response.json();
-                        // Selecciona el contenedor donde se mostrarán las checkboxes
-                        const preguntaList = document.getElementById('preguntaList');
-                        // Limpia las preguntas anteriores
-                        preguntaList.innerHTML = '';
-                        // Llena el contenedor con las nuevas preguntas
-                        preguntas.forEach(pregunta => {
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.id = `pregunta-${pregunta._id}`;
-                            checkbox.name = 'preguntas';
-                            checkbox.value = pregunta._id;
-
-                            // Restaurar selección si la pregunta ya estaba seleccionada
-                            if (selectedaPreguntas[categoriaId] && selectedaPreguntas[categoriaId].includes(pregunta._id)) {
-                                checkbox.checked = true;
-                            }
-
-                            // Actualizar el objeto de selecciones al marcar/desmarcar una pregunta
-                            checkbox.addEventListener('change', function() {
-                                if (!selectedaPreguntas[categoriaId]) {
-                                  selectedaPreguntas[categoriaId] = [];
-                                }
-
-                                if (this.checked) {
-                                    // Añadir pregunta seleccionada
-                                    selectedaPreguntas[categoriaId].push(pregunta._id);
-                                } else {
-                                    // Eliminar pregunta deseleccionada
-                                    selectedaPreguntas[categoriaId] = selectedaPreguntas[categoriaId].filter(id => id !== pregunta._id);
-                                }
-                            });
-
-                            const label = document.createElement('label');
-                            label.htmlFor = `pregunta-${pregunta._id}`;
-                            label.textContent = pregunta.nombre;
-
-                            const div = document.createElement('div');
-                            div.appendChild(checkbox);
-                            div.appendChild(label);
-
-                            preguntaList.appendChild(div);
-                        });
-                    });          
-                      </script>
-                      <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-        async function fetchLastRecord() {
-            try {
-                const response = await fetch('/admin/ultimoRegistro');
-                const lastRecord = await response.json();
-
-        const registroContainer = document.getElementById('registroContainer');
-
-        if (lastRecord) {
-          registroContainer.innerHTML = `
-                        <input class="form-control" type="hidden" id="idEncuesta" name="idEncuesta" value="${lastRecord._id}" readonly>
-                        <label class="form-label" for="nombre">Nombre de la Encuesta</label>
-                        <input class="form-control" type="text" id="nombre" value=" ${lastRecord.nombre}" readonly>
-                    `;
-        } else {
-          registroContainer.innerHTML = '<p>No se encontró ningún registro.</p>';
-        }
-      } catch (error) {
-        console.error('Error al obtener el último registro:', error);
-      }
-    }
-
-    // Llamar a la función fetchLastRecord cada 5 segundos
-    setInterval(fetchLastRecord, 1000);
-  });
-</script>
-<script>
-  function handleSubmit() {
-    // Combinar todas las selecciones de todas las categorías en un solo array
-    const encuestaId = document.getElementById('idEncuesta').value;
-    const allSelectedPreguntas = Object.values(selectedaPreguntas).flat();
+                        <script>
+                          const selectedaPreguntas = {};
+                      document.getElementById('categoriaSelect').addEventListener('change', async function() {
+                          const categoriaId = this.value;
+                          // Realizar la solicitud AJAX a tu API para obtener las preguntas
+                          const response = await fetch(`/admin/listaEncuesta/${categoriaId}`);
+                          const preguntas = await response.json();
+                          // Selecciona el contenedor donde se mostrarán las checkboxes
+                          const preguntaList = document.getElementById('preguntaList');
+                          // Limpia las preguntas anteriores
+                          preguntaList.innerHTML = '';
+                          // Llena el contenedor con las nuevas preguntas
+                          preguntas.forEach(pregunta => {
+                              const checkbox = document.createElement('input');
+                              checkbox.type = 'checkbox';
+                              checkbox.id = `pregunta-${pregunta._id}`;
+                              checkbox.name = 'preguntas';
+                              checkbox.value = pregunta._id;
   
-    // Asegúrate de que el array no esté vacío
-    if (!allSelectedPreguntas.length) {
-      alert('Por favor, selecciona al menos una pregunta.');
-      return;
-    }
+                              // Restaurar selección si la pregunta ya estaba seleccionada
+                              if (selectedaPreguntas[categoriaId] && selectedaPreguntas[categoriaId].includes(pregunta._id)) {
+                                  checkbox.checked = true;
+                              }
   
-    // Opcional: Convertir a JSON si el servidor espera este formato
-    const dataToSend = JSON.stringify({
-      encuestaId: encuestaId,
-      preguntasSeleccionadas: allSelectedPreguntas
-    });
+                              // Actualizar el objeto de selecciones al marcar/desmarcar una pregunta
+                              checkbox.addEventListener('change', function() {
+                                  if (!selectedaPreguntas[categoriaId]) {
+                                    selectedaPreguntas[categoriaId] = [];
+                                  }
   
-    // Enviar la solicitud al servidor
-    fetch('/forms/nuevaEncPreg', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: dataToSend
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message === 'Preguntas guardadas correctamente') { // Verificar el mensaje de éxito
-        // Recargar la página o realizar otra acción según sea necesario
-        alert('Preguntas guardadas correctamente.'); // Mostrar alerta de éxito
-        location.reload(); // o cerrar el modal si prefieres
-      } else {
-        alert('Ocurrió un error al guardar las preguntas.' + data.message); // Mostrar alerta de error solo si hay un mensaje de error
-      }
-    })
-    .catch(error => {
-      console.error('Error al registrar las preguntas:', error);
-      alert('Ocurrió un error al guardar las preguntas.'); // Mostrar alerta de error si hay un error en la solicitud fetch
-    });
-  }
+                                  if (this.checked) {
+                                      // Añadir pregunta seleccionada
+                                      selectedaPreguntas[categoriaId].push(pregunta._id);
+                                  } else {
+                                      // Eliminar pregunta deseleccionada
+                                      selectedaPreguntas[categoriaId] = selectedaPreguntas[categoriaId].filter(id => id !== pregunta._id);
+                                  }
+                              });
   
-</script>
+                              const label = document.createElement('label');
+                              label.htmlFor = `pregunta-${pregunta._id}`;
+                              label.textContent = pregunta.nombre;
+  
+                              const div = document.createElement('div');
+                              div.appendChild(checkbox);
+                              div.appendChild(label);
+  
+                              preguntaList.appendChild(div);
+                          });
+                      });          
+                        </script>
+                        <script>
+                          document.addEventListener('DOMContentLoaded', function() {
+          async function fetchLastRecord() {
+              try {
+                  const response = await fetch('/admin/ultimoRegistro');
+                  const lastRecord = await response.json();
+  
+                  const registroContainer = document.getElementById('registroContainer');
+  
+                  if (lastRecord) {
+                      registroContainer.innerHTML = `
+                          <input class="form-control" type="hidden" id="idEncuesta" name="idEncuesta" value="${lastRecord._id}" readonly>
+                          <label class="form-label" for="nombre">Nombre de la Encuesta</label>
+                          <input class="form-control" type="text" id="nombre" value=" ${lastRecord.nombre}" readonly>
+                      `;
+                  } else {
+                      registroContainer.innerHTML = '<p>No se encontró ningún registro.</p>';
+                  }
+              } catch (error) {
+                  console.error('Error al obtener el último registro:', error);
+              }
+          }
+  
+          // Llamar a la función fetchLastRecord cada 5 segundos
+          setInterval(fetchLastRecord, 1000);
+      });
+                        </script>
+                        <script>
+                              function handleSubmit() {
+                                  // Combinar todas las selecciones de todas las categorías en un solo array
+                                  const encuestaId = document.getElementById('idEncuesta').value;
+                                  const allSelectedPreguntas = Object.values(selectedaPreguntas).flat();
+  
+                                  // Asegúrate de que el array no esté vacío
+                                  if (allSelectedPreguntas.length === 0) {
+                                      alert('Por favor, selecciona al menos una pregunta.');
+                                      return;
+                                  }
+  
+                                  // Opcional: Convertir a JSON si el servidor espera este formato
+                                  const dataToSend = JSON.stringify({ 
+                                    encuestaId: encuestaId,
+                                    preguntasSeleccionadas: allSelectedPreguntas 
+                                  });
+  
+                                  // Enviar la solicitud al servidor
+                                  fetch('/forms/nuevaEncPreg', {
+                                      method: 'POST',
+                                      headers: {
+                                          'Content-Type': 'application/json'
+                                      },
+                                      body: dataToSend
+                                  })
+                                  .then(response => response.json())
+                                  .then(data => {
+                                      //console.log('Registro exitoso:' );
+                                      //recargar la pagina
+                                      location.reload();
+                                  })
+                                  .catch(error => {
+                                      console.error('Error al registrar las preguntas:', error);
+                                      alert('Ocurrió un error al guardar las preguntas.');
+                                  });
+                              }
+                        </script>
+  
