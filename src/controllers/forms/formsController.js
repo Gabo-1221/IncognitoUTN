@@ -5,24 +5,16 @@ import Area from '../../models/Area.js';
 import Encuesta from '../../models/Encuesta.js';
 import EncPre from '../../models/PreguntaEncuesta.js';
 import Usu from '../../models/Usuario.js'; // Importa el modelo Usuario
-import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
-import userHelper from '../../helpers/userHelper.js';
+
 
 // Controlador para agregar una nueva pregunta
 export const newQuestion = async (req, res) => {
   try {
-    const { pregunta, categoria } = req.body; // No necesitas "user" en req.body
-    const userId = req.session.userId; // Obtener el ID del usuario loggeado
-
-    // Verificar si el usuario está loggeado
-    if (!userId) {
-      return res.status(401).json({ error: 'Debes iniciar sesión para crear una pregunta' });
-    }
-
+    const { pregunta, categoria, user } = req.body;
     const newQuestion = new Pregunta({
       nombre: pregunta,
       id_categoria: categoria,
-      id_creo: userId // Asignar el ID del usuario loggeado
+      id_creo: user
     });
 
     await newQuestion.save();
@@ -43,7 +35,7 @@ export const findOnePregunta = async (req, res) => {
     if (!pregunta) {
       return res.status(404).json({ message: 'Pregunta no encontrada' });
     }
-
+    
     res.json({
       title: "Editor Pregunta",
       id: pregunta._id,
@@ -59,25 +51,17 @@ export const findOnePregunta = async (req, res) => {
 
 // Controlador para actualizar una pregunta
 export const updateAsk = async (req, res) => {
-  const { id, pregunta, categoria } = req.body; // No necesitas "user" en req.body
-  const userId = req.session.userId; // Obtener el ID del usuario loggeado
-
+  const { id, pregunta, categoria, user } = req.body;
   try {
-    // Verificar si el usuario está loggeado
-    if (!userId) {
-      return res.status(401).json({ error: 'Debes iniciar sesión para actualizar una pregunta' });
-    }
-
     const updatedPregunta = await Pregunta.findByIdAndUpdate(id, {
       nombre: pregunta,
       id_categoria: categoria,
-      id_creo: userId // Asignar el ID del usuario loggeado
-    }, { new: true });
+      id_creo: user
+    }, { new: true }); // Devuelve el documento actualizado
 
     if (!updatedPregunta) {
       return res.status(404).json({ message: 'Pregunta no encontrada' });
     }
-
     res.redirect('/admin/listaPreguntas');
   } catch (error) {
     console.error("Error al actualizar la pregunta:", error);
@@ -90,14 +74,14 @@ export const updateAsk = async (req, res) => {
 export const deletePregunta = async (req, res) => {
   try {
     const { idpregunta } = req.params;
-
+    
     await EncPre.deleteMany({ id_pregunta: idpregunta });
-    const deletedPregunta = await Pregunta.findByIdAndDelete(idpregunta);
+    const deletedPregunta = await Pregunta.findByIdAndDelete(idpregunta); 
 
     if (!deletedPregunta) {
       return res.status(404).json({ message: 'Pregunta no encontrada' });
     }
-
+    
     res.redirect('/admin/listaPreguntas');
   } catch (error) {
     console.error("Error al eliminar la pregunta:", error);
@@ -108,18 +92,10 @@ export const deletePregunta = async (req, res) => {
 // Controlador para agregar una nueva categoría
 export const newCategoria = async (req, res) => {
   try {
-    const { categoria, color } = req.body; // No necesitas "user" en req.body
-    const userId = req.session.userId; // Obtener el ID del usuario loggeado
-
-    // Verificar si el usuario está loggeado
-    if (!userId) {
-      return res.status(401).json({ error: 'Debes iniciar sesión para crear una categoría' });
-    }
-
+    const { categoria, user } = req.body;
     const newCategoria = new Categoria({
       nombre: categoria,
-      id_creo: userId,  // Asignar el ID del usuario loggeado
-      color_hover: color
+      id_creo: user
     });
 
     await newCategoria.save();
@@ -139,12 +115,11 @@ export const findOneCategoria = async (req, res) => {
     if (!categoria) {
       return res.status(404).json({ message: 'Categoría no encontrada' });
     }
-
+    
     res.json({
       title: "Editor Categoria",
       id: categoria._id,
       categoria: categoria.nombre,
-      color_hover: categoria.color_hover,
       creadoPor: categoria.id_creo
     });
   } catch (error) {
@@ -155,20 +130,12 @@ export const findOneCategoria = async (req, res) => {
 
 // Controlador para actualizar una categoría
 export const updateCategoria = async (req, res) => {
-  const { id, categoria, color } = req.body; // No necesitas "user" en req.body
-  const userId = req.session.userId; // Obtener el ID del usuario loggeado
-
+  const { id, categoria, user } = req.body;
   try {
-    // Verificar si el usuario está loggeado
-    if (!userId) {
-      return res.status(401).json({ error: 'Debes iniciar sesión para actualizar una categoría' });
-    }
-
     const updatedCategoria = await Categoria.findByIdAndUpdate(id, {
       nombre: categoria,
-      id_creo: userId, // Asignar el ID del usuario loggeado
-      color_hover: color,
-    }, { new: true });
+      id_creo: user
+    }, { new: true }); // Devuelve el documento actualizado
 
     if (!updatedCategoria) {
       return res.status(404).json({ message: 'Categoría no encontrada' });
@@ -185,14 +152,14 @@ export const updateCategoria = async (req, res) => {
 export const deleteCategoria = async (req, res) => {
   try {
     const { idcategoria } = req.params;
-
+    
     await Pregunta.deleteMany({ id_categoria: idcategoria }); // Eliminar preguntas asociadas
     const deletedCategoria = await Categoria.findByIdAndDelete(idcategoria);
 
     if (!deletedCategoria) {
       return res.status(404).json({ message: 'Categoría no encontrada' });
     }
-
+    
     res.redirect('/admin/listaCategorias');
   } catch (error) {
     console.error("Error al eliminar la categoria:", error);
@@ -203,19 +170,11 @@ export const deleteCategoria = async (req, res) => {
 // Controlador para agregar una nueva area
 export const newArea = async (req, res) => {
   try {
-    const { area, calificacion, color } = req.body;
-    const userId = req.session.userId; // Obtener el ID del usuario loggeado
-
-    if (!userId) {
-      // Manejar el caso en que el usuario no está loggeado
-      return res.status(401).json({ error: 'Debes iniciar sesión para crear un área' });
-    }
-
+    const { area, calificacion, user } = req.body;
     const newArea = new Area({
       nombre: area,
       promedio: calificacion,
-      id_creo: userId,
-      color_hover: color
+      id_creo: user
     });
 
     await newArea.save();
@@ -227,6 +186,7 @@ export const newArea = async (req, res) => {
   }
 };
 
+// Controlador para obtener un área
 export const findOneArea = async (req, res) => {
   const { idArea } = req.params;
   try {
@@ -235,13 +195,12 @@ export const findOneArea = async (req, res) => {
     if (!area) {
       return res.status(404).json({ message: 'Área no encontrada' });
     }
-
+    
     res.json({
       title: "Editor Area",
       id: area._id,
       area: area.nombre,
-      color_hover: area.color_hover,
-      promedio: area.promedio.toString(), // Convertir Decimal128 a string 
+      promedio: area.promedio,
       creadoPor: area.id_creo
     });
   } catch (error) {
@@ -252,20 +211,13 @@ export const findOneArea = async (req, res) => {
 
 // Controlador para actualizar un área
 export const updateArea = async (req, res) => {
-  const { id, area, promedio, color } = req.body; // No necesitas "user" en req.body
-  const userId = req.session.userId; // Obtener el ID del usuario loggeado
-
+  const { id, area, promedio, user } = req.body;
   try {
-    // Verificar si el usuario está loggeado
-    if (!userId) {
-      return res.status(401).json({ error: 'Debes iniciar sesión para actualizar un área' });
-    }
-
     const updatedArea = await Area.findByIdAndUpdate(id, {
       nombre: area,
-      color_hover: color,
-      id_creo: userId // Asignar el ID del usuario loggeado
-    }, { new: true });
+      promedio: promedio,
+      id_creo: user
+    }, { new: true }); // Devuelve el documento actualizado
 
     if (!updatedArea) {
       return res.status(404).json({ message: 'Área no encontrada' });
@@ -311,24 +263,17 @@ export const deleteArea = async (req, res) => {
 // Controlador para agregar una nueva encuesta
 export const newEncuesta = async (req, res) => {
   try {
-    const { nombre, area, canperson, fechat } = req.body;
-    const userId = req.session.userId; // Obtener el ID del usuario loggeado
-
-    // Verificar si el usuario está loggeado
-    if (!userId) {
-      return res.status(401).json({ error: 'Debes iniciar sesión para crear una encuesta' });
-    }
-
+    const { nombre, area, canperson, user, fechat } = req.body;
     const currentDate = new Date();
     const utcDate = currentDate.toLocaleDateString('en-CA');
     const newEncuesta = new Encuesta({
       nombre: nombre,
       id_area: area,
-      id_encargado: userId, // Asignar el ID del usuario loggeado
+      id_encargado: user,
       fecha_creada: utcDate,
       fecha_limite: fechat,
       cantidad: canperson,
-      calificacion: 0.0
+      calificacion: 4.9
     });
 
     await newEncuesta.save();
@@ -339,98 +284,29 @@ export const newEncuesta = async (req, res) => {
   }
 };
 
-/* export const findOneEncuesta = async(req, res ) => {
+export const findOneEncuesta = async(req, res ) => {
   const {idEncuesta} = req.params;
-  
+  console.log(idEncuesta);
   try {
 
     const encuesta = await Encuesta.findById(idEncuesta);
-    if(!encuesta){
-      return res.status(404).json({message:'Encuesta no encontrada'})
-    }
+    console.log(encuesta);
     res.json({
       title: "Editor Encuesta",
       id: encuesta._id,
       nombre: encuesta.nombre,
       area: encuesta.id_area,
       encargo: encuesta.id_encargado,
-      cantidad: encuesta.cantidad,
-      fechaT: encuesta.fecha_limite
+      cantidad: encuesta.cantidad
     
     });
-  } catch (error) {
-    console.log('Error al obener la Encuesta deseada')
-  }
-};
-
-export const obtenerDatosEncuesta = async (req, res) => {
-  const { idEncuesta } = req.params;
-  try {
-    const userId = req.session.userId;
-    const userData = await userHelper.getUserData(userId);
-
-    const encuesta = await Encuesta.findById(idEncuesta);
-    const areas = await Area.find();
-    const categorias = await Categoria.find();
-    const preguntas = await Pregunta.find(); // Todas las preguntas
-    const encpres = await EncPre.find();
-
-    res.render('forms/formEditarEncuesta',{ username: userData.username, rol: userData.rol,
-      imagen: userData.imagen, activeSection: '', encuesta: encuesta , title:'Editar Encuesta' , encuesta:encuesta,categorias:categorias,preguntas:preguntas, encpres:encpres,areas,areas})
-    } catch (error) {
-    // Manejar el error
-    console.error(error);
-    res.status(500).send('Error al obtener los datos de la encuesta' + error);
-  }
-};
-
-export const preguntasSelects = async (req,res) => {
-  const { idEncuesta } = req.body;
-
-  try {
-    // Paso 1: Buscar las entradas de PreguntaEncuesta
-    const relaciones = await PreguntaEncuesta.find({ id_encuesta: idEncuesta });
-
-    if (!relaciones || relaciones.length === 0) {
-      return res.status(404).json({ message: 'No se encontraron preguntas relacionadas a la encuesta' });
+    if(!encuesta){
+      return res.status(404).json({message:'Encuesta no encontrada'})
     }
-
-    // Extraer los IDs de preguntas y categorías
-    const idPreguntas = relaciones.map(rel => rel.id_pregunta);
-
-    // Paso 2: Buscar los detalles de las preguntas usando los IDs
-    const preguntas = await Pregunta.find({ _id: { $in: idPreguntas } });
-
-    // Buscar todas las categorías disponibles
-    const categorias = await Categoria.find({});
-
-    if (!preguntas || preguntas.length === 0) {
-      return res.status(404).json({ message: 'Preguntas no encontradas' });
-    }
-
-    // Devolver las preguntas y las categorías
-    res.json({ preguntas, categorias });
   } catch (error) {
-    console.error('Error al obtener las preguntas:', error);
-    res.status(500).json({ message: 'Error al obtener las preguntas' });
+    console.log('Error al obyener la Encuesta deseada')
   }
 }
-//consulat ejemplo
-export const preguntasCategoria = async (req,res) => {
-  const { idEncuesta } = req.body;
-
-  try {
-    // Paso 1: Buscar las entradas de PreguntaEncuesta
-    const encpre = await EncPre.find({id_encuesta: '66ce2a15204b900b416d0b84'});
-    console.log(encpre);
-    res.json({encpre});
-
-  } catch (error) {
-    console.error('Error al obtener las preguntas:', error);
-    res.status(500).json({ message: 'Error al obtener las preguntas' });
-  }
-}
-
 
 // Controlador para eliminar una encuesta
 export const deleteEncuesta = async (req, res) => {
@@ -438,7 +314,7 @@ export const deleteEncuesta = async (req, res) => {
     const { idEncuesta } = req.params;
 
     await EncPre.deleteMany({ id_encuesta: idEncuesta });
-    const deletedEncuesta = await Encuesta.findByIdAndDelete(idEncuesta);
+    const deletedEncuesta = await Encuesta.findByIdAndDelete(idEncuesta); 
 
     if (!deletedEncuesta) {
       return res.status(404).json({ message: 'Encuesta no encontrada' });
@@ -460,9 +336,8 @@ export const newEncPreg = async (req, res) => {
       try {
         const newEncPre = new EncPre({
           id_encuesta: encuestaId,
-          id_pregunta: pregunta, 
+          id_pregunta: pregunta,
         });
-    
         await newEncPre.save();
       } catch (error) {
         console.error('Error al guardar la pregunta:', error);
@@ -473,35 +348,6 @@ export const newEncPreg = async (req, res) => {
   } catch (error) {
     console.error('Error en newEncPreg:', error);
     return res.status(500).json({ error: 'Error en el servidor' });
-  }
-};
-
-export const updateEncuesta = async (req, res) => {
-  try {
-    const { id, nombre, area, canperson, fechat } = req.body; 
-    const userId = req.session.userId; // Obtener el ID del usuario loggeado
-
-    if (!userId) {
-      return res.status(401).json({ error: 'Debes iniciar sesión para crear una encuesta' });
-    }
-
-    const updatedEncuesta = await Encuesta.findByIdAndUpdate(id, {
-      nombre: nombre,
-      id_area: area,
-      id_encargado: userId, 
-      fecha_limite: fechat,
-      cantidad: canperson,
-    }, { new: true }); 
-
-    if (!updatedEncuesta) {
-      return res.status(404).json({ error: 'Encuesta no encontrada' });
-    }
-
-    // Enviar una respuesta JSON con un mensaje de éxito
-    //res.json({ message: 'Encuesta actualizada correctamente', encuestaId: updatedEncuesta._id }); 
-  } catch (error) {
-    console.error("Error al actualizar la encuesta:", error);
-    res.status(500).json({ error: 'Error al actualizar la encuesta' });
   }
 };
 
