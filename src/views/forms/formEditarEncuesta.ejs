@@ -1,61 +1,97 @@
-<!-- Toggle Between Modals -->
+<!DOCTYPE html>
+<html
+  lang="es"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <%- include('../layout/cabeceraNewWindow') %>
+  </head>
+  <body>
+    <!-- <h1><%= title %></h1>
+  <p>¡Bienvenido a tu aplicación Express con EJS!</p> -->
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <%- include('../admin/menuAdmin') %>
 
-<!-- Modal 1-->
-<div class="modal fade" id="modalToggleEditar" aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalToggleLabel">Modal 1</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Layout container -->
+        <div class="layout-page">
+          <%- include('../admin/navbarAdmin') %>
+
+          <div class="content-wrapper"></div>
+              <form >
+                  <input type="hidden" id="id" name="id">
+                <div class="mb-3">
+                  <label class="form-label" for="nombre">Nombre de la Encuesta</label>
+                  <input type="text" class="form-control" id="nombre" name="nombre"/>
+                </div>
+                <div class="mb-3">
+                  <lab for="areaSelect" class="form-label">Area</lab  el>
+                  <select class="form-select" id="areaSelect" name="area">
+                    <option >Selecionar una Area...</option>
+                    <% areas.forEach(area => { %>
+                      <option value="<%= area._id %>"><%= area.nombre %></option>
+                  <% }) %>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="user">Creado por..</label>
+                  <div class="input-group input-group-merge">
+                    <input
+                      type="text"
+                      id="user"
+                      name="user"
+                      class="form-control"
+                      placeholder="usuario"
+                      value="user1"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="canperson">Cantidad de personas que podran responder</label>
+                  <input
+                    type="number"
+                    id="canperson"
+                    name="canperson"
+                    class="form-control phone-mask"
+                    placeholder="10"
+
+                  />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" for="fechat">Fecha de termino</label>
+                  <input class="form-control" type="date" name="fechat" id="fechat">
+                </div>
+                
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="abrirModal2">Siguiente</button> 
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+
+                          
+            
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
       </div>
-      <div class="modal-body">
-        <form action="/forms/EditarEncuesta" method="post">
-          <div class="mb-3">
-            <label class="form-label" for="nombre">Nombre de la Encuesta</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" />
-          </div>
-          <div class="mb-3">
-            <label for="areaSelect" class="form-label">Categoria</label>
-            <select class="form-select" id="areaSelect" name="area">
-              <option>Selecionar una Area...</option>
-              <% areas.forEach(area=> { %>
-                <option value="<%= area._id %>">
-                  <%= area.nombre %>
-                </option>
-                <% }) %>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="user">Creado por..</label>
-            <div class="input-group input-group-merge">
-              <input type="text" id="user" name="user" class="form-control" placeholder="usuario" value="user1"
-                readonly />
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="canperson">Cantidad de personas que podran responder</label>
-            <input type="number" id="canperson" name="canperson" class="form-control phone-mask" placeholder="10" />
-          </div>
-          <div class="mb-3">
-            <label class="form-label" for="fechat">Fecha de termino</label>
-            <input class="form-control" type="date" name="fechat" id="fechat">
-          </div>
 
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" data-bs-target="#modalToggleEditar2" data-bs-toggle="modal"
-              data-bs-dismiss="modal">
-              Siguiente
-            </button>
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
+      <!-- Overlay -->
+    
+  
 
-    </div>
-  </div>
-</div>
+    
+    <%- include('../components/scriptsBodyNewWindow') %>
 
-<%- include('../forms/formEditarEncuestaP2.ejs') %>
+  </body>
+</html>
