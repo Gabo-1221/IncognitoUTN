@@ -1,84 +1,84 @@
-                        <div class="modal fade" id="modalTogglEditar2" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="modalToggleLabel2">Parte 2</h5>
-                              <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                              ></button>
-                            </div>
-                            <form id="encpreg" >
-                            <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="categoriaSelec" class="form-label">Categoria</label>
-                                        <select class="form-select" id="categoriaSelects" name="categoria">
-                                          <option >Selecionar una categoria...</option>
-                                          <% categorias.forEach(categoria => { %>
-                                            <option value="<%=categoria._id %>"><%= categoria.nombre %></option>
-                                        <% }) %>
-                                        </select>
-                                      </div>
-                                      <div id="registroContainer"></div>
-                                    <!-- Sección para las preguntas con checkboxes -->
-                                    <div class="row mb-3">
-                                        <div class="text-start-center">
-                                            <label class="text-body" style="font-size: 25px;">Preguntas</label>
-                                        <div class="col-sm-10">
-                                        <br>
-                                        <div id="preguntaList2">
-                                        </div>
-                                        <!-- Agrega más preguntas según sea necesario -->
-                                      </div>
-                                    </div>
-                                  
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+<div class="modal fade" id="modalTogglEditar2" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalToggleLabel2">Parte 2</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form id="encpreg" >
+      <div class="modal-body">
+              <div class="mb-3">
+                  <label for="categoriaSelec" class="form-label">Categoria</label>
+                  <select class="form-select" id="categoriaSelects" name="categoria">
+                    <option >Selecionar una categoria...</option>
+                    <% categorias.forEach(categoria => { %>
+                      <option value="<%=categoria._id %>"><%= categoria.nombre %></option>
+                  <% }) %>
+                  </select>
+                </div>
+                <div id="registroContainer"></div>
+              <!-- Sección para las preguntas con checkboxes -->
+              <div class="row mb-3">
+                  <div class="text-start-center">
+                      <label class="text-body" style="font-size: 25px;">Preguntas</label>
+                  <div class="col-sm-10">
+                  <br>
+                  <div id="preguntaList2">
+                  </div>
+                  <!-- Agrega más preguntas según sea necesario -->
+                </div>
+              </div>
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
 <!--                                   <button type="button" class="btn btn-primary"  onclick="handleSubmit()">Crear</button>
- -->                                </div>
-                              </form>
-                          </div>
-                        </div>
-                      </div>
-                      <script>
-                        function handleSubmit() {
-                        // Combinar todas las selecciones de todas las categorías
-                        const allSelectedPreguntas = Object.values(selectedPreguntas).flat();
+-->                                </div>
+        </form>
+    </div>
+  </div>
+</div>
+<script>
+  function handleSubmit() {
+  // Combinar todas las selecciones de todas las categorías
+  const allSelectedPreguntas = Object.values(selectedPreguntas).flat();
 
-                        // Validar que se haya seleccionado al menos una pregunta
-                        if (allSelectedPreguntas.length === 0) {
-                          alert('Por favor, selecciona al menos una pregunta.');
-                          return;
-                        }
+  // Validar que se haya seleccionado al menos una pregunta
+  if (allSelectedPreguntas.length === 0) {
+    alert('Por favor, selecciona al menos una pregunta.');
+    return;
+  }
 
-                        // Obtener el ID de la encuesta (adapta esto según tu código)
-                        const encuestaId = document.getElementById('idEncuesta').value; 
+  // Obtener el ID de la encuesta (adapta esto según tu código)
+  const encuestaId = document.getElementById('idEncuesta').value; 
 
-                        // Preparar los datos para enviar
-                        const dataToSend = JSON.stringify({ 
-                          encuestaId: encuestaId,
-                          preguntasSeleccionadas: allSelectedPreguntas 
-                        });
+  // Preparar los datos para enviar
+  const dataToSend = JSON.stringify({ 
+    encuestaId: encuestaId,
+    preguntasSeleccionadas: allSelectedPreguntas 
+  });
 
-                        // Enviar la solicitud al servidor
-                        fetch('/forms/nuevaEncPreg', { // Reemplaza con la ruta de tu controlador
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json'
-                          },
-                          body: dataToSend
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                          // ... manejar la respuesta del servidor ...
-                          // Por ejemplo, mostrar un mensaje de éxito o recargar la página
-                        })
-                        .catch(error => {
-                          // ... manejar errores ...
-                          // Por ejemplo, mostrar un mensaje de error
-                        });
-                      }
-                      </script>
+  // Enviar la solicitud al servidor
+  fetch('/forms/nuevaEncPreg', { // Reemplaza con la ruta de tu controlador
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: dataToSend
+  })
+  .then(response => response.json())
+  .then(data => {
+    // ... manejar la respuesta del servidor ...
+    // Por ejemplo, mostrar un mensaje de éxito o recargar la página
+  })
+  .catch(error => {
+    // ... manejar errores ...
+    // Por ejemplo, mostrar un mensaje de error
+  });
+}
+</script>
