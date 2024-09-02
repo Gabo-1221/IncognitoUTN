@@ -5,6 +5,7 @@
 
 <head>
   <%- include('../layout/cabecera') %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
 </head>
 
 <body>
@@ -47,6 +48,7 @@
                       <thead class="table-dark">
                         <tr>
                           <th>Nombre</th>
+                          <th>Color</th>
                           <th>Creado por...</th>
                           <th>Opciones</th>
                         </tr>
@@ -57,6 +59,9 @@
                             <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>
                                 <%= categoria.nombre %>
                               </strong></td>
+                            <td>
+                              <div style="background-color:<%= categoria.color_hover %>; width: 20px; height: 20px;"></div>
+                            </td>
                             <td>
                               <%= categoria.id_creo.nombre %>
                             </td>
@@ -100,6 +105,7 @@
                         // Rellenar los campos del formulario con los datos recibidos
                         document.querySelector('#modalEditarC  #id').value = data.id;
                         document.querySelector('#modalEditarC #categoria').value = data.categoria;
+                        document.querySelector('#modalEditarC #color').value = data.color_hover;
                         //document.querySelector('#modalEditarC #user').value = data.creadoPor;
 
                         // Mostrar el modal

@@ -67,7 +67,8 @@ export const getListaEncuestasPendientes = async (req, res) => {
       }).populate({
         path: 'id_area',
         select: 'color_hover nombre' // Agregar el campo nombre a la selección
-      });
+      })
+      .sort({ _id: -1 });
 
       // Filtrar encuestas por fecha_limite, usuarios que han respondido y cantidad
       const fechaActual = new Date();
@@ -120,7 +121,8 @@ export const getListaEncuestasRealizadas = async (req, res) => {
       }).populate({
         path: 'id_area',
         select: 'color_hover nombre'
-      });
+      })
+      .sort({ _id: -1 });
       res.render('mystery/listaEncuestasRealizadas', {
         title: 'Incognito UTN | Encuestas realizadas', username: userData.username, rol: userData.rol,
         imagen: userData.imagen, activeSection: 'encuestasRealizadas', encuestas: encuestas
@@ -143,6 +145,7 @@ export const responderEncuesta = async (req, res) => {
     }
     const userData = await userHelper.getUserData(userId);
     if (userData) {
+      const encuesta = await Encuesta.findById(encuestaId).populate('id_area', 'nombre color_hover');
       const preguntas = await PreguntaEncuesta.find({ id_encuesta: encuestaId })
         .populate('id_pregunta') // Obtiene la información completa de la pregunta
         .populate({
@@ -154,7 +157,9 @@ export const responderEncuesta = async (req, res) => {
       res.render('mystery/responderEncuesta', {
         title: 'Incognito UTN | Encuestas pendientes', username: userData.username, rol: userData.rol,
         imagen: userData.imagen, activeSection: 'encuestasPendientes', encuestaId: encuestaId, // Pasar el ID de la encuesta
-        preguntas: preguntas // Pasar las preguntas a la vista
+        preguntas: preguntas, // Pasar las preguntas a la vista
+        areaNombre: encuesta.id_area.nombre,
+        areaColor: encuesta.id_area.color_hover
       });
       console.log('Preguntas:', preguntas);
     }

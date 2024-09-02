@@ -107,7 +107,7 @@ export const deletePregunta = async (req, res) => {
 // Controlador para agregar una nueva categoría
 export const newCategoria = async (req, res) => {
   try {
-    const { categoria } = req.body; // No necesitas "user" en req.body
+    const { categoria, color } = req.body; // No necesitas "user" en req.body
     const userId = req.session.userId; // Obtener el ID del usuario loggeado
 
     // Verificar si el usuario está loggeado
@@ -117,7 +117,8 @@ export const newCategoria = async (req, res) => {
 
     const newCategoria = new Categoria({
       nombre: categoria,
-      id_creo: userId  // Asignar el ID del usuario loggeado
+      id_creo: userId,  // Asignar el ID del usuario loggeado
+      color_hover: color
     });
 
     await newCategoria.save();
@@ -142,6 +143,7 @@ export const findOneCategoria = async (req, res) => {
       title: "Editor Categoria",
       id: categoria._id,
       categoria: categoria.nombre,
+      color_hover: categoria.color_hover,
       creadoPor: categoria.id_creo
     });
   } catch (error) {
@@ -152,7 +154,7 @@ export const findOneCategoria = async (req, res) => {
 
 // Controlador para actualizar una categoría
 export const updateCategoria = async (req, res) => {
-  const { id, categoria } = req.body; // No necesitas "user" en req.body
+  const { id, categoria, color } = req.body; // No necesitas "user" en req.body
   const userId = req.session.userId; // Obtener el ID del usuario loggeado
 
   try {
@@ -163,7 +165,8 @@ export const updateCategoria = async (req, res) => {
 
     const updatedCategoria = await Categoria.findByIdAndUpdate(id, {
       nombre: categoria,
-      id_creo: userId // Asignar el ID del usuario loggeado
+      id_creo: userId, // Asignar el ID del usuario loggeado
+      color_hover: color,
     }, { new: true });
 
     if (!updatedCategoria) {

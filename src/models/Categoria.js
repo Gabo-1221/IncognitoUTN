@@ -7,6 +7,7 @@ const categoriaSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, // Cambiar el tipo a ObjectId
     ref: 'usuarios' // Referencia al modelo de usuarios
   },
+  color_hover: { type: String, default: null },
 });
 
 const Categoria = mongoose.model('categorias', categoriaSchema);

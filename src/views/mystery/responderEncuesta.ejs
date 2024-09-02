@@ -1,135 +1,112 @@
-<!-- src/views/index.ejs -->
-<style>
-  :root {
-    --color-inactivo: #5f5050;
-    --color-hover: #ffa400;
-}
-.valoracion {
-    display: flex;
-    flex-direction: row-reverse;
-}
-.valoracion button {
-    background-color: initial;
-    border: 0;
-    color: var(--color-inactivo);
-    transition: 1s all;
-}
-.valoracion button:hover {
-    cursor: pointer;
-    color: var(--color-hover);
-    transform: rotate(360deg);
-}
-button:nth-child(1):hover ~ button {
-    color: var(--color-hover);
-    transform: rotate(360deg);
-}
-button:nth-child(2):hover ~ button {
-    color: var(--color-hover);
-    transform: rotate(360deg);
-}
-button:nth-child(3):hover ~ button {
-    color: var(--color-hover);
-    transform: rotate(360deg);
-}
-button:nth-child(4):hover ~ button {
-    color: var(--color-hover);
-    transform: rotate(360deg);
-}
-button:nth-child(5):hover ~ button {
-    color: var(--color-hover);
-    transform: rotate(360deg);
-}
-
-</style>
 <!DOCTYPE html>
-<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
-  data-template="vertical-menu-template-free">
+<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
+  data-assets-path="../assets/" data-template="vertical-menu-template-free">
 
 <head>
   <%- include('../layout/cabeceraEncuesta') %>
+    <link rel="stylesheet" href="../../assets/css/respuestaEncuestaStyles.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+      integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 </head>
 
 <body>
-  <!-- <h1><%= title %></h1>
-  <p>¡Bienvenido a tu aplicación Express con EJS!</p> -->
-  <!-- Layout wrapper -->
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
       <%- include('./menuMystery') %>
+      <div class="layout-page">
+        <%- include('./navbarMystery') %>
+        <div class="content-wrapper">
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <small class="text-light fw-semibold">Seleccione su respuesta dentro de las preguntas ubiacadas en cada sección, 
+              tome en cuenta que la valoración es de 1 a 5 estrellas.
+            </small>
+            <% if (preguntas && preguntas.length> 0) { %>
+              <div class="accordion mt-3" id="accordionExample">
 
-        <!-- Layout container -->
-        <div class="layout-page">
-          <%- include('./navbarMystery') %>
+                <% 
+                  // Agrupar preguntas por categoría
+                  const preguntasPorCategoria = {};
+                  preguntas.forEach(pregunta => {
+                    const categoriaNombre = pregunta.id_pregunta.id_categoria.nombre;
+                    if (!preguntasPorCategoria[categoriaNombre]) {
+                      preguntasPorCategoria[categoriaNombre] = [];
+                    }
+                    preguntasPorCategoria[categoriaNombre].push(pregunta);
+                  });
 
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-              <!-- Content -->
-
-              <div class="container-xxl flex-grow-1 container-p-y">
-
-                <% if (preguntas && preguntas.length> 0) { %>
-                  <ul>
-                    <% preguntas.forEach(pregunta=> { %>
-                      <li>
-                        <strong>Pregunta:</strong>
-                        <%= pregunta.id_pregunta.nombre %> <br>
-                          <strong>Categoría:</strong>
-                          <%= pregunta.id_pregunta.id_categoria.nombre %>
-                            <% /* Mostrar las opciones de la pregunta aquí */ %>
-                      </li>
-                      <% }); %>
-                  </ul>
-                  <% } else { %>
-                    <p>No hay preguntas disponibles para esta encuesta.</p>
-                    <% } %>
-
-                    <div class="valoracion">
-
-                      <!-- Estrella 1 -->
-                      <button>
-                          <i class="fas fa-star"></i>
-                      </button>
-                  
-                      <!-- Estrella 2 -->
-                      <button>
-                          <i class="fas fa-star"></i>
-                      </button>
-                  
-                      <!-- Estrella 3 -->
-                      <button>
-                          <i class="fas fa-star"></i>
-                      </button>
-                  
-                      <!-- Estrella 4 -->
-                      <button>
-                          <i class="fas fa-star"></i>
-                      </button>
-                  
-                      <!-- Estrella 5 -->
-                      <button>
-                          <i class="fas fa-star"></i>
-                      </button>
-                  
+                  // Iterar sobre las categorías y crear un acordeón para cada una
+                  let contadorCategorias = 0; // Contador para IDs únicos de acordeones
+                  for (const categoriaNombre in preguntasPorCategoria) { 
+                    contadorCategorias++;
+                %>
+                <div class="card accordion-item">
+                  <h2 class="accordion-header" id="heading<%= contadorCategorias %>">
+                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+        data-bs-target="#collapse<%= contadorCategorias %>" aria-expanded="false"
+        aria-controls="collapse<%= contadorCategorias %>" 
+        data-color-hover="<%= preguntasPorCategoria[categoriaNombre][0].id_pregunta.id_categoria.color_hover %>">
+  <%= categoriaNombre %>                      
+</button>
+                  </h2>
+                  <div id="collapse<%= contadorCategorias %>" class="accordion-collapse collapse"
+                    aria-labelledby="heading<%= contadorCategorias %>" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <ul>
+                        <% preguntasPorCategoria[categoriaNombre].forEach(pregunta => { %>
+                          <li>
+                            <span class="badge rounded-pill bg-label-respuesta-enc" style="color: <%= pregunta.id_pregunta.id_categoria.color_hover %>;">#<%= pregunta.id_pregunta.id_categoria.nombre %> | </span>
+                            <%= pregunta.id_pregunta.nombre %> <br>
+                            <div class="valoracion">
+                              <button>
+                                <i class="fas fa-star"></i>
+                              </button>
+                              <button>
+                                <i class="fas fa-star"></i>
+                              </button>
+                              <button>
+                                <i class="fas fa-star"></i>
+                              </button>
+                              <button>
+                                <i class="fas fa-star"></i>
+                              </button>
+                              <button>
+                                <i class="fas fa-star"></i>
+                              </button>
+                            </div>
+                            <br>
+                          </li>
+                          <% }); %>
+                      </ul>
+                    </div>
                   </div>
-
+                </div>
+                <% } %> 
 
               </div>
-              <!-- / Content -->
+              <% } else { %>
+                <p>No hay preguntas disponibles para esta encuesta.</p>
+                <% } %>
 
-              <%- include('../components/footer') %>
-
-                <div class="content-backdrop fade"></div>
-            </div>
-            <!-- Content wrapper -->
+          </div>
+          <%- include('../components/footer') %>
+            <div class="content-backdrop fade"></div>
         </div>
-        <!-- / Layout page -->
+      </div>
     </div>
-
-    <!-- Overlay -->
     <div class="layout-overlay layout-menu-toggle"></div>
   </div>
-  <!-- / Layout wrapper -->
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const botonesAcordeon = document.querySelectorAll('.accordion-button');
+    
+      botonesAcordeon.forEach(boton => {
+        const colorHover = boton.dataset.colorHover;
+        if (colorHover) {
+          boton.style.color = colorHover; // Aplicar el color_hover al botón
+        }
+      });
+    });
+  </script>
   <%- include('../components/scriptsBodyEncuesta') %>
 </body>
 
