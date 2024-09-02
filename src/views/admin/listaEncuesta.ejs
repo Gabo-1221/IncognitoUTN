@@ -76,44 +76,49 @@
                               <td><i class="bx bx-star"></i> <%= encuesta.calificacion %> </td>
                               <td>    
                                   <div class="dropdown">
-                                    <button class="m-1 btn" type="button" onclick="abrirModalEditarE('<%= encuesta._id %>')"
-                                      ><i class="bx bx-edit-alt me-1"></i> Edit</button>
-                                      <%- include('../forms/formEditarEncuesta.ejs') %>
+                                      <!-- <button class="m-1 btn" type="button" onclick="abrirModalEditarE('<%= encuesta._id %>')"
+                                      ><i class="bx bx-edit-alt me-1"></i> </button> -->
+                                      <a href="/admin/formEditarEncu/<%= encuesta._id %>" type="button" class="btn btn-primary" ><i class="bx bx-edit-alt"></i></a>
                                       <a class="m-1" href="#" onclick="confirmDeletion('<%= encuesta._id %>'); return false;" style="color: inherit;"
-                                      ><i class="bx bx-trash me-1"></i> Delete</a
-                                      >
-                                  </div>
-                              </td>
+                                        ><i class="bx bx-trash me-1"></i> </a
+                                        >
+                                      </div>
+                                    </td>
                               </tr>
-                          <% }) %>
-
-                        </tbody>
-                      </table>
+                              <% }) %>
+                              
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      
                     </div>
-                  </div>
-
-            </div>
-            <!-- / Content -->
-            <script>
-              function confirmDeletion(id) {
-                if (confirm('¿Estás seguro de que deseas eliminar esta Encuesta?')) {
-                  window.location.href = '/forms/eliminarEncuesta/' + id;
-                }
-              }
-            </script>
+                    <%- include('../forms/formEditarEncuesta.ejs') %>
+                    <!-- / Content -->
+                    <script>
+                      function confirmDeletion(id) {
+                        if (confirm('¿Estás seguro de que deseas eliminar esta Encuesta?')) {
+                          window.location.href = '/forms/eliminarEncuesta/' + id;
+                        }
+                      }
+                      </script>
             <script>
               function abrirModalEditarE(idEncuesta) {  
                 // Cargar los datos de la encuesta para editar
-                fetch(`/admin/listaEncuesta/${idEncuesta}`)
+                fetch(`/admin/listaEncuestas/${idEncuesta}`)
                 .then(response => response.json())
                 .then(data => {
-                
+                console.log(data.encuesta)
                 // Llenar el formulario con los datos de la encuesta
-                document.querySelector('#modalToggleEditar #id').value = data.id;
-                document.querySelector('#modalToggleEditar #nombre').value = data.nombre;
-                document.querySelector('#modalToggleEditar #areaSelect').value = data.area;
-                document.querySelector('#modalToggleEditar #fechat').value = data.encargo;
-                document.querySelector('#modalToggleEditar #canperson').value = data.cantidad;
+                document.querySelector('#modalToggleEditar #id').value = data.encuesta._id;
+                const modalElement = document.getElementById('modalToggleEditar');
+                modalElement.setAttribute('data-id', data.encuesta._id); 
+                
+                document.querySelector('#modalToggleEditar #nombre').value = data.encuesta.nombre;
+                document.querySelector('#modalToggleEditar #areaSelect').value = data.encuesta.id_area;
+                document.querySelector('#modalToggleEditar #fechat').value = data.encuesta.id_encargo;
+                document.querySelector('#modalToggleEditar #canperson').value = data.encuesta.cantidad;
+                            
 
                 new bootstrap.Modal(document.getElementById('modalToggleEditar')).show();
 

@@ -6,7 +6,7 @@ import Encuesta from '../../models/Encuesta.js';
 import EncPre from '../../models/PreguntaEncuesta.js';
 import Usu from '../../models/Usuario.js'; // Importa el modelo Usuario
 import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
-
+import userHelper from '../../helpers/userHelper.js';
 
 // Controlador para agregar una nueva pregunta
 export const newQuestion = async (req, res) => {
@@ -312,16 +312,21 @@ export const findOneEncuesta = async(req, res ) => {
 export const obtenerDatosEncuesta = async (req, res) => {
   const { idEncuesta } = req.params;
   try {
+    const userId = req.session.userId;
+    const userData = await userHelper.getUserData(userId);
+
     const encuesta = await Encuesta.findById(idEncuesta);
+    const areas = await Area.find();
     const categorias = await Categoria.find();
     const preguntas = await Pregunta.find(); // Todas las preguntas
-    const encpre = await EncPre.find();
+    const encpres = await EncPre.find();
 
-    res.json({ encuesta, categorias, preguntas, encpre }); 
+    res.render('forms/formEditarEncuesta',{ username: userData.username, rol: userData.rol,
+      imagen: userData.imagen, activeSection: '', encuesta: encuesta , title:'Editar Encuesta' , encuesta:encuesta,categorias:categorias,preguntas:preguntas, encpres:encpres,areas,areas})
     } catch (error) {
     // Manejar el error
     console.error(error);
-    res.status(500).send('Error al obtener los datos de la encuesta');
+    res.status(500).send('Error al obtener los datos de la encuesta' + error);
   }
 };
 

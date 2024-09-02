@@ -44,41 +44,41 @@
                         </div>
                       </div>
                       <script>
-                            function handleSubmit() {
-                                // Combinar todas las selecciones de todas las categorías en un solo array
-                                const encuestaId = document.getElementById('idEncuesta').value;
-                                const allSelectedPreguntas = Object.values(selectedPreguntas).flat();
+                        function handleSubmit() {
+                        // Combinar todas las selecciones de todas las categorías
+                        const allSelectedPreguntas = Object.values(selectedPreguntas).flat();
 
-                                // Asegúrate de que el array no esté vacío
-                                if (allSelectedPreguntas.length === 0) {
-                                  alert('Por favor, selecciona al menos una pregunta.');
-                                  return;
-                                }
+                        // Validar que se haya seleccionado al menos una pregunta
+                        if (allSelectedPreguntas.length === 0) {
+                          alert('Por favor, selecciona al menos una pregunta.');
+                          return;
+                        }
 
-                                // Opcional: Convertir a JSON si el servidor espera este formato
-                                const dataToSend = JSON.stringify({ 
-                                  encuestaId: encuestaId,
-                                  preguntasSeleccionadas: allSelectedPreguntas 
-                                });
+                        // Obtener el ID de la encuesta (adapta esto según tu código)
+                        const encuestaId = document.getElementById('idEncuesta').value; 
 
-                                // Enviar la solicitud al servidor
-                                fetch('/forms/nuevaEncPreg', {
-                                  method: 'POST',
-                                  headers: {
-                                    'Content-Type': 'application/json'
-                                  },
-                                  body: dataToSend
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                  //console.log('Registro exitoso:' );
-                                  //recargar la pagina
-                                  location.reload();
-                                })
-                                .catch(error => {
-                                  console.error('Error al registrar las preguntas:', error);
-                                  alert('Ocurrió un error al guardar las preguntas.');
-                                });
-                              }
-                            
+                        // Preparar los datos para enviar
+                        const dataToSend = JSON.stringify({ 
+                          encuestaId: encuestaId,
+                          preguntasSeleccionadas: allSelectedPreguntas 
+                        });
+
+                        // Enviar la solicitud al servidor
+                        fetch('/forms/nuevaEncPreg', { // Reemplaza con la ruta de tu controlador
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json'
+                          },
+                          body: dataToSend
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                          // ... manejar la respuesta del servidor ...
+                          // Por ejemplo, mostrar un mensaje de éxito o recargar la página
+                        })
+                        .catch(error => {
+                          // ... manejar errores ...
+                          // Por ejemplo, mostrar un mensaje de error
+                        });
+                      }
                       </script>
