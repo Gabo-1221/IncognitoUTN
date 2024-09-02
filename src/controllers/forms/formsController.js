@@ -336,7 +336,7 @@ export const newEncuesta = async (req, res) => {
   }
 };
 
-/* export const findOneEncuesta = async(req, res ) => {
+export const findOneEncuesta = async(req, res ) => {
   const {idEncuesta} = req.params;
   
   try {
