@@ -12,7 +12,7 @@ router.get('/home', authMiddleware, adminController.getHomeAdmin);
 router.get('/listaUsuario', authMiddleware, adminController.getUsers);
 router.get('/listaEncuesta', authMiddleware, adminController.getQuestions);
 
-router.get('/listaEncuestaCategoria/:categoriaId', adminController.getQuestionsByCategory);
+router.get('/listaEncuesta/:categoriaId', adminController.getQuestionsByCategory);
 router.get('/ultimoRegistro', authMiddleware, adminController.getlastEnc);
 
 router.get('/listaPreguntas', authMiddleware, adminController.getAsks);
