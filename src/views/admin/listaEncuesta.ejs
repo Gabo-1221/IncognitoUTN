@@ -5,6 +5,7 @@
 
 <head>
   <%- include('../layout/cabecera') %>
+  <link rel="stylesheet" href="../assets/css/encuestasAdminStyles.css" />
 </head>
 
 <body>
@@ -48,7 +49,7 @@
                         <th>Nombre <br>Encuesta</th>
                         <th>Area</th>
                         <th>Creado por..</th>
-                        <th>N° Encuestas <br>contestada</th>
+                        <th>N° Pueden <br> responder</th>
                         <th>Fecha <br>Creada</th>
                         <th>Fecha <br>Terminar</th>
                         <th>Calificacion <br> Creadas</th>
@@ -62,11 +63,12 @@
                           <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>
                               <%= encuesta.nombre %>
                             </strong></td>
-                          <td>
-                            <%= encuesta.id_area %>
+                          <td><span class="badge bg-label-color-hover-area me-1" style="color: <%= encuesta.id_area.color_hover %>;">
+                              <%= encuesta.id_area.nombre %> 
+                            </span>
                           </td>
                           <td>
-                            <%= encuesta.id_encargado %>
+                            <%= encuesta.id_encargado.nombre %>
                           </td>
                           <td>
                             <%= encuesta.cantidad %>
@@ -97,6 +99,9 @@
                   </table>
                 </div>
               </div>
+
+
+
 
             </div>
             <!-- / Content -->

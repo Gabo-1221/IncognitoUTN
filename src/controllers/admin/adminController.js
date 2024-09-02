@@ -34,8 +34,8 @@ export const getUsers = async (req, res) => {
     const userId = req.session.userId;
 
     const usuarios = await Usuario.find()
-      .populate('rol', 'nombre') 
-      .lean(); 
+      .populate('rol', 'nombre')
+      .lean();
 
     usuarios.forEach(usuario => {
       usuario.encuestasCreadasCount = usuario.encuestas_creadas.length;
@@ -49,13 +49,13 @@ export const getUsers = async (req, res) => {
     const userData = await userHelper.getUserData(userId);
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaUsuario', { 
-          title: 'Incognito UTN | Usuarios', 
-          username: userData.username, 
-          rol: userData.rol, 
+        res.render('admin/listaUsuario', {
+          title: 'Incognito UTN | Usuarios',
+          username: userData.username,
+          rol: userData.rol,
           usuarios: usuarios, // Pasar los usuarios con la información del rol y el conteo de encuestas
-          activeSection: 'usuarios', 
-          imagen: userData.imagen 
+          activeSection: 'usuarios',
+          imagen: userData.imagen
         });
       } else {
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
@@ -73,15 +73,38 @@ export const getQuestions = async (req, res) => {
   try {
     const userId = req.session.userId;
     const encuestas = await Encuesta.find()
-    const categorias = await Categoria.find()
-    const areas = await Area.find()
+      .populate('id_area', 'nombre color_hover')
+      .populate('id_encargado', 'nombre'); // Popular el nombre de usuario
+
+    const categorias = await Categoria.find();
+    const areas = await Area.find();
+
     if (!userId) {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });
     }
+
     const userData = await userHelper.getUserData(userId);
+
     if (userData) {
       if (userData.rol == 'Administrador') {
-        res.render('admin/listaEncuesta', { title: 'Incognito UTN | Lista Encuesta', username: userData.username, rol: userData.rol, categorias: categorias, areas: areas, activeSection: 'encuestas', encuestas: encuestas, imagen: userData.imagen });
+        const encuestasFormateadas = encuestas.map(encuesta => {
+          return {
+            ...encuesta._doc, // Copiar las propiedades del objeto original
+            fecha_creada: formatearFecha(encuesta.fecha_creada),
+            fecha_limite: formatearFecha(encuesta.fecha_limite)
+          };
+        });
+        res.render('admin/listaEncuesta', { 
+          title: 'Incognito UTN | Lista Encuesta', 
+          username: userData.username, 
+          rol: userData.rol, 
+          categorias: categorias, 
+          areas: areas, 
+          activeSection: 'encuestas', 
+          //encuestas: encuestas, 
+          encuestas: encuestasFormateadas,
+          imagen: userData.imagen 
+        });
       } else {
         res.status(404).render('layout/error', { title: 'Incognito UTN | Error 404 :c', message: 'No se encuentra la ruta establecida' });
       }
@@ -93,6 +116,12 @@ export const getQuestions = async (req, res) => {
     res.status(500).json({ message: 'Error 2', error: error.message });
   }
 };
+
+// Función para formatear la fecha
+function formatearFecha(fecha) {
+  const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  return fecha.toLocaleDateString('es-ES', opciones); // Cambiar 'es-ES' por el idioma deseado
+}
 
 export const getAsks = async (req, res) => {
   try {
