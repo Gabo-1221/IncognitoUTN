@@ -304,9 +304,26 @@ export const findOneEncuesta = async(req, res ) => {
       return res.status(404).json({message:'Encuesta no encontrada'})
     }
   } catch (error) {
-    console.log('Error al obyener la Encuesta deseada')
+    console.error('Error al obtener las preguntas:', error);
+    res.status(500).json({ message: 'Error al obtener las preguntas' });
   }
 }
+//consulat ejemplo
+export const preguntasCategoria = async (req,res) => {
+  const { idEncuesta } = req.body;
+
+  try {
+    // Paso 1: Buscar las entradas de PreguntaEncuesta
+    const encpre = await EncPre.find({id_encuesta: '66ce2a15204b900b416d0b84'});
+    console.log(encpre);
+    res.json({encpre});
+
+  } catch (error) {
+    console.error('Error al obtener las preguntas:', error);
+    res.status(500).json({ message: 'Error al obtener las preguntas' });
+  }
+}
+
 
 // Controlador para eliminar una encuesta
 export const deleteEncuesta = async (req, res) => {
