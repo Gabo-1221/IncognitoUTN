@@ -267,10 +267,11 @@ export const newEncuesta = async (req, res) => {
     const { nombre, area, canperson, user, fechat } = req.body;
     const currentDate = new Date();
     const utcDate = currentDate.toLocaleDateString('en-CA');
+    const idUser = req.session.userId;
     const newEncuesta = new Encuesta({
       nombre: nombre,
       id_area: area,
-      id_encargado: user,
+      id_encargado: idUser,
       fecha_creada: utcDate,
       fecha_limite: fechat,
       cantidad: canperson,
