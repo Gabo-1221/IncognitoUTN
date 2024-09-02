@@ -5,7 +5,7 @@
 
 <head>
   <%- include('../layout/cabecera') %>
-  <link rel="stylesheet" href="../assets/css/encuestasAdminStyles.css" />
+    <link rel="stylesheet" href="../assets/css/encuestasAdminStyles.css" />
 </head>
 
 <body>
@@ -33,7 +33,7 @@
                     <div class="col-lg-4 col-md-6" style="margin-left: auto;"">
                             <div class=" mt-3">
                       <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#modalToggle">
+                        data-bs-target="#modalToggleNewEncuesta">
                         <i class="bx bx-plus"></i>
                       </button>
                       <!-- Modal -->
@@ -63,8 +63,9 @@
                           <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>
                               <%= encuesta.nombre %>
                             </strong></td>
-                          <td><span class="badge bg-label-color-hover-area me-1" style="color: <%= encuesta.id_area.color_hover %>;">
-                              <%= encuesta.id_area.nombre %> 
+                          <td><span class="badge bg-label-color-hover-area me-1"
+                              style="color: <%= encuesta.id_area.color_hover %>;">
+                              <%= encuesta.id_area.nombre %>
                             </span>
                           </td>
                           <td>
@@ -87,7 +88,7 @@
                               <button class="m-1 btn" type="button"
                                 onclick="abrirModalEditarE('<%= encuesta._id %>')"><i class="bx bx-edit-alt me-1"></i>
                                 Edit</button>
-                              <%- include('../forms/formEditarEncuesta.ejs') %>
+                              <!-- < % - include('../forms/formEditarEncuesta.ejs') % > -->
                                 <a class="m-1" href="#" onclick="confirmDeletion('<%= encuesta._id %>'); return false;"
                                   style="color: inherit;"><i class="bx bx-trash me-1"></i> Delete</a>
                             </div>
@@ -99,10 +100,6 @@
                   </table>
                 </div>
               </div>
-
-
-
-
             </div>
             <!-- / Content -->
             <%- include('../components/footer') %>
@@ -116,17 +113,20 @@
               <script>
                 function abrirModalEditarE(idEncuesta) {
                   // Cargar los datos de la encuesta para editar
-                  fetch(`/admin/listaEncuesta/${idEncuesta}`)
+                  fetch(`/admin/listaEncuestaEdit/${idEncuesta}`)
                     .then(response => response.json())
                     .then(data => {
-                      console.log(data);
+                      console.log('Datos de la encuesta'+data);
                       // Llenar el formulario con los datos de la encuesta
-                      document.querySelector('#modalToggleEditar #nombre').value = data.nombre;
-                      document.querySelector('#modalToggleEditar #areaSelect').value = data.area;
-                      document.querySelector('#modalToggleEditar #fechat').value = data.encargo;
-                      document.querySelector('#modalToggleEditar #canperson').value = data.cantidad;
+                      document.querySelector('#modalToggleEditarEncuesta #id').value = data.id;
+                      document.querySelector('#modalToggleEditarEncuesta #nombre').value = data.nombre;
+                      document.querySelector('#modalToggleEditarEncuesta #areaSelect').value = data.areaId;
+                      document.querySelector('#modalToggleEditarEncuesta #fechat').value = data.fecha_limite;
+                      /*const fechaFormateada = new Date(data.fecha_limite).toISOString().split('T')[0];
+                      document.querySelector('#modalToggleEditarEncuesta #fechat').value = fechaFormateada;*/
+                      document.querySelector('#modalToggleEditarEncuesta #canperson').value = data.cantidad;
 
-                      new bootstrap.Modal(document.getElementById('modalToggleEditar')).show();
+                      new bootstrap.Modal(document.getElementById('modalToggleEditarEncuesta')).show();
 
                     })
                     .catch(error => {

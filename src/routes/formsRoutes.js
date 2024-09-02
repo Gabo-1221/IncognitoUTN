@@ -10,6 +10,7 @@ router.post('/nuevaCategoria', formsController.newCategoria);
 router.post('/nuevArea', formsController.newArea);
 router.post('/nuevaEncuesta', formsController.newEncuesta);
 router.post('/nuevaEncPreg', formsController.newEncPreg);
+router.post('/EditarEncuesta', formsController.updateEncuesta);
 router.get('/eliminarPregunta/:idpregunta', formsController.deletePregunta);
 router.get('/eliminarCategoria/:idcategoria', formsController.deleteCategoria);
 router.get('/eliminarArea/:idArea', formsController.deleteArea);

@@ -14,8 +14,11 @@ const encuestaSchema = new mongoose.Schema({
   cantidad: { type: Number, default: null },
   fecha_creada: { type: Date, default: null },
   fecha_limite: { type: Date, default: null },
-  calificacion: { type: Number, default: null },  
-  id_usuarios_respondieron: { type: Array, default: [] },
+  calificacion: { type: mongoose.Schema.Types.Decimal128, default: null },  
+  id_usuarios_respondieron: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'usuarios' // Referencia al modelo 'usuarios'
+  }],
 });
 
 const Encuesta = mongoose.model('encuestas', encuestaSchema);

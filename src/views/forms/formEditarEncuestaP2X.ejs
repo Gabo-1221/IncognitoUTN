@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalToggleEditEncuestaPreguntas" aria-hidden="true"
+<div class="modal fade" id="modalToggleEditarEncuestaPreguntas" aria-hidden="true"
   aria-labelledby="modalToggleLabelEditarEncuestaPreguntas" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -160,11 +160,7 @@
       headers: {
         'Content-Type': 'application/json'
       },
-      /* body: dataToSend*/
-      body: JSON.stringify({
-        encuestaId: encuestaId,
-        preguntasSeleccionadas: allSelectedPreguntas
-      })
+      body: dataToSend
     })
       .then(response => response.json())
       .then(data => {

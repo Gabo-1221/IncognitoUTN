@@ -1,22 +1,24 @@
 <!-- Toggle Between Modals -->
 
 <!-- Modal 1-->
-<div class="modal fade" id="modalToggleNewEncuesta" aria-labelledby="modalToggleLabelNewEncuesta" tabindex="-1" style="display: none"
-  aria-hidden="true">
+<div class="modal fade" id="modalToggleEditarEncuesta" aria-labelledby="modalToggleLabelEditarEncuesta" tabindex="-1"
+  style="display: none" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalToggleLabel">Nueva encuesta</h5>
+        <h5 class="modal-title" id="modalToggleLabel">Editar encuesta</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="/forms/nuevaEncuesta" method="post">
+        <form action="/forms/EditarEncuesta" method="post">
           <div class="mb-3">
+            <!-- id encuesta -->
+            <input type="hidden" id="id" name="id" />
             <label class="form-label" for="nombre">Nombre de la Encuesta</label>
             <input type="text" class="form-control" id="nombre" name="nombre" />
           </div>
           <div class="mb-3">
-            <label for="areaSelect" class="form-label">Categoria</label>
+            <label for="areaSelect" class="form-label">Area</label>
             <select class="form-select" id="areaSelect" name="area">
               <option>Selecionar una Area...</option>
               <% areas.forEach(area=> { %>
@@ -27,7 +29,7 @@
             </select>
           </div>
           <div class="mb-3">
-            <label class="form-label" for="user">Creado por..</label>
+            <label class="form-label" for="user">Eitado por..</label>
             <div class="input-group input-group-merge">
               <input type="text" id="user" name="user" class="form-control" placeholder="<%= username %>" readonly />
             </div>
@@ -42,8 +44,8 @@
           </div>
 
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" data-bs-target="#modalToggleNewEncuestaPreguntas" data-bs-toggle="modal"
-              data-bs-dismiss="modal">
+            <button type="submit" class="btn btn-primary" data-bs-target="#modalToggleEditarEncuestaPreguntas"
+              data-bs-toggle="modal" data-bs-dismiss="modal">
               Siguiente
             </button>
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -57,4 +59,4 @@
   </div>
 </div>
 
-<%- include('../forms/formEncuestaP2.ejs') %>
+<%- include('../forms/formEditarEncuestaP2.ejs') %>

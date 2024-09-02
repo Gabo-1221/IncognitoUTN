@@ -12,7 +12,7 @@ router.get('/home', authMiddleware, adminController.getHomeAdmin);
 router.get('/listaUsuario', authMiddleware, adminController.getUsers);
 router.get('/listaEncuesta', authMiddleware, adminController.getQuestions);
 
-router.get('/listaEncuesta/:categoriaId', adminController.getQuestionsByCategory);
+router.get('/listaEncuestaCategoria/:categoriaId', adminController.getQuestionsByCategory);
 router.get('/ultimoRegistro', authMiddleware, adminController.getlastEnc);
 
 router.get('/listaPreguntas', authMiddleware, adminController.getAsks);
@@ -25,7 +25,7 @@ router.get('/formCategoria', adminController.getCategoria);
 router.get('/listaPreguntas/:idPregunta', formsController.findOnePregunta);
 router.get('/listaCategorias/:idCategoria', formsController.findOneCategoria);
 router.get('/listaAreas/:idArea', formsController.findOneArea);
-router.get('/listaEncuesta/:idEncuesta', formsController.findOneEncuesta);
+router.get('/listaEncuestaEdit/:idEncuesta', formsController.findOneEncuesta);
 router.get('/perfil', authMiddleware, adminController.getPerfil);
 
 

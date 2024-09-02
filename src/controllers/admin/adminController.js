@@ -74,7 +74,8 @@ export const getQuestions = async (req, res) => {
     const userId = req.session.userId;
     const encuestas = await Encuesta.find()
       .populate('id_area', 'nombre color_hover')
-      .populate('id_encargado', 'nombre'); // Popular el nombre de usuario
+      .populate('id_encargado', 'nombre')
+      .sort({ _id: -1 }); // Popular el nombre de usuario
 
     const categorias = await Categoria.find();
     const areas = await Area.find();

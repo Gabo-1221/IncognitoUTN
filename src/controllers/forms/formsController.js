@@ -324,7 +324,7 @@ export const newEncuesta = async (req, res) => {
       fecha_creada: utcDate,
       fecha_limite: fechat,
       cantidad: canperson,
-      calificacion: 4.9
+      calificacion: 0.0
     });
 
     await newEncuesta.save();
@@ -379,8 +379,11 @@ export const findOneEncuesta = async (req, res) => {
       id: encuesta._id,
       nombre: encuesta.nombre,
       area: encuesta.id_area.nombre, // Acceder al nombre del área a través de la propiedad populada
+      areaId: encuesta.id_area._id,
       encargo: encuesta.id_encargado ? `${encuesta.id_encargado.nombre} ${encuesta.id_encargado.apellidos}` : 'Sin Encargado',
-      cantidad: encuesta.cantidad
+      cantidad: encuesta.cantidad,
+      /* fecha_limite: encuesta.fecha_limite */
+      fecha_limite: encuesta.fecha_limite.toISOString().split('T')[0]
     });
   } catch (error) {
     console.log('Error al obtener la Encuesta deseada:', error); // Mostrar el error en la consola
@@ -415,9 +418,10 @@ export const newEncPreg = async (req, res) => {
     for (const pregunta of preguntasSeleccionadas) {
       try {
         const newEncPre = new EncPre({
-          id_encuesta: mongoose.Types.ObjectId(encuestaId), // Convertir a ObjectId
-          id_pregunta: mongoose.Types.ObjectId(pregunta), // Convertir a ObjectId
+          id_encuesta: encuestaId,
+          id_pregunta: pregunta, 
         });
+    
         await newEncPre.save();
       } catch (error) {
         console.error('Error al guardar la pregunta:', error);
@@ -428,6 +432,35 @@ export const newEncPreg = async (req, res) => {
   } catch (error) {
     console.error('Error en newEncPreg:', error);
     return res.status(500).json({ error: 'Error en el servidor' });
+  }
+};
+
+export const updateEncuesta = async (req, res) => {
+  try {
+    const { id, nombre, area, canperson, fechat } = req.body; 
+    const userId = req.session.userId; // Obtener el ID del usuario loggeado
+
+    if (!userId) {
+      return res.status(401).json({ error: 'Debes iniciar sesión para crear una encuesta' });
+    }
+
+    const updatedEncuesta = await Encuesta.findByIdAndUpdate(id, {
+      nombre: nombre,
+      id_area: area,
+      id_encargado: userId, 
+      fecha_limite: fechat,
+      cantidad: canperson,
+    }, { new: true }); 
+
+    if (!updatedEncuesta) {
+      return res.status(404).json({ error: 'Encuesta no encontrada' });
+    }
+
+    // Enviar una respuesta JSON con un mensaje de éxito
+    //res.json({ message: 'Encuesta actualizada correctamente', encuestaId: updatedEncuesta._id }); 
+  } catch (error) {
+    console.error("Error al actualizar la encuesta:", error);
+    res.status(500).json({ error: 'Error al actualizar la encuesta' });
   }
 };
 
@@ -447,7 +480,8 @@ const formsController = {
   newEncuesta,
   findOneEncuesta,
   deleteEncuesta,
-  newEncPreg
+  newEncPreg,
+  updateEncuesta
 };
 
 export default formsController;
