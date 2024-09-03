@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 const areaSchema = new mongoose.Schema({
   nombre: { type: String, default: null },
   promedio: { type: Number, default: null },
-  id_creo: { type: Number, default: null },
+  id_creo: { type: mongoose.Schema.Types.ObjectId,
+    ref:'usuarios' },
 });
 
 const Area = mongoose.model('areas', areaSchema);
