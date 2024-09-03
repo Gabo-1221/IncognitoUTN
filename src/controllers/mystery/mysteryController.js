@@ -4,6 +4,8 @@ import Encuesta from '../../models/Encuesta.js';
 import Area from '../../models/Area.js';
 import Categoria from '../../models/Categoria.js';
 import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
+import RespuestaEncuesta from '../../models/RespuestaEncuesta.js';
+import Usuario from '../../models/Usuario.js';
 
 export const getHomeMystery = async (req, res) => {
   try {
@@ -68,7 +70,7 @@ export const getListaEncuestasPendientes = async (req, res) => {
         path: 'id_area',
         select: 'color_hover nombre' // Agregar el campo nombre a la selección
       })
-      .sort({ _id: -1 });
+        .sort({ _id: -1 });
 
       // Filtrar encuestas por fecha_limite, usuarios que han respondido y cantidad
       const fechaActual = new Date();
@@ -92,7 +94,7 @@ export const getListaEncuestasPendientes = async (req, res) => {
 
       res.render('mystery/listaEncuestasPendientes', {
         title: 'Incognito UTN | Encuestas pendientes', username: userData.username, rol: userData.rol,
-        imagen: userData.imagen, activeSection: 'encuestasPendientes', encuestas: encuestasFiltradas
+        imagen: userData.imagen, activeSection: 'encuestasPendientes', encuestas: encuestasFiltradas, messageRegister: null
       });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
@@ -122,7 +124,7 @@ export const getListaEncuestasRealizadas = async (req, res) => {
         path: 'id_area',
         select: 'color_hover nombre'
       })
-      .sort({ _id: -1 });
+        .sort({ _id: -1 });
       res.render('mystery/listaEncuestasRealizadas', {
         title: 'Incognito UTN | Encuestas realizadas', username: userData.username, rol: userData.rol,
         imagen: userData.imagen, activeSection: 'encuestasRealizadas', encuestas: encuestas
@@ -161,7 +163,7 @@ export const responderEncuesta = async (req, res) => {
         areaNombre: encuesta.id_area.nombre,
         areaColor: encuesta.id_area.color_hover
       });
-      console.log('Preguntas:', preguntas);
+      //console.log('Preguntas:', preguntas);
     }
     else {
       res.status(404).json({ message: 'Usuario no encontrado' });
@@ -172,13 +174,72 @@ export const responderEncuesta = async (req, res) => {
   }
 }
 
+export const registrarRespuestaEncuesta = async (req, res) => {
+  try {
+    const encuestaId = req.body.encuestaId;
+    const userId = req.session.userId;
+
+    // Validar que el usuario está autenticado
+    if (!userId) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
+    // Iterar sobre las respuestas del formulario
+    for (const key in req.body) {
+      if (key.startsWith('pregunta_')) {
+        const partes = key.split('_'); // Dividir la clave en partes
+        const preguntaId = partes[1];
+        const calificacion = req.body[key];
+
+        // Verificar si calificacion es un array (si se seleccionó más de una estrella)
+        if (Array.isArray(calificacion)) {
+          // Iterar sobre las calificaciones del array
+          calificacion.forEach(async calif => {
+            // Crear un nuevo documento de RespuestaEncuesta para cada calificación
+            const nuevaRespuesta = new RespuestaEncuesta({
+              id_encuesta: encuestaId,
+              id_pregunta: preguntaId,
+              respuesta: calif, // Usar la calificación individual del array
+              id_usuario: userId,
+            });
+
+            // Guardar la respuesta en la base de datos
+            await nuevaRespuesta.save();
+          });
+        } else {
+          // Si solo se seleccionó una estrella, guardar la respuesta directamente
+          const nuevaRespuesta = new RespuestaEncuesta({
+            id_encuesta: encuestaId,
+            id_pregunta: preguntaId,
+            respuesta: calificacion,
+            id_usuario: userId,
+          });
+
+          await nuevaRespuesta.save();
+        }
+      }
+    }
+
+    // Actualizar el array encuestas_resueltas del usuario
+    await Usuario.findByIdAndUpdate(userId, {
+      $push: { encuestas_resueltas: encuestaId }
+    });
+
+    res.redirect('/mystery/listaEncuestasPendientes');
+  } catch (error) {
+    console.error('Error al registrar las respuestas:', error);
+    res.status(500).json({ message: 'Error al guardar las respuestas' });
+  }
+};
+
 
 const mysteryController = {
   getHomeMystery,
   getPerfilMystery,
   getListaEncuestasPendientes,
   getListaEncuestasRealizadas,
-  responderEncuesta
+  responderEncuesta,
+  registrarRespuestaEncuesta
 };
 
 export default mysteryController;

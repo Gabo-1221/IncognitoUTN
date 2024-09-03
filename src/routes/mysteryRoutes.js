@@ -9,5 +9,6 @@ router.get('/perfil', authMiddleware, mysteryController.getPerfilMystery);
 router.get('/listaEncuestasPendientes', authMiddleware, mysteryController.getListaEncuestasPendientes);
 router.get('/listaEncuestasRealizadas', authMiddleware, mysteryController.getListaEncuestasRealizadas);
 router.get('/responderEncuesta/:id', authMiddleware, mysteryController.responderEncuesta);
+router.post('/registrarRespuestaEncuesta', authMiddleware, mysteryController.registrarRespuestaEncuesta);
 
 export default router;
