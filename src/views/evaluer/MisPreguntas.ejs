@@ -1,0 +1,144 @@
+<div class="content-wrapper">
+    <!DOCTYPE html>
+    <html
+      lang="es"
+      class="light-style layout-menu-fixed"
+      dir="ltr"
+      data-theme="theme-default"
+      data-assets-path="../assets/"
+      data-template="vertical-menu-template-free"
+    >
+      <head>
+        <%- include('../layout/cabecera') %>
+      </head>
+      <body>
+        <!-- <h1><%= title %></h1>
+      <p>¡Bienvenido a tu aplicación Express con EJS!</p> -->
+        <!-- Layout wrapper -->
+        <div class="layout-wrapper layout-content-navbar">
+          <div class="layout-container">
+            <%- include('./menuEvaluer') %>
+    
+            <!-- Layout container -->
+            <div class="layout-page">
+              <%- include('./navbarEvaluer') %>
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="card">
+            <div style="display: flex; align-items: center;">
+                <div>
+                    <h5 class="card-header">Lista Preguntas</h5>
+                </div>
+                <div class="col-lg-4 col-md-6" style="margin-left: auto;">
+                    <div class="mt-3">
+                      <!-- Button trigger modal -->
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalCenterP"
+                      >
+                        <i class="bx bx-plus"></i>
+                      </button>
+                      <!-- Modal -->
+                       <%- include('../forms/formPregunta.ejs') %>
+                       <!-- modal -->
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive text-nowrap">
+              <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                    <th>Pregunta</th>
+                    <th>Categoria</th>
+                    <th>Creado por..</th>
+                    <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                  <% preguntas.forEach( pregunta => {  %>
+                    <tr>
+                      <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong> <%= pregunta.nombre %> </strong></td>
+                      <td><span class="badge rounded-pill bg-label-secondary"><%= pregunta.id_categoria %></span></td>
+                      <td> <%= pregunta.id_creo %>   </td>
+                      <td>    
+                          <div class="dropdown">
+                              <button class="m-1 btn" type="button" onclick="abrirModalEditar('<%= pregunta._id %>')"
+                              ><i class="bx bx-edit-alt me-1"></i> Edit</button>
+                              <%- include('../forms/formsEditPregunta.ejs') %>
+                              <a class="m-1" href="#" onclick="confirmDeletion('<%= pregunta._id %>'); return false;" style="color: inherit;"
+                              ><i class="bx bx-trash me-1"></i> Delete</a
+                              >
+                          </div>
+                      </td>
+                      </tr>
+                  <% }) %>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+    </div>
+    <!-- / Content -->
+    <script>
+    function confirmDeletion(id) {
+      if (confirm('¿Estás seguro de que deseas eliminar esta pregunta?')) {
+        window.location.href = '/forms/eliminarPregunta/' + id;
+      }
+    }
+  </script>
+  <script>
+    function abrirModalEditar(idPregunta) {
+          fetch(`/admin/listaPreguntas/${idPregunta}`)  // Hacer la solicitud para obtener la pregunta por su ID
+          .then(response => response.json())
+          .then(data => {
+              // Rellenar los campos del formulario con los datos recibidos
+              document.querySelector('#modalEditarP  #id').value = data.id;
+              document.querySelector('#modalEditarP  #pregunta').value = data.pregunta;
+              document.querySelector('#modalEditarP #categoria').value = data.categoria;
+              document.querySelector('#modalEditarP #user').value = data.creadoPor; // Establecer el ID de la pregunta en el campo oculto
+  
+              // Mostrar el modal
+              new bootstrap.Modal(document.getElementById('modalEditarP')).show();
+          })
+          .catch(error => console.error('Error al obtener los datos de la pregunta:', error));
+      }
+    </script>
+    <!-- <%- include('../components/footer') %> -->
+
+    <div class="content-backdrop fade"></div>
+  </div>
+
+  <!-- / Content -->
+  <script>
+    function confirmDeletion(id) {
+      if (confirm('¿Estás seguro de que deseas eliminar esta Encuesta?')) {
+        window.location.href = '/forms/eliminarEncuesta/' + id;
+      }
+    }
+    </script>
+<!-- Content wrapper -->
+</div>
+<!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+</div>
+<!-- / Layout wrapper -->
+
+<div class="buy-now">
+<a
+href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+target="_blank"
+class="btn btn-danger btn-buy-now"
+>Upgrade to Pro</a
+>
+</div>
+
+<%- include('../components/scriptsBody') %>
+</body>
+</html>
