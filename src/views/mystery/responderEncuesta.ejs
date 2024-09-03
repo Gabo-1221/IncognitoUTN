@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
+
+<head>
+  <%- include('../layout/cabeceraEncuesta') %>
+    <link rel="stylesheet" href="../../assets/css/respuestaEncuestaStyles.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+      integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <%- include('./menuMystery') %>
+        <div class="layout-page">
+          <%- include('./navbarMystery') %>
+            <div class="content-wrapper">
+              <div class="container-xxl flex-grow-1 container-p-y">
+                <small class="text-light fw-semibold">Seleccione su respuesta dentro de las preguntas ubicadas en cada
+                  sección,
+                  tome en cuenta que la valoración es de 1 a 5 estrellas.
+                </small>
+                <% if (preguntas && preguntas.length> 0) { %>
+                  <form method="POST" action="/mystery/registrarRespuestaEncuesta">
+                    <input type="hidden" name="encuestaId" value="<%= encuestaId %>">
+                    <div class="accordion mt-3" id="accordionExample">
+
+                      <% const preguntasPorCategoria={}; preguntas.forEach(pregunta=> {
+                        const categoriaNombre = pregunta.id_pregunta.id_categoria.nombre;
+                        if (!preguntasPorCategoria[categoriaNombre]) {
+                        preguntasPorCategoria[categoriaNombre] = [];
+                        }
+                        preguntasPorCategoria[categoriaNombre].push(pregunta);
+                        });
+
+                        let contadorCategorias = 0;
+                        for (const categoriaNombre in preguntasPorCategoria) {
+                        contadorCategorias++;
+                        %>
+                        <div class="card accordion-item">
+                          <h2 class="accordion-header" id="heading<%= contadorCategorias %>">
+                            <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                              data-bs-target="#collapse<%= contadorCategorias %>" aria-expanded="false"
+                              aria-controls="collapse<%= contadorCategorias %>"
+                              data-color-hover="<%= preguntasPorCategoria[categoriaNombre][0].id_pregunta.id_categoria.color_hover %>">
+                              <%= categoriaNombre %>
+                            </button>
+                          </h2>
+                          <div id="collapse<%= contadorCategorias %>" class="accordion-collapse collapse"
+                            aria-labelledby="heading<%= contadorCategorias %>" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                              <ul>
+                                <% preguntasPorCategoria[categoriaNombre].forEach(pregunta=> { %>
+                                  <li>
+                                    <%= pregunta.id_pregunta.nombre %> <br>
+                                      <div class="valoracion" data-pregunta-id="<%= pregunta.id_pregunta._id %>">
+                                        <% for (let i=5; i>= 1; i--) { %>
+                                          <input type="checkbox" name="pregunta_<%= pregunta.id_pregunta._id %>[]"
+                                            id="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>" value="<%= i %>"
+                                            style="display: none;"> <label
+                                            for="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>">
+                                            <i class="fas fa-star"></i>
+                                          </label>
+                                          <% } %>
+                                      </div>
+                                      <br>
+                                  </li>
+                                  <% }); %>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                        <% } %>
+
+                    </div>
+                    <button type="submit">Enviar Respuestas</button>
+                  </form>
+                  <% } else { %>
+                    <p>No hay preguntas disponibles para esta encuesta.</p>
+                    <% } %>
+              </div>
+              <%- include('../components/footer') %>
+                <div class="content-backdrop fade"></div>
+            </div>
+        </div>
+    </div>
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const botonesAcordeon = document.querySelectorAll('.accordion-button');
+
+      botonesAcordeon.forEach(boton => {
+        const colorHover = boton.dataset.colorHover;
+        if (colorHover) {
+          boton.style.color = colorHover; // Aplicar el color_hover al botón
+        }
+      });
+
+      const valoraciones = document.querySelectorAll('.valoracion');
+
+      valoraciones.forEach(valoracion => {
+        const preguntaId = valoracion.dataset.preguntaId;
+        const estrellas = valoracion.querySelectorAll('input[type="checkbox"]');
+        const labels = valoracion.querySelectorAll('label'); // Obtener los labels
+
+        labels.forEach((label, index) => { // Iterar sobre los labels
+          label.addEventListener('click', function () {
+            // Obtener el valor (calificación) del checkbox asociado al label
+            const checkbox = document.getElementById(`estrella_${preguntaId}_${index + 1}`);
+            const selectedValue = parseInt(checkbox.value, 10);
+
+            //console.log(`Estrella seleccionada: ${selectedValue}`);
+
+            // Iterar sobre todas las estrellas (labels)
+            labels.forEach((star, i) => {
+              // Si el índice de la estrella es menor o igual que el valor seleccionado, la rellena
+              if (i <= index) {
+                star.querySelector('i').style.color = '#ffa400'; // Estrella llena
+              } else {
+                star.querySelector('i').style.color = '#5f5050'; // Estrella vacía
+              }
+            });
+
+            // Actualizar el estado del checkbox
+            checkbox.checked = !checkbox.checked;
+          });
+        });
+      });
+    });
+  </script>
+  <%- include('../components/scriptsBodyEncuesta') %>
+</body>
+
+</html>

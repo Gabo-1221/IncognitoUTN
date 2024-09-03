@@ -6,7 +6,7 @@
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="modalCenterPe">Modal title</h5>
+                            <h5 class="modal-title" id="modalCenterPe">Nueva pregunta</h5>
                             <button
                               type="button"
                               class="btn-close"
@@ -23,7 +23,7 @@
                                 <div class="mb-3">
                                   <label class="form-label" for="categoria">Categoria</label>
                                   <select class="form-control" name="categoria" id="categoria">
-                                    <option value="1">Seleccionar una categoaria</option>
+                                    <option value="1">Seleccione una categoria...</option>
                                     <% categorias.forEach( categoria => { %>
                                       <option value="<%= categoria._id %>"> <%= categoria.nombre %></option>
                                     <% }) %>
@@ -31,12 +31,12 @@
                                 </div>
                                 <div class="mb-3">
                                   <label class="form-label" for="user">Creado por...</label>
-                                  <input type="number" class="form-control" id="user" name="user"  placeholder="Usuario..." readonly/>
+                                  <input type="number" class="form-control" id="user" name="user"  placeholder="<%= username%>" readonly/>
                                 </div>
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">Enviar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
                                   </div>
                                 
                           </div>

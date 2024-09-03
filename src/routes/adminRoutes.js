@@ -4,8 +4,8 @@ import express from 'express';
 const router = express.Router();
 import adminController from '../controllers/admin/adminController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
-//import formsController from '../controllers/forms/formsController';
 import formsController from '../controllers/forms/formsController.js';
+//import formsController from '../controllers/forms/formsController';
 
 // Definir la ruta para la página de administración
 router.get('/home', authMiddleware, adminController.getHomeAdmin);
@@ -25,6 +25,9 @@ router.get('/formCategoria', adminController.getCategoria);
 router.get('/listaPreguntas/:idPregunta', formsController.findOnePregunta);
 router.get('/listaCategorias/:idCategoria', formsController.findOneCategoria);
 router.get('/listaAreas/:idArea', formsController.findOneArea);
+router.get('/formEditarEncu/:idEncuesta', formsController.obtenerDatosEncuesta);
+router.get('/preguntasSelects/:idEncuesta', formsController.preguntasSelects);
+router.get('/preguntasCategoria/:idEncuesta', formsController.preguntasCategoria);
 router.get('/perfil', authMiddleware, adminController.getPerfil);
 
 

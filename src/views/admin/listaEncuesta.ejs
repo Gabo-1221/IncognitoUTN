@@ -1,33 +1,30 @@
 <!-- admin/listaUsuarios.ejs -->
 <!DOCTYPE html>
-<html
-  lang="es"
-  class="light-style layout-menu-fixed"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
-    <%- include('../layout/cabecera') %>
-  </head>
-  <body>
-    <!-- <h1><%= title %></h1>
+<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
+
+<head>
+  <%- include('../layout/cabecera') %>
+    <link rel="stylesheet" href="../assets/css/encuestasAdminStyles.css" />
+</head>
+
+<body>
+  <!-- <h1><%= title %></h1>
   <p>¡Bienvenido a tu aplicación Express con EJS!</p> -->
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <%- include('../admin/menuAdmin') %>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <%- include('../admin/menuAdmin') %>
 
         <!-- Layout container -->
         <div class="layout-page">
           <%- include('../admin/navbarAdmin') %>
 
-          <!-- Content wrapper -->
-          <div class="content-wrapper">
-            <!-- Content -->
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+              <!-- Content -->
 
-            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="container-xxl flex-grow-1 container-p-y">
                 <div class="card">
                     <div style="display: flex; align-items: center;">
                         <div>
@@ -76,31 +73,59 @@
                               <td><i class="bx bx-star"></i> <%= encuesta.calificacion %> </td>
                               <td>    
                                   <div class="dropdown">
-                                      <a class="m-1" href="" style="color: inherit;"
-                                      ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                      >
+                                      <!-- <button class="m-1 btn" type="button" onclick="abrirModalEditarE('<%= encuesta._id %>')"
+                                      ><i class="bx bx-edit-alt me-1"></i> </button> -->
+                                      <a href="/admin/formEditarEncu/<%= encuesta._id %>" type="button" class="btn btn-primary" ><i class="bx bx-edit-alt"></i></a>
                                       <a class="m-1" href="#" onclick="confirmDeletion('<%= encuesta._id %>'); return false;" style="color: inherit;"
-                                      ><i class="bx bx-trash me-1"></i> Delete</a
-                                      >
-                                  </div>
-                              </td>
+                                        ><i class="bx bx-trash me-1"></i> </a
+                                        >
+                                      </div>
+                                    </td>
                               </tr>
-                         <% }) %>
-
-                        </tbody>
-                      </table>
+                              <% }) %>
+                              
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      
                     </div>
-                  </div>
-
-            </div>
-            <!-- / Content -->
+                    
+                    <!-- / Content -->
+                    <script>
+                      function confirmDeletion(id) {
+                        if (confirm('¿Estás seguro de que deseas eliminar esta Encuesta?')) {
+                          window.location.href = '/forms/eliminarEncuesta/' + id;
+                        }
+                      }
+                      </script>
             <script>
-              function confirmDeletion(id) {
-                if (confirm('¿Estás seguro de que deseas eliminar esta Encuesta?')) {
-                  window.location.href = '/forms/eliminarEncuesta/' + id;
+              function abrirModalEditarE(idEncuesta) {  
+                // Cargar los datos de la encuesta para editar
+                fetch(`/admin/listaEncuestas/${idEncuesta}`)
+                .then(response => response.json())
+                .then(data => {
+                console.log(data.encuesta)
+                // Llenar el formulario con los datos de la encuesta
+                document.querySelector('#modalToggleEditar #id').value = data.encuesta._id;
+                const modalElement = document.getElementById('modalToggleEditar');
+                modalElement.setAttribute('data-id', data.encuesta._id); 
+                
+                document.querySelector('#modalToggleEditar #nombre').value = data.encuesta.nombre;
+                document.querySelector('#modalToggleEditar #areaSelect').value = data.encuesta.id_area;
+                document.querySelector('#modalToggleEditar #fechat').value = data.encuesta.id_encargo;
+                document.querySelector('#modalToggleEditar #canperson').value = data.encuesta.cantidad;
+                            
+
+                      new bootstrap.Modal(document.getElementById('modalToggleEditarEncuesta')).show();
+
+                  })
+                  .catch(error => {
+                      console.error('Error al cargar los datos de la encuesta:', error);
+                  });
                 }
-              }
             </script>
+            
             <!-- <%- include('../components/footer') %> -->
 
             <div class="content-backdrop fade"></div>
@@ -114,8 +139,9 @@
     
     </div>
 
-
+    
     <%- include('../components/scriptsBody') %>
 
-  </body>
+</body>
+
 </html>

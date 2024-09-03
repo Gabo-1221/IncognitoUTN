@@ -1,6 +1,8 @@
 // controllers/auth/authController.js
 import bcrypt from 'bcrypt';
 import Usuario from '../../models/Usuario.js'; // Agrega la extensión .js
+import Rol from '../../models/Rol.js'; // Agrega la extensión .js
+import EstatusD from '../../models/EstadosUser.js'; // Agrega la extensión .js
 import jwt from 'jsonwebtoken';
 import userHelper from '../../helpers/userHelper.js'; // Agrega la extensión .js
 import { storage } from '../../config/firebase.js';
@@ -10,6 +12,9 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 const ROL_ADMIN = "66be37bf44270796dde41a7a";
 const ROL_EVALUADOR = "66be379a44270796dde41a79";
 const ROL_MYSTERY = "66be375044270796dde41a76";
+/* const rolAdministrador = await Rol.findOne({ nombre: 'Administrador' });
+    const rolEvaluador = await Rol.findOne({ nombre: 'Evaluador' });
+    const rolMystery = await Rol.findOne({ nombre: 'Mystery Shopper' }); */
 
 // Función auxiliar para determinar la vista según el rol
 function getViewForRole(rol) {
@@ -21,7 +26,6 @@ function getViewForRole(rol) {
     return 'perfil/perfilMystery';
   }
 }
-
 
 // Muestra el formulario de inicio de sesión
 export const formLogin = (req, res) => {
@@ -47,16 +51,27 @@ export const login = async (req, res) => {
       /* return res.status(401).json({ message: 'Credenciales inválidas' }); */
       return res.render('auth/formLogin', { title: 'Incognito UTN | Iniciar sesión', error: true, message: 'Credenciales inválidas' });
     }
-    // Verifica el estado del usuario
-    const STATUS_INACTIVO = "66bf97b9d94dc47ae564b7d6"; // Define la constante para el estado desuscrito
-    if (usuario.status == STATUS_INACTIVO) {
-      return res.render('auth/formLogin', { title: 'Incognito UTN | Iniciar sesión', error: true, message: 'Usuario no activo' });
+
+    const rolAdministrador = await Rol.findOne({ nombre: 'Administrador' });
+    const rolEvaluador = await Rol.findOne({ nombre: 'Evaluador' });
+    const rolMystery = await Rol.findOne({ nombre: 'Mystery Shopper' });
+    const estadoActivo = await EstatusD.findOne({ nombre: 'Activo' }); 
+    const estadoInactivo = await EstatusD.findOne({ nombre: 'Inactivo' });
+    const estadoSuspendido = await EstatusD.findOne({ nombre: 'Desuscrito' });
+    if (!usuario.status.equals(estadoActivo._id)) {
+      return res.render('auth/formLogin', { 
+        title: 'Incognito UTN | Iniciar sesión', 
+        error: true, 
+        message: 'Usuario no activo' 
+      });
     }
-    const STATUS_ACTIVO = "66bf97d6d94dc47ae564b7d7"; // Define la constante para el estado activo
-    if (usuario.status !== STATUS_ACTIVO) {
-      return res.render('auth/formLogin', { title: 'Incognito UTN | Iniciar sesión', error: true, message: 'Credenciales inválidas' });
+    if (usuario.status.equals(estadoInactivo._id)) {
+      return res.render('auth/formLogin', { 
+        title: 'Incognito UTN | Iniciar sesión', 
+        error: true, 
+        message: 'Usuario inactivo' 
+      });
     }
-    // Guarda el ObjectId del usuario en la sesión
     req.session.userId = usuario._id;
     // Verifica si el usuario marcó la casilla "Recuérdame"
     if (req.body.rememberMe) {
@@ -64,15 +79,17 @@ export const login = async (req, res) => {
       const token = jwt.sign({ userId: usuario._id }, process.env.JWT_SECRET, { expiresIn: '30d' }); // Expira en 30 días
       // Guarda el token en una cookie
       res.cookie('rememberMeToken', token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true }); // Expira en 30 días
-    }
+    }     
+
     // Redirige al usuario según su rol
-    if (usuario.rol === "66be37bf44270796dde41a7a") {
+    // Redirige al usuario según su rol (comparando ObjectIds)
+    if (usuario.rol.equals(rolAdministrador._id)) {
       res.redirect('/admin/home');
-    } else if (usuario.rol === "66be379a44270796dde41a79") {
+    } else if (usuario.rol.equals(rolEvaluador._id)) {
       res.redirect('/evaluador/home');
-    } else if (usuario.rol === "66be375044270796dde41a76") {
+    } else if (usuario.rol.equals(rolMystery._id)) {
       res.redirect('/mystery/home');
-    }
+    } 
     else {
       // Maneja el caso de un rol inválido
       /* res.status(500).json({ message: 'Rol inválido' }); */

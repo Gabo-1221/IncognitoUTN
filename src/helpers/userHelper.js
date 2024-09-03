@@ -1,6 +1,7 @@
 // helpers/userHelper.js
 import Usuario from '../models/Usuario.js';
 import Rol from '../models/Rol.js';
+import e from 'connect-flash';
 
 async function getUserData(userId) {
   try {
@@ -14,7 +15,9 @@ async function getUserData(userId) {
         correo: usuario.correo,
         fecha_nac: usuario.fecha_nac,
         contrasena: usuario.contrasena, // <-- Agrega esta línea para incluir la contraseña
-        imagen: usuario.profilePicture
+        imagen: usuario.profilePicture,
+        encuestas_creadas: usuario.encuestas_creadas,
+        encuestas_resueltas: usuario.encuestas_resueltas,
       };
     } else {
       return null;

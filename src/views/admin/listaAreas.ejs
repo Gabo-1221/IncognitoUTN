@@ -1,131 +1,142 @@
 <!-- admin/listaUsuarios.ejs -->
 <!DOCTYPE html>
-<html
-  lang="es"
-  class="light-style layout-menu-fixed"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
-    <%- include('../layout/cabecera') %>
-  </head>
-  <body>
-    <!-- <h1><%= title %></h1>
+<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
+
+<head>
+  <%- include('../layout/cabecera') %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.4.5/jscolor.min.js"></script>
+</head>
+
+<body>
+  <!-- <h1><%= title %></h1>
   <p>¡Bienvenido a tu aplicación Express con EJS!</p> -->
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <%- include('../admin/menuAdmin') %>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <%- include('../admin/menuAdmin') %>
 
         <!-- Layout container -->
         <div class="layout-page">
           <%- include('../admin/navbarAdmin') %>
 
-          <!-- Content wrapper -->
-          <div class="content-wrapper">
-            <!-- Content -->
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
+              <!-- Content -->
 
-            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="container-xxl flex-grow-1 container-p-y">
                 <div class="card">
-                    <div style="display: flex; align-items: center;">
-                        <div>
-                            <h5 class="card-header">Lista Area</h5>
-                        </div>
-                        <div class="col-lg-4 col-md-6" style="margin-left: auto;">
-                            <div class="mt-3">
-                              <!-- Button trigger modal -->
-                              <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalCenterP"
-                              >
-                                <i class="bx bx-plus"></i>
-                              </button>
-                              <!-- Modal -->
-                               <%- include('../forms/formArea.ejs') %>
-                               <!-- modal -->
-                            </div>
-                        </div>
+                  <div style="display: flex; align-items: center;">
+                    <div>
+                      <h5 class="card-header">Lista Area</h5>
                     </div>
-                    <div class="table-responsive text-nowrap">
-                      <table class="table">
-                        <thead class="table-dark">
-                            <tr>
-                            <th>Area</th>
-                            <th>calificacion</th>
-                            <th>Creado por..</th>
-                            <th>Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                            <% areas.forEach(area => { %>
-
-                                <tr>
-                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong> <%= area.nombre %> </strong></td>
-                                    <td><span class="badge rounded-pill bg-label-secondary"> <%= area.promedio %> </span></td>
-                                    <td>  <%= area.id_creo %>   </td>
-                                    <td>    
-                                        <div class="dropdown">
-                                          <button class="m-1 btn" type="button" onclick="abrirModalEditar('<%= area._id %>')"
-                                            ><i class="bx bx-edit-alt me-1"></i> Edit</button>
-                                            <%- include('../forms/formEditarArea.ejs') %>
-                                            <a class="m-1" href="" onclick="confirmDeletion('<%= area._id %>'); return false;" style="color: inherit;"
-                                            ><i class="bx bx-trash me-1"></i> Delete</a
-                                            >
-                                        </div>
-                                    </td>
-                                    </tr>
-                            <% }) %>
-
-
-                        </tbody>
-                      </table>
+                    <div class="col-lg-4 col-md-6" style="margin-left: auto;">
+                      <div class="mt-3">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                          data-bs-target="#modalCenterP">
+                          <i class="bx bx-plus"></i>
+                        </button>
+                        <!-- Modal -->
+                        <%- include('../forms/formArea.ejs') %>
+                          <!-- modal -->
+                      </div>
                     </div>
                   </div>
+                  <div class="table-responsive text-nowrap">
+                    <table class="table">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Area</th>
+                          <th>Color</th>
+                          <th>calificacion</th>
+                          <th>Creado por..</th>
+                          <th>Opciones</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-border-bottom-0">
+                        <% areas.forEach(area=> { %>
 
-            </div>
-            <!-- / Content -->
-            <script>
-              function confirmDeletion(id) {
-                if (confirm('¿Estás seguro de que deseas eliminar esta Area?')) {
-                  window.location.href = '/forms/eliminarArea/' + id;
+                          <tr>
+                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>
+                                <%= area.nombre %>
+                              </strong></td>
+                            <td>
+                              <div style="background-color:<%= area.color_hover %>; width: 20px; height: 20px;"></div>
+                            </td>
+                            <td><span class="badge rounded-pill bg-label-secondary">
+                                <%= area.promedio %>
+                              </span></td>
+                            <td>
+                              <%= area.id_creo.nombre %>
+                            </td>
+                            <td>
+                              <div class="dropdown">
+                                <button class="m-1 btn" type="button" onclick="abrirModalEditar('<%= area._id %>')"><i
+                                    class="bx bx-edit-alt me-1"></i> Editar</button>
+                                <%- include('../forms/formEditarArea.ejs') %>
+                                  <a class="m-1" href="" onclick="confirmDeletion('<%= area._id %>'); return false;"
+                                    style="color: inherit;"><i class="bx bx-trash me-1"></i> Eliminar</a>
+                              </div>
+                            </td>
+                          </tr>
+                          <% }) %>
+
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+              <!-- / Content -->
+               <%- include('../components/footer') %>              
+              <script>
+                function confirmDeletion(id) {
+                  if (confirm('¿Estás seguro de que deseas eliminar esta Area?')) {
+                    window.location.href = '/forms/eliminarArea/' + id;
+                  }
                 }
-              }
-            </script>
-            <script>
-              function abrirModalEditar(idArea) {
-                    fetch(`/admin/listaAreas/${idArea}`)  // Hacer la solicitud para obtener la pregunta por su ID
+              </script>
+              <script>
+                function abrirModalEditar(idArea) {
+                  fetch(`/admin/listaAreas/${idArea}`)
                     .then(response => response.json())
                     .then(data => {
-                        // Rellenar los campos del formulario con los datos recibidos
-                        document.querySelector('#modalEditarA  #id').value = data.id;
-                        document.querySelector('#modalEditarA #area').value = data.area;
-                        document.querySelector('#modalEditarA #calificacion').value = data.promedio;
-                        document.querySelector('#modalEditarA #user').value = data.creadoPor; // Establecer el ID de la pregunta en el campo oculto
-            
-                        // Mostrar el modal
-                        new bootstrap.Modal(document.getElementById('modalEditarA')).show();
+                      // Rellenar los campos del formulario con los datos recibidos
+                      document.querySelector('#modalEditarA  #id').value = data.id;
+                      document.querySelector('#modalEditarA #area').value = data.area;
+                      document.querySelector('#modalEditarA #color').value = data.color_hover;
+                      document.querySelector('#modalEditarA #calificacion').value = data.promedio;
+                      document.querySelector('#modalEditarA #user').value = data.creadoPor;
+
+                      // Mostrar el modal
+                      const modalEditarA = new bootstrap.Modal(document.getElementById('modalEditarA'));
+                      modalEditarA.show();
+
+                      // Crear la instancia de jscolor y establecer el color después de que el modal se haya mostrado
+                      modalEditarA._element.addEventListener('shown.bs.modal', function () {
+                        const colorInput = document.querySelector('#modalEditarA #color'); // Obtener el elemento del input de color
+                        const colorPicker = new jscolor.fromElement(colorInput); // Crear instancia de jscolor
+                        colorPicker.fromString(data.color_hover); // Establecer el color seleccionado en el picker
+                      });
+
                     })
                     .catch(error => console.error('Error al obtener los datos del Area:', error));
                 }
               </script>
-            <!-- <%- include('../components/footer') %> -->
-
-            <div class="content-backdrop fade"></div>
-          </div>
-          <!-- Content wrapper -->
+              <div class="content-backdrop fade"></div>
+            </div>
+            <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->
-      </div>
-
-      <!-- Overlay -->
-    
     </div>
 
+    <!-- Overlay -->
 
-    <%- include('../components/scriptsBody') %>
-  </body>
+  </div>
+
+  <%- include('../components/scriptsBody') %>
+</body>
+
 </html>
