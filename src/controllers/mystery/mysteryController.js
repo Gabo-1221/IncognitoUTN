@@ -149,30 +149,35 @@ export const responderEncuesta = async (req, res) => {
     if (userData) {
       const encuesta = await Encuesta.findById(encuestaId).populate('id_area', 'nombre color_hover');
       const preguntas = await PreguntaEncuesta.find({ id_encuesta: encuestaId })
-        .populate('id_pregunta') // Obtiene la información completa de la pregunta
+        .populate('id_pregunta')
         .populate({
           path: 'id_pregunta',
           populate: {
-            path: 'id_categoria' // Obtiene la información completa de la categoría
+            path: 'id_categoria'
           }
         });
+
+      // Renderiza la vista
       res.render('mystery/responderEncuesta', {
-        title: 'Incognito UTN | Encuestas pendientes', username: userData.username, rol: userData.rol,
-        imagen: userData.imagen, activeSection: 'encuestasPendientes', encuestaId: encuestaId, // Pasar el ID de la encuesta
-        preguntas: preguntas, // Pasar las preguntas a la vista
-        areaNombre: encuesta.id_area.nombre,
-        areaColor: encuesta.id_area.color_hover
+        title: 'Incognito UTN | Encuestas pendientes',
+        username: userData.username, 
+        rol: userData.rol,
+        imagen: userData.imagen, 
+        activeSection: 'encuestasPendientes', 
+        encuestaId: encuestaId, // ID de la encuesta
+        encuestaNombre: encuesta.nombre, // **Nombre de la encuesta**
+        preguntas: preguntas, // Preguntas
+        areaNombre: encuesta.id_area.nombre, 
+        areaColor: encuesta.id_area.color_hover 
       });
-      //console.log('Preguntas:', preguntas);
-    }
-    else {
+    } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
     }
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: 'Error 2', error: error.message });
   }
-}
+};
 
 export const registrarRespuestaEncuesta = async (req, res) => {
   try {
@@ -225,12 +230,14 @@ export const registrarRespuestaEncuesta = async (req, res) => {
       $push: { encuestas_resueltas: encuestaId }
     });
 
-    res.redirect('/mystery/listaEncuestasPendientes');
+    //res.redirect('/mystery/encuestaRegistrada');
+    res.status(200).json({ message: 'Encuesta registrada correctamente' });
   } catch (error) {
     console.error('Error al registrar las respuestas:', error);
     res.status(500).json({ message: 'Error al guardar las respuestas' });
   }
 };
+
 
 
 const mysteryController = {
