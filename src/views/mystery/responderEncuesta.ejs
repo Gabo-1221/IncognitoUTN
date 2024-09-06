@@ -1,100 +1,104 @@
 <!DOCTYPE html>
-<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+<html lang="es" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
 
 <head>
   <%- include('../layout/cabeceraEncuesta') %>
-  <link rel="stylesheet" href="../../assets/css/respuestaEncuestaStyles.css" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
-    integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous"> 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  </head>
+    <link rel="stylesheet" href="../../assets/css/respuestaEncuestaStyles.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+      integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
 <body>
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
       <%- include('./menuMystery') %>
-      <div class="layout-page">
-        <%- include('./navbarMystery') %>
-        <div class="content-wrapper">
-          <div class="container-xxl flex-grow-1 container-p-y">
-            <small class="text-light fw-semibold">Seleccione su respuesta dentro de las preguntas ubicadas en cada sección,
-              tome en cuenta que la valoración es de 1 a 5 estrellas.
-            </small>
-            <div id="encuesta-nombre" class="encuesta-nombre"><%= encuestaNombre%></div>
-            <div class="card-body">
-              <% if (preguntas && preguntas.length> 0) { %>
-                <form method="POST" action="/mystery/registrarRespuestaEncuesta" id="formulario-encuesta">
-                  <input type="hidden" name="encuestaId" value="<%= encuestaId %>">
-                  <div class="accordion mt-3" id="accordionExample">
+        <div class="layout-page">
+          <%- include('./navbarMystery') %>
+            <div class="content-wrapper">
+              <div class="container-xxl flex-grow-1 container-p-y">
+                <small class="text-light fw-semibold">Seleccione su respuesta dentro de las preguntas ubicadas en cada
+                  sección,
+                  tome en cuenta que la valoración es de 1 a 5 estrellas.
+                </small>
+                <div id="encuesta-nombre" class="encuesta-nombre">
+                  <%= encuestaNombre%>
+                </div>
+                <div class="card-body">
+                  <% if (preguntas && preguntas.length> 0) { %>
+                    <form method="POST" action="/mystery/registrarRespuestaEncuesta" id="formulario-encuesta">
+                      <input type="hidden" name="encuestaId" value="<%= encuestaId %>">
+                      <div class="accordion mt-3" id="accordionExample">
 
-                    <% 
-                      const preguntasPorCategoria={}; 
-                      preguntas.forEach(pregunta=> {
-                        const categoriaNombre = pregunta.id_pregunta.id_categoria.nombre;
-                        if (!preguntasPorCategoria[categoriaNombre]) {
+                        <% const preguntasPorCategoria={}; preguntas.forEach(pregunta=> {
+                          const categoriaNombre = pregunta.id_pregunta.id_categoria.nombre;
+                          if (!preguntasPorCategoria[categoriaNombre]) {
                           preguntasPorCategoria[categoriaNombre] = [];
-                        }
-                        preguntasPorCategoria[categoriaNombre].push(pregunta);
-                      });
-                      let contadorCategorias = 0;
-                      for (const categoriaNombre in preguntasPorCategoria) {
-                        contadorCategorias++;
-                    %>
-                    <div class="card accordion-item">
-                      <h2 class="accordion-header" id="heading<%= contadorCategorias %>">
-                        <button type="button" class="accordion-button collapsed categoria-encuesta"
-                          data-bs-toggle="collapse" data-bs-target="#collapse<%= contadorCategorias %>"
-                          aria-expanded="false" aria-controls="collapse<%= contadorCategorias %>"
-                          data-color-hover="<%= preguntasPorCategoria[categoriaNombre][0].id_pregunta.id_categoria.color_hover %>">
-                          <%= categoriaNombre %>
-                        </button>
-                      </h2>
-                      <div id="collapse<%= contadorCategorias %>" class="accordion-collapse collapse"
-                        aria-labelledby="heading<%= contadorCategorias %>" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                          <ul>
-                            <% preguntasPorCategoria[categoriaNombre].forEach(pregunta=> { %>
-                              <span class="pregunta-encuesta">
-                                <%= pregunta.id_pregunta.nombre %>
-                              </span>
-                              <div class="valoracion" data-pregunta-id="<%= pregunta.id_pregunta._id %>">
-                                <% for (let i=5; i>= 1; i--) { %>
-                                  <input type="checkbox" name="pregunta_<%= pregunta.id_pregunta._id %>_<%= i %>"
-                                    id="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>" value="<%= i %>"
-                                    style="display: none;"> <label
-                                    for="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>">
-                                    <i class="fas fa-star"></i>
-                                  </label>
-                                  <% } %>
+                          }
+                          preguntasPorCategoria[categoriaNombre].push(pregunta);
+                          });
+                          let contadorCategorias = 0;
+                          for (const categoriaNombre in preguntasPorCategoria) {
+                          contadorCategorias++;
+                          %>
+                          <div class="card accordion-item">
+                            <h2 class="accordion-header" id="heading<%= contadorCategorias %>">
+                              <button type="button" class="accordion-button collapsed categoria-encuesta"
+                                data-bs-toggle="collapse" data-bs-target="#collapse<%= contadorCategorias %>"
+                                aria-expanded="false" aria-controls="collapse<%= contadorCategorias %>"
+                                data-color-hover="<%= preguntasPorCategoria[categoriaNombre][0].id_pregunta.id_categoria.color_hover %>">
+                                <%= categoriaNombre %>
+                              </button>
+                            </h2>
+                            <div id="collapse<%= contadorCategorias %>" class="accordion-collapse collapse"
+                              aria-labelledby="heading<%= contadorCategorias %>" data-bs-parent="#accordionExample">
+                              <div class="accordion-body">
+                                <ul>
+                                  <% preguntasPorCategoria[categoriaNombre].forEach(pregunta=> { %>
+                                    <span class="pregunta-encuesta">
+                                      <%= pregunta.id_pregunta.nombre %>
+                                    </span>
+                                    <div class="valoracion" data-pregunta-id="<%= pregunta.id_pregunta._id %>">
+                                      <% for (let i=1; i <=5; i++) { %> <!-- Cambiado el rango del bucle -->
+                                        <input type="radio" name="pregunta_<%= pregunta.id_pregunta._id %>"
+                                          id="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>" value="<%= i %>"
+                                          style="display: none;">
+                                        <label for="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>">
+                                          <i class="fas fa-star"></i>
+                                        </label>
+                                        <% } %>
+                                    </div>
+                                    <br>
+                                    <% }); %>
+                                </ul>
                               </div>
-                              <br>
-                              <% }); %>
-                          </ul>
+                            </div>
+                          </div>
+                          <% } %>
+
+                      </div>
+                      <div class="demo-inline-spacing">
+                        <button type="submit" class="btn rounded-pill btn-primary" id="boton-enviar">Enviar
+                          Respuestas</button>
+                      </div>
+                      <div id="spinner-container" style="display: none;">
+                        <div class="demo-inline-spacing">
+                          <div class="spinner-border spinner-border-lg text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <% } %>
-
-                  </div>
-                  <div class="demo-inline-spacing">
-                    <button type="submit" class="btn rounded-pill btn-primary" id="boton-enviar">Enviar
-                      Respuestas</button>
-                  </div>
-                  <div id="spinner-container" style="display: none;">
-                    <div class="demo-inline-spacing">
-                      <div class="spinner-border spinner-border-lg text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-                <% } else { %>
-                  <p>No hay preguntas disponibles para esta encuesta.</p>
-                  <% } %>
+                    </form>
+                    <% } else { %>
+                      <p>No hay preguntas disponibles para esta encuesta.</p>
+                      <% } %>
+                </div>
+              </div>
+              <%- include('../components/footer') %>
+                <div class="content-backdrop fade"></div>
             </div>
-          </div>
-          <%- include('../components/footer') %>
-            <div class="content-backdrop fade"></div>
         </div>
-      </div>
     </div>
     <div class="layout-overlay layout-menu-toggle"></div>
   </div>
@@ -105,7 +109,7 @@
       botonesAcordeon.forEach(boton => {
         const colorHover = boton.dataset.colorHover;
         if (colorHover) {
-          boton.style.color = colorHover; 
+          boton.style.color = colorHover;
         }
       });
 
@@ -115,68 +119,94 @@
         const estrellas = valoracion.querySelectorAll('input[type="checkbox"]');
         const labels = valoracion.querySelectorAll('label');
 
-        labels.forEach((label, index) => { 
+        labels.forEach((label, index) => {
           label.addEventListener('click', function () {
-            const checkbox = document.getElementById(`estrella_${preguntaId}_${index + 1}`);
-            const selectedValue = parseInt(checkbox.value, 10);
-
+            const selectedValue = index + 1;
             labels.forEach((star, i) => {
               if (i <= index) {
-                star.querySelector('i').style.color = '#ffa400'; 
+                star.querySelector('i').style.color = '#ffa400';
               } else {
                 star.querySelector('i').style.color = '#5f5050';
               }
             });
-
-            checkbox.checked = !checkbox.checked;
           });
+        });
+
+      });
+
+      const formularioEncuesta = document.getElementById('formulario-encuesta');
+      let formularioModificado = false; // Inicializamos como no modificado
+
+      // Detectamos cambios en las respuestas de la encuesta
+      const valoracionesInputs = document.querySelectorAll('.valoracion input[type="radio"]');
+      valoracionesInputs.forEach(input => {
+        input.addEventListener('change', function () {
+          formularioModificado = true; // Marcamos el formulario como modificado
         });
       });
 
-      const formulario = document.getElementById('formulario-encuesta');
-      const botonEnviar = document.getElementById('boton-enviar');
-      const spinnerContainer = document.getElementById('spinner-container');
-
-      formulario.addEventListener('submit', function (event) {
-        event.preventDefault(); // Evitar que el formulario se envíe normalmente
-
-        spinnerContainer.style.display = 'block'; 
-        botonEnviar.disabled = true;
-
-        // Enviar la solicitud al servidor con AJAX
-        fetch(formulario.action, {
-          method: formulario.method,
-          body: new FormData(formulario)
-        })
-          .then(response => {
-            if (response.ok) { 
-              // Mostrar SweetAlert de éxito
-              Swal.fire({
-                icon: 'success',
-                title: '¡Buen trabajo!',
-                text: '¡La encuesta ha sido registrada!',
-                showConfirmButton: false, 
-                timer: 1500 
-              });
-
-              // Redirigir a la página de encuestas pendientes
-              setTimeout(() => {
-                window.location.href = '/mystery/listaEncuestasPendientes';
-              }, 1500);
-            } else {
-              // ... (manejar respuestas de error)
-            }
-          })
-          .catch(error => {
-            // ... (manejar errores)
-          })
-          .finally(() => {
-            spinnerContainer.style.display = 'none'; 
-            botonEnviar.disabled = false; 
-          });
+      // Mostrar alerta al intentar salir de la página o recargarla si el formulario fue modificado
+      /*window.addEventListener('beforeunload', function (e) {
+        if (formularioModificado) {
+          const mensaje = 'Tienes respuestas sin guardar. Si sales de esta página, tus respuestas no se guardarán.';
+          e.preventDefault();
+          e.returnValue = mensaje;
+          return mensaje;
+        }
       });
+      */
+
+      // Manejar el envío del formulario
+      formularioEncuesta.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevenir envío automático del formulario
+        let preguntasSinResponder = 0;
+
+        // Recorremos todas las valoraciones
+        const valoraciones = document.querySelectorAll('.valoracion');
+
+        valoraciones.forEach(valoracion => {
+          const preguntaId = valoracion.dataset.preguntaId;
+          const radios = valoracion.querySelectorAll('input[type="radio"]');
+          let respondida = false;
+
+          radios.forEach(radio => {
+            if (radio.checked) {
+              respondida = true; // Se ha respondido la pregunta
+            }
+          });
+
+          if (!respondida) {
+            preguntasSinResponder++; // Incrementar el contador de preguntas sin responder
+          }
+        });
+
+        // Si faltan preguntas por responder, mostramos un mensaje con SweetAlert
+        if (preguntasSinResponder > 0) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Faltan respuestas',
+            text: `Te faltan ${preguntasSinResponder} pregunta(s) por contestar.`,
+            confirmButtonText: 'Ok'
+          });
+        } else {
+          // Si todas están respondidas, mostramos un mensaje de éxito
+          Swal.fire({
+            icon: 'success',
+            title: '¡Gracias!',
+            text: 'Has contestado todas las preguntas correctamente.',
+            showConfirmButton: false,  // Ocultar el botón de confirmación
+            timer: 2000  // Mostrar el mensaje por 2 segundos
+          });
+          // Después de 2 segundos, enviar el formulario automáticamente
+          setTimeout(() => {
+            formularioEncuesta.submit(); // Enviar el formulario
+          }, 2000);
+        }
+      });
+      
     });
-  </script>
+</script>
+
   <%- include('../components/scriptsBodyEncuesta') %>
 </body>
 

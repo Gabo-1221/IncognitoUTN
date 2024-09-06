@@ -231,7 +231,8 @@ export const registrarRespuestaEncuesta = async (req, res) => {
     });
 
     //res.redirect('/mystery/encuestaRegistrada');
-    res.status(200).json({ message: 'Encuesta registrada correctamente' });
+    //res.status(200).json({ message: 'Encuesta registrada correctamente' });
+    res.redirect('/mystery/listaEncuestasPendientes');
   } catch (error) {
     console.error('Error al registrar las respuestas:', error);
     res.status(500).json({ message: 'Error al guardar las respuestas' });
