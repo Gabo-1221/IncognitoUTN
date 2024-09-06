@@ -160,15 +160,15 @@ export const responderEncuesta = async (req, res) => {
       // Renderiza la vista
       res.render('mystery/responderEncuesta', {
         title: 'Incognito UTN | Encuestas pendientes',
-        username: userData.username, 
+        username: userData.username,
         rol: userData.rol,
-        imagen: userData.imagen, 
-        activeSection: 'encuestasPendientes', 
+        imagen: userData.imagen,
+        activeSection: 'encuestasPendientes',
         encuestaId: encuestaId, // ID de la encuesta
         encuestaNombre: encuesta.nombre, // **Nombre de la encuesta**
         preguntas: preguntas, // Preguntas
-        areaNombre: encuesta.id_area.nombre, 
-        areaColor: encuesta.id_area.color_hover 
+        areaNombre: encuesta.id_area.nombre,
+        areaColor: encuesta.id_area.color_hover
       });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
