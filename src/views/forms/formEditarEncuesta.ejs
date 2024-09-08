@@ -22,7 +22,8 @@
         <div class="layout-page">
           <%- include('../admin/navbarAdmin') %>
 
-          <div class="content-wrapper"></div>
+          <div class="content-wrapper">
+            <div class="container">
               <form >
                   <input type="hidden" id="id" name="id">
                 <div class="mb-3">
@@ -76,6 +77,16 @@
               </div>
             </form>
 
+          </div>
+        </div>
+
+        <script>
+          
+        </script>
+            document.getElementById('formEditarEncuesta').addEventListener('submit', async function (event) {
+              event.preventDefault(); // Evitar el envío del formulario tradicional
+          
+              const form = event.target;
                           
             
 

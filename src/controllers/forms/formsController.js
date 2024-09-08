@@ -552,7 +552,7 @@ const formsController = {
     updateArea,
     deleteArea,
     newEncuesta,
-    findOneEncuesta,
+    findOneEnucesta,
     obtenerDatosEncuesta,
     preguntasSelects,
     preguntasCategoria,
