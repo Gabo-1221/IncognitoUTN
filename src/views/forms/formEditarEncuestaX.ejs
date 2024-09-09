@@ -1,0 +1,62 @@
+<!-- Toggle Between Modals -->
+
+<!-- Modal 1-->
+<div class="modal fade" id="modalToggleEditarEncuesta" aria-labelledby="modalToggleLabelEditarEncuesta" tabindex="-1"
+  style="display: none" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalToggleLabel">Editar encuesta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/forms/EditarEncuesta" method="post">
+          <div class="mb-3">
+            <!-- id encuesta -->
+            <input type="hidden" id="id" name="id" />
+            <label class="form-label" for="nombre">Nombre de la Encuesta</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" />
+          </div>
+          <div class="mb-3">
+            <label for="areaSelect" class="form-label">Area</label>
+            <select class="form-select" id="areaSelect" name="area">
+              <option>Selecionar una Area...</option>
+              <% areas.forEach(area=> { %>
+                <option value="<%= area._id %>">
+                  <%= area.nombre %>
+                </option>
+                <% }) %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="user">Eitado por..</label>
+            <div class="input-group input-group-merge">
+              <input type="text" id="user" name="user" class="form-control" placeholder="<%= username %>" readonly />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="canperson">Cantidad de personas que podran responder</label>
+            <input type="number" id="canperson" name="canperson" class="form-control phone-mask" placeholder="10" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="fechat">Fecha de termino</label>
+            <input class="form-control" type="date" name="fechat" id="fechat">
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" data-bs-target="#modalToggleEditarEncuestaPreguntas"
+              data-bs-toggle="modal" data-bs-dismiss="modal">
+              Siguiente
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<%- include('../forms/formEditarEncuestaP2.ejs') %>

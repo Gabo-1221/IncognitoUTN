@@ -65,8 +65,8 @@
                           <% encuestas.forEach( encuesta => { %>
                             <tr>
                               <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><%= encuesta.nombre %></strong></td>
-                              <td><%= encuesta.id_area.nombre %></td>
-                              <td><%= encuesta.id_encargado._id ? encuesta.id_encargado.nombre : 'Usuario desconocido' %></td>
+                              <td><%= encuesta.id_area %></td>
+                              <td><%= encuesta.id_encargado %></td>
                               <td><%= encuesta.cantidad %></td>
                               <td><%= encuesta.fecha_creada %></td>
                               <td><%= encuesta.fecha_limite %></td>
@@ -75,7 +75,7 @@
                                   <div class="dropdown">
                                       <!-- <button class="m-1 btn" type="button" onclick="abrirModalEditarE('<%= encuesta._id %>')"
                                       ><i class="bx bx-edit-alt me-1"></i> </button> -->
-                                      <a href="/admin/formEditarEncuesta/<%= encuesta._id %>" type="button" class="btn btn-primary" ><i class="bx bx-edit-alt"></i></a>
+                                      <a href="/admin/formEditarEncu/<%= encuesta._id %>" type="button" class="btn btn-primary" ><i class="bx bx-edit-alt"></i></a>
                                       <a class="m-1" href="#" onclick="confirmDeletion('<%= encuesta._id %>'); return false;" style="color: inherit;"
                                         ><i class="bx bx-trash me-1"></i> </a
                                         >

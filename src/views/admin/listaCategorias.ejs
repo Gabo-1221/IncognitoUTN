@@ -105,17 +105,11 @@
                         // Rellenar los campos del formulario con los datos recibidos
                         document.querySelector('#modalEditarC  #id').value = data.id;
                         document.querySelector('#modalEditarC #categoria').value = data.categoria;
-                        document.querySelector('#modalEditarC #color').value = data.color;
+                        document.querySelector('#modalEditarC #color').value = data.color_hover;
                         //document.querySelector('#modalEditarC #user').value = data.creadoPor;
 
                         // Mostrar el modal
                         new bootstrap.Modal(document.getElementById('modalEditarC')).show();
-
-                        modalEditarA._element.addEventListener('shown.bs.modal', function () {
-                        const colorInput = document.querySelector('#modalEditarA #color'); // Obtener el elemento del input de color
-                        const colorPicker = new jscolor.fromElement(colorInput); // Crear instancia de jscolor
-                        colorPicker.fromString(data.color); // Establecer el color seleccionado en el picker
-                      });
                       })
                       .catch(error => console.error('Error al obtener los datos de la categoria:', error));
                   }

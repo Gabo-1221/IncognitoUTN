@@ -52,7 +52,6 @@
             <thead class="table-dark">
                 <tr>
                   <th>Nombre</th>
-                  <th>Color</th>
                   <th>Creado por...</th>
                   <th>Opciones</th>
                 </tr>
@@ -60,15 +59,9 @@
             <tbody class="table-border-bottom-0">
               <% categorias.forEach( categoria => { %>
                 <tr>
-                  <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>
-                    <%= categoria.nombre %>
-                  </strong></td>
-                <td>
-                  <div style="background-color:<%= categoria.color_hover %>; width: 20px; height: 20px;"></div>
-                </td>
-                <td>
-                  <%= categoria.id_creo.nombre %>
-                </td>
+                  <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><%= categoria.nombre %></strong></td>
+                  <td>  <%= categoria.id_creo %>   </td>
+
                   <td>    
                       <div class="dropdown">
                         <button class="m-1 btn" type="button" onclick="abrirModalEditar('<%= categoria._id %>')"
@@ -99,29 +92,6 @@
       }
     }
     </script>
-      <script>
-        function abrirModalEditar(idCategoria) {
-          fetch(`/admin/listaCategorias/${idCategoria}`)  // Hacer la solicitud para obtener la pregunta por su ID
-            .then(response => response.json())
-            .then(data => {
-              // Rellenar los campos del formulario con los datos recibidos
-              document.querySelector('#modalEditarC  #id').value = data.id;
-              document.querySelector('#modalEditarC #categoria').value = data.categoria;
-              document.querySelector('#modalEditarC #color').value = data.color;
-              //document.querySelector('#modalEditarC #user').value = data.creadoPor;
-
-              // Mostrar el modal
-              new bootstrap.Modal(document.getElementById('modalEditarC')).show();
-
-              modalEditarA._element.addEventListener('shown.bs.modal', function () {
-              const colorInput = document.querySelector('#modalEditarA #color'); // Obtener el elemento del input de color
-              const colorPicker = new jscolor.fromElement(colorInput); // Crear instancia de jscolor
-              colorPicker.fromString(data.color); // Establecer el color seleccionado en el picker
-            });
-            })
-            .catch(error => console.error('Error al obtener los datos de la categoria:', error));
-        }
-      </script>
 <!-- Content wrapper -->
 </div>
 <!-- / Layout page -->
@@ -132,6 +102,14 @@
 </div>
 <!-- / Layout wrapper -->
 
+<div class="buy-now">
+<a
+href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+target="_blank"
+class="btn btn-danger btn-buy-now"
+>Upgrade to Pro</a
+>
+</div>
 
 <%- include('../components/scriptsBody') %>
 </body>

@@ -106,7 +106,7 @@
                       // Rellenar los campos del formulario con los datos recibidos
                       document.querySelector('#modalEditarA  #id').value = data.id;
                       document.querySelector('#modalEditarA #area').value = data.area;
-                      document.querySelector('#modalEditarA #color').value = data.color;
+                      document.querySelector('#modalEditarA #color').value = data.color_hover;
                       document.querySelector('#modalEditarA #calificacion').value = data.promedio;
                       document.querySelector('#modalEditarA #user').value = data.creadoPor;
 
@@ -118,7 +118,7 @@
                       modalEditarA._element.addEventListener('shown.bs.modal', function () {
                         const colorInput = document.querySelector('#modalEditarA #color'); // Obtener el elemento del input de color
                         const colorPicker = new jscolor.fromElement(colorInput); // Crear instancia de jscolor
-                        colorPicker.fromString(data.color); // Establecer el color seleccionado en el picker
+                        colorPicker.fromString(data.color_hover); // Establecer el color seleccionado en el picker
                       });
 
                     })

@@ -53,7 +53,6 @@
             <thead class="table-dark">
                 <tr>
                 <th>Area</th>
-                <th>Color</th>
                 <th>calificacion</th>
                 <th>Creado por..</th>
                 <th>Opciones</th>
@@ -63,28 +62,18 @@
                 <% areas.forEach(area => { %>
 
                     <tr>
-                      <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>
-                        <%= area.nombre %>
-                      </strong></td>
-                    <td>
-                      <div style="background-color:<%= area.color_hover %>; width: 20px; height: 20px;"></div>
-                    </td>
-                    <td><span class="badge rounded-pill bg-label-secondary">
-                        <%= area.promedio %>
-                      </span></td>
-                    <td>
-                      <%= area.id_creo.nombre %>
-                    </td>   
-                    <td>
-
-                      <div class="dropdown">
-                        <button class="m-1 btn" type="button" onclick="abrirModalEditar('<%= area._id %>')"
-                          ><i class="bx bx-edit-alt me-1"></i> Edit</button>
-                          <%- include('../forms/formEditarArea.ejs') %>
-                          <a class="m-1" href="" onclick="confirmDeletion('<%= area._id %>'); return false;" style="color: inherit;"
-                            ><i class="bx bx-trash me-1"></i> Delete</a
-                            >
-                          </div>
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong> <%= area.nombre %> </strong></td>
+                        <td><span class="badge rounded-pill bg-label-secondary"> <%= area.promedio %> </span></td>
+                        <td>  <%= area.id_creo %>   </td>
+                        <td>    
+                            <div class="dropdown">
+                              <button class="m-1 btn" type="button" onclick="abrirModalEditar('<%= area._id %>')"
+                                ><i class="bx bx-edit-alt me-1"></i> Edit</button>
+                                <%- include('../forms/formEditarArea.ejs') %>
+                                <a class="m-1" href="" onclick="confirmDeletion('<%= area._id %>'); return false;" style="color: inherit;"
+                                ><i class="bx bx-trash me-1"></i> Delete</a
+                                >
+                            </div>
                         </td>
                         </tr>
                 <% }) %>
@@ -105,33 +94,6 @@
       }
     }
     </script>
-    <script>
-      function abrirModalEditar(idArea) {
-        fetch(`/admin/listaAreas/${idArea}`)
-          .then(response => response.json())
-          .then(data => {
-            // Rellenar los campos del formulario con los datos recibidos
-            document.querySelector('#modalEditarA  #id').value = data.id;
-            document.querySelector('#modalEditarA #area').value = data.area;
-            document.querySelector('#modalEditarA #color').value = data.color;
-            document.querySelector('#modalEditarA #calificacion').value = data.promedio;
-            document.querySelector('#modalEditarA #user').value = data.creadoPor;
-
-            // Mostrar el modal
-            const modalEditarA = new bootstrap.Modal(document.getElementById('modalEditarA'));
-            modalEditarA.show();
-
-            // Crear la instancia de jscolor y establecer el color después de que el modal se haya mostrado
-            modalEditarA._element.addEventListener('shown.bs.modal', function () {
-              const colorInput = document.querySelector('#modalEditarA #color'); // Obtener el elemento del input de color
-              const colorPicker = new jscolor.fromElement(colorInput); // Crear instancia de jscolor
-              colorPicker.fromString(data.color); // Establecer el color seleccionado en el picker
-            });
-
-          })
-          .catch(error => console.error('Error al obtener los datos del Area:', error));
-      }
-    </script>
 <!-- Content wrapper -->
 </div>
 <!-- / Layout page -->
@@ -142,6 +104,14 @@
 </div>
 <!-- / Layout wrapper -->
 
+<div class="buy-now">
+<a
+href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+target="_blank"
+class="btn btn-danger btn-buy-now"
+>Upgrade to Pro</a
+>
+</div>
 
 <%- include('../components/scriptsBody') %>
 </body>

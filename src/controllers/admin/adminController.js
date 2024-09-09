@@ -192,7 +192,7 @@ export const getlastEnc = async (req, res) => {
 
 export const getService = async (req, res) => {
   try {
-    const categorias = await Categoria.find().populate('id_creo', 'nombre').sort({ _id: -1 }); // Usar populate para obtener el nombre del usuario
+    const categorias = await Categoria.find().populate('id_creo', 'nombre').sort({ _id: -1 });; // Usar populate para obtener el nombre del usuario
 
     const userId = req.session.userId;
     if (!userId) {
@@ -223,7 +223,7 @@ export const getService = async (req, res) => {
 
 export const getArea = async (req, res) => {
   try {
-    const areas = await Area.find().populate('id_creo', 'nombre').sort({ _id: -1 });
+    const areas = await Area.find().populate('id_creo', 'nombre').sort({ _id: -1 });;
     const userId = req.session.userId;
     if (!userId) {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });

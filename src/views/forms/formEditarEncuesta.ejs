@@ -22,19 +22,19 @@
         <div class="layout-page">
           <%- include('../admin/navbarAdmin') %>
 
-          <div class="content-wrapper">
-            <div class="container ">
-              <form method="post" action="/forms/editarEncuesta/<%= encuesta._id %>">
+          <div class="content-wrapper"></div>
+              <form >
+                  <input type="hidden" id="id" name="id">
                 <div class="mb-3">
                   <label class="form-label" for="nombre">Nombre de la Encuesta</label>
-                  <input type="text" class="form-control" id="nombre" value="<%= encuesta.nombre %>"  name="nombre"/>
+                  <input type="text" class="form-control" id="nombre" name="nombre"/>
                 </div>
                 <div class="mb-3">
                   <lab for="areaSelect" class="form-label">Area</lab  el>
                   <select class="form-select" id="areaSelect" name="area">
                     <option >Selecionar una Area...</option>
                     <% areas.forEach(area => { %>
-                      <option value="<%= area._id %>" ><%= area.nombre %></option>
+                      <option value="<%= area._id %>"><%= area.nombre %></option>
                   <% }) %>
                   </select>
                 </div>
@@ -46,7 +46,8 @@
                       id="user"
                       name="user"
                       class="form-control"
-                      placeholder="<%= username %>"
+                      placeholder="usuario"
+                      value="user1"
                       readonly
                     />
                   </div>
@@ -58,31 +59,23 @@
                     id="canperson"
                     name="canperson"
                     class="form-control phone-mask"
-                    value="<%= encuesta.cantidad %>"
+                    placeholder="10"
 
                   />
                 </div>
                 <div class="mb-3">
                   <label class="form-label" for="fechat">Fecha de termino</label>
-                  <input class="form-control" type="date" name="fechat" id="fechat" value="<%= fechalimite %>">
+                  <input class="form-control" type="date" name="fechat" id="fechat">
                 </div>
                 
                 <div class="modal-footer">
-                <!-- <a href="/admin/formEditarEncuestaPt2/<%= encuesta._id %>" type="button" class="btn btn-primary">Siguiente</a> --> 
-                <button type="submit"  class="btn btn-outline-primary" >Siguiente</button>
-                <button type="button" class="btn btn-outline-secondary">
+                <button type="button" class="btn btn-primary" id="abrirModal2">Siguiente</button> 
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                   Cancelar
                 </button>
               </div>
             </form>
 
-          </div>
-        </div>
-
-        <script>
-          document.getElementById('areaSelect').value = '<%= encuesta.id_area %>';
-
-        </script>
                           
             
 
