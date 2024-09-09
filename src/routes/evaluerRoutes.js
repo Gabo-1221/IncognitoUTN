@@ -13,7 +13,7 @@ router.get('/listaMiEncuesta',authMiddleware, evaluerController.getMyQuestions);
 router.get('/listaMisAreas',authMiddleware, evaluerController.getMyAreas);
 router.get('/listaMisCategorias',authMiddleware, evaluerController.getMyCategoria);
 router.get('/listaMisPreguntas',authMiddleware, evaluerController.getMyAsks);
-router.get('/listaMiEncuesta/:idEncueta',authMiddleware, formsController.getMyAsks);
+router.get('/formEditarEncuesta/:idEncueta',authMiddleware, formsController.obtenerDatosEncuesta);
 
 
 

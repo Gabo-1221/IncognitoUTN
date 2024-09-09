@@ -434,12 +434,12 @@ export const obtenerDatosEncuesta = async (req, res) => {
 
     const encuesta = await Encuesta.findById(idEncuesta);
     const areas = await Area.find();
-    const categorias = await Categoria.find();
-    const preguntas = await Pregunta.find(); // Todas las preguntas
-    const encpres = await EncPre.find();
+ 
+
+    const fechaLimiteFormateada = new Date(encuesta.fecha_limite).toISOString().split('T')[0];
 
     res.render('forms/formEditarEncuesta',{ username: userData.username, rol: userData.rol,
-      imagen: userData.imagen, activeSection: '', encuesta: encuesta , title:'Editar Encuesta' , encuesta:encuesta,categorias:categorias,preguntas:preguntas, encpres:encpres,areas,areas})
+      imagen: userData.imagen, activeSection: '',fechalimite:fechaLimiteFormateada, encuesta: encuesta , title:'Editar Encuesta' , areas})
     } catch (error) {
     // Manejar el error
     console.error(error);
@@ -447,51 +447,39 @@ export const obtenerDatosEncuesta = async (req, res) => {
   }
 };
 
-export const preguntasSelects = async (req,res) => {
-  const { idEncuesta } = req.body;
+export const preguntasSelects = async (req, res) => {
+  const { idEncuesta } = req.params;
 
   try {
-    // Paso 1: Buscar las entradas de PreguntaEncuesta
+    const userId = req.session.userId;
+    const userData = await userHelper.getUserData(userId);
+    // Obtener todas las relaciones de PreguntaEncuesta para la encuesta específica
     const relaciones = await PreguntaEncuesta.find({ id_encuesta: idEncuesta });
+    
+    // Obtener todas las preguntas
+    const preguntas = await Pregunta.find();
+    
+    // Obtener todas las categorías
+    const categorias = await Categoria.find();
+    
+    // Extraer los IDs de las preguntas relacionadas a la encuesta
+    const idPreguntasRelacionadas = relaciones.map(rel => rel.id_pregunta.toString());
 
-    if (!relaciones || relaciones.length === 0) {
-      return res.status(404).json({ message: 'No se encontraron preguntas relacionadas a la encuesta' });
-    }
-
-    // Extraer los IDs de preguntas y categorías
-    const idPreguntas = relaciones.map(rel => rel.id_pregunta);
-
-    // Paso 2: Buscar los detalles de las preguntas usando los IDs
-    const preguntas = await Pregunta.find({ _id: { $in: idPreguntas } });
-
-    // Buscar todas las categorías disponibles
-    const categorias = await Categoria.find({});
-
-    if (!preguntas || preguntas.length === 0) {
-      return res.status(404).json({ message: 'Preguntas no encontradas' });
-    }
-
-    // Devolver las preguntas y las categorías
-    res.json({ preguntas, categorias });
+    // Pasar las preguntas, categorías y los IDs de preguntas relacionadas a la vista
+    res.render('forms/formEditarEncuestaP2', { username: userData.username, rol: userData.rol,
+      imagen: userData.imagen, activeSection: '',title:'Editar Encuesta parte 2',preguntas, categorias, idPreguntasRelacionadas });
   } catch (error) {
     console.error('Error al obtener las preguntas:', error);
     res.status(500).json({ message: 'Error al obtener las preguntas' });
   }
-}
+};
 //consulat ejemplo
-export const preguntasCategoria = async (req,res) => {
-  const { idEncuesta } = req.body;
+export const actualizarEncuesta = async(req,res) => {
 
-  try {
-    // Paso 1: Buscar las entradas de PreguntaEncuesta
-    const encpre = await EncPre.find({id_encuesta: '66ce2a15204b900b416d0b84'});
-    console.log(encpre);
-    res.json({encpre});
+}
 
-  } catch (error) {
-    console.error('Error al obtener las preguntas:', error);
-    res.status(500).json({ message: 'Error al obtener las preguntas' });
-  }
+export const actualizarEncuestaPregunta = async(req,res) => {
+
 }
 
 
@@ -552,10 +540,11 @@ const formsController = {
     updateArea,
     deleteArea,
     newEncuesta,
-    findOneEnucesta,
+    findOneEncuesta,
     obtenerDatosEncuesta,
     preguntasSelects,
-    preguntasCategoria,
+    actualizarEncuesta,
+    actualizarEncuestaPregunta,
     deleteEncuesta,
     newEncPreg
 };
