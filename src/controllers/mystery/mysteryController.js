@@ -72,9 +72,15 @@ export const getListaEncuestasPendientes = async (req, res) => {
       })
         .sort({ _id: -1 });
 
+      // Mapear las encuestas y obtener el número de preguntas de forma asíncrona
+      const encuestasConPreguntas = await Promise.all(encuestas.map(async encuesta => {
+        const numeroPreguntas = await PreguntaEncuesta.countDocuments({ id_encuesta: encuesta._id });
+        return { ...encuesta.toObject(), numero_preguntas: numeroPreguntas }; // Crear un nuevo objeto con la propiedad numero_preguntas
+      }));
+
       // Filtrar encuestas por fecha_limite, usuarios que han respondido y cantidad
       const fechaActual = new Date();
-      const encuestasFiltradas = encuestas.filter(encuesta => {
+      const encuestasFiltradas = encuestasConPreguntas.filter(encuesta => {
         const fechaLimite = new Date(encuesta.fecha_limite);
         if (fechaLimite > fechaActual) {
           // Validación 1: El usuario no ha respondido la encuesta
@@ -84,7 +90,7 @@ export const getListaEncuestasPendientes = async (req, res) => {
               // Calcular la diferencia en días
               const diffEnMilisegundos = fechaLimite.getTime() - fechaActual.getTime();
               const diffEnDias = Math.ceil(diffEnMilisegundos / (1000 * 60 * 60 * 24));
-              encuesta.dias_restantes = diffEnDias; // Agregar dias_restantes a la encuesta
+              encuesta.dias_restantes = diffEnDias; // Agregar dias_restantes a la encuesta              
               return true; // Incluir la encuesta en el resultado
             }
           }
@@ -125,9 +131,23 @@ export const getListaEncuestasRealizadas = async (req, res) => {
         select: 'color_hover nombre'
       })
         .sort({ _id: -1 });
+
+      // Calcular el promedio de las respuestas para cada encuesta
+      const encuestasConPromedio = await Promise.all(encuestas.map(async encuesta => {
+        const respuestas = await RespuestaEncuesta.find({ id_encuesta: encuesta._id });
+        const sumaRespuestas = respuestas.reduce((total, respuesta) => total + respuesta.respuesta, 0);
+        const promedio = respuestas.length > 0 ? sumaRespuestas / respuestas.length : 0;
+
+        // Asegurarse de que el promedio esté entre 0 y 5
+        const promedioAjustado = Math.min(Math.max(promedio, 0), 5);
+
+        return { ...encuesta.toObject(), promedio: promedioAjustado };
+      }));
+
+
       res.render('mystery/listaEncuestasRealizadas', {
         title: 'Incognito UTN | Encuestas realizadas', username: userData.username, rol: userData.rol,
-        imagen: userData.imagen, activeSection: 'encuestasRealizadas', encuestas: encuestas
+        imagen: userData.imagen, activeSection: 'encuestasRealizadas', encuestas: encuestasConPromedio,
       });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
@@ -159,7 +179,7 @@ export const responderEncuesta = async (req, res) => {
 
       // Renderiza la vista
       res.render('mystery/responderEncuesta', {
-        title: 'Incognito UTN | Encuestas pendientes',
+        title: 'Incognito UTN | Responder encuesta',
         username: userData.username,
         rol: userData.rol,
         imagen: userData.imagen,
