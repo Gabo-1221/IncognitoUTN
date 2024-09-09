@@ -10,17 +10,29 @@ import userHelper from '../../helpers/userHelper.js';
 
 // Controlador para agregar una nueva pregunta
 export const newQuestion = async (req, res) => {
+  const userId = req.session.userId;
+  // Validar que el usuario está autenticado
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+  const usuario = await userHelper.getUserData(userId);
   try {
     const { pregunta, categoria, user } = req.body;
     const newQuestion = new Pregunta({
       nombre: pregunta,
       id_categoria: categoria,
-      id_creo: user
+      id_creo: userId 
     });
 
     await newQuestion.save();
-
-    res.redirect('/admin/listaPreguntas');
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaPreguntas');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisPreguntas');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
+    
   } catch (error) {
     console.error("Error al agregar nueva pregunta:", error);
     // Manejar el error de manera apropiada, por ejemplo, redirigiendo a una página de error
@@ -52,18 +64,30 @@ export const findOnePregunta = async (req, res) => {
 
 // Controlador para actualizar una pregunta
 export const updateAsk = async (req, res) => {
+  const userId = req.session.userId;
+    // Validar que el usuario está autenticado
+    if (!userId) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+  const usuario = await userHelper.getUserData(userId);
   const { id, pregunta, categoria, user } = req.body;
   try {
     const updatedPregunta = await Pregunta.findByIdAndUpdate(id, {
       nombre: pregunta,
       id_categoria: categoria,
-      id_creo: user
+      id_creo: userId
     }, { new: true }); // Devuelve el documento actualizado
 
     if (!updatedPregunta) {
       return res.status(404).json({ message: 'Pregunta no encontrada' });
     }
-    res.redirect('/admin/listaPreguntas');
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaPreguntas');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisPreguntas');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
   } catch (error) {
     console.error("Error al actualizar la pregunta:", error);
     // Manejar el error adecuadamente
@@ -73,6 +97,12 @@ export const updateAsk = async (req, res) => {
 
 // Controlador para eliminar una pregunta
 export const deletePregunta = async (req, res) => {
+  const userId = req.session.userId;
+  // Validar que el usuario está autenticado
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+  const usuario = await userHelper.getUserData(userId);
   try {
     const { idpregunta } = req.params;
     
@@ -83,7 +113,13 @@ export const deletePregunta = async (req, res) => {
       return res.status(404).json({ message: 'Pregunta no encontrada' });
     }
     
-    res.redirect('/admin/listaPreguntas');
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaPreguntas');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisPreguntas');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
   } catch (error) {
     console.error("Error al eliminar la pregunta:", error);
     // Manejar el error adecuadamente
@@ -92,15 +128,29 @@ export const deletePregunta = async (req, res) => {
 
 // Controlador para agregar una nueva categoría
 export const newCategoria = async (req, res) => {
+  const userId = req.session.userId;
+  // Validar que el usuario está autenticado
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+  const usuario = await userHelper.getUserData(userId);
+  const { categoria,color } = req.body;
   try {
-    const { categoria, user } = req.body;
     const newCategoria = new Categoria({
       nombre: categoria,
-      id_creo: user
+      id_creo: userId,
+      color_hover: color
     });
 
     await newCategoria.save();
-    res.redirect('/admin/listaCategorias');
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaCategorias');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisCategorias');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
+    
   } catch (error) {
     console.error("Error al agregar nueva categoria:", error);
     // Manejar el error de manera apropiada
@@ -121,7 +171,8 @@ export const findOneCategoria = async (req, res) => {
       title: "Editor Categoria",
       id: categoria._id,
       categoria: categoria.nombre,
-      creadoPor: categoria.id_creo
+      creadoPor: categoria.id_creo,
+      color: categoria.color_hover
     });
   } catch (error) {
     console.error("Error al obtener la categoria:", error);
@@ -131,18 +182,31 @@ export const findOneCategoria = async (req, res) => {
 
 // Controlador para actualizar una categoría
 export const updateCategoria = async (req, res) => {
-  const { id, categoria, user } = req.body;
+  const userId = req.session.userId;
+  // Validar que el usuario está autenticado
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+  const usuario = await userHelper.getUserData(userId);
   try {
+    const { id, categoria, color } = req.body;
     const updatedCategoria = await Categoria.findByIdAndUpdate(id, {
       nombre: categoria,
-      id_creo: user
+      id_creo: userId,
+      color_hover: color
     }, { new: true }); // Devuelve el documento actualizado
 
     if (!updatedCategoria) {
       return res.status(404).json({ message: 'Categoría no encontrada' });
     }
 
-    res.redirect('/admin/listaCategorias');
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaCategorias');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisCategorias');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
   } catch (error) {
     console.error("Error al actualizar la categoria:", error);
     // Manejar el error adecuadamente
@@ -151,6 +215,12 @@ export const updateCategoria = async (req, res) => {
 
 // Controlador para eliminar una categoría
 export const deleteCategoria = async (req, res) => {
+  const userId = req.session.userId;
+  // Validar que el usuario está autenticado
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+const usuario = await userHelper.getUserData(userId);
   try {
     const { idcategoria } = req.params;
     
@@ -161,7 +231,13 @@ export const deleteCategoria = async (req, res) => {
       return res.status(404).json({ message: 'Categoría no encontrada' });
     }
     
-    res.redirect('/admin/listaCategorias');
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaCategorias');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisCategorias');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
   } catch (error) {
     console.error("Error al eliminar la categoria:", error);
     // Manejar el error adecuadamente
@@ -171,13 +247,13 @@ export const deleteCategoria = async (req, res) => {
 // Controlador para agregar una nueva area
 export const newArea = async (req, res) => {
   const userId = req.session.userId;
-
     // Validar que el usuario está autenticado
     if (!userId) {
       return res.status(401).json({ message: 'Usuario no autenticado' });
     }
+  const usuario = await userHelper.getUserData(userId);
   try {
-    const { area, calificacion, user, color } = req.body;
+    const { area, calificacion, color } = req.body;
     const newArea = new Area({
       nombre: area,
       promedio: calificacion,
@@ -186,8 +262,15 @@ export const newArea = async (req, res) => {
     });
 
     await newArea.save();
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaAreas');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisAreas');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
 
-    res.redirect('/admin/listaAreas');
+
   } catch (error) {
     console.error("Error al agregar nueva Area:", error);
     // Manejar el error de manera apropiada
@@ -208,8 +291,9 @@ export const findOneArea = async (req, res) => {
       title: "Editor Area",
       id: area._id,
       area: area.nombre,
-      promedio: area.promedio,
-      creadoPor: area.id_creo
+      promedio: area.promedio.toString(),
+      creadoPor: area.id_creo,
+      color: area.color_hover
     });
   } catch (error) {
     console.error("Error al obtener el area:", error);
@@ -220,12 +304,12 @@ export const findOneArea = async (req, res) => {
 // Controlador para actualizar un área
 export const updateArea = async (req, res) => {
   const userId = req.session.userId;
-
   // Validar que el usuario está autenticado
   if (!userId) {
     return res.status(401).json({ message: 'Usuario no autenticado' });
   }
-  const { id, area, promedio, user,color } = req.body;
+  const usuario = await userHelper.getUserData(userId);
+  const { id, area, promedio,color } = req.body;
   try {
     const updatedArea = await Area.findByIdAndUpdate(id, {
       nombre: area,
@@ -238,7 +322,13 @@ export const updateArea = async (req, res) => {
       return res.status(404).json({ message: 'Área no encontrada' });
     }
 
-    res.redirect('/admin/listaAreas');
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaAreas');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisAreas');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
   } catch (error) {
     console.error("Error al actualizar el area:", error);
     // Manejar el error adecuadamente
@@ -247,6 +337,12 @@ export const updateArea = async (req, res) => {
 
 // Controlador para eliminar un área
 export const deleteArea = async (req, res) => {
+  const userId = req.session.userId;
+    // Validar que el usuario está autenticado
+    if (!userId) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+  const usuario = await userHelper.getUserData(userId);
   try {
     const { idArea } = req.params;
 
@@ -268,7 +364,13 @@ export const deleteArea = async (req, res) => {
       return res.status(404).json({ message: 'Área no encontrada' });
     }
 
-    res.redirect('/admin/listaAreas');
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect('/admin/listaAreas');
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect('/evaluador/listaMisAreas');
+    } else {
+      res.status(500).json({message: 'Error al obtener vista para areas'})
+    } 
   } catch (error) {
     console.error("Error al eliminar el area:", error);
     // Manejar el error adecuadamente
@@ -332,12 +434,12 @@ export const obtenerDatosEncuesta = async (req, res) => {
 
     const encuesta = await Encuesta.findById(idEncuesta);
     const areas = await Area.find();
-    const categorias = await Categoria.find();
-    const preguntas = await Pregunta.find(); // Todas las preguntas
-    const encpres = await EncPre.find();
+ 
+
+    const fechaLimiteFormateada = new Date(encuesta.fecha_limite).toISOString().split('T')[0];
 
     res.render('forms/formEditarEncuesta',{ username: userData.username, rol: userData.rol,
-      imagen: userData.imagen, activeSection: '', encuesta: encuesta , title:'Editar Encuesta' , encuesta:encuesta,categorias:categorias,preguntas:preguntas, encpres:encpres,areas,areas})
+      imagen: userData.imagen, activeSection: '',fechalimite:fechaLimiteFormateada, encuesta: encuesta , title:'Editar Encuesta' , areas})
     } catch (error) {
     // Manejar el error
     console.error(error);
@@ -345,51 +447,39 @@ export const obtenerDatosEncuesta = async (req, res) => {
   }
 };
 
-export const preguntasSelects = async (req,res) => {
-  const { idEncuesta } = req.body;
+export const preguntasSelects = async (req, res) => {
+  const { idEncuesta } = req.params;
 
   try {
-    // Paso 1: Buscar las entradas de PreguntaEncuesta
+    const userId = req.session.userId;
+    const userData = await userHelper.getUserData(userId);
+    // Obtener todas las relaciones de PreguntaEncuesta para la encuesta específica
     const relaciones = await PreguntaEncuesta.find({ id_encuesta: idEncuesta });
+    
+    // Obtener todas las preguntas
+    const preguntas = await Pregunta.find();
+    
+    // Obtener todas las categorías
+    const categorias = await Categoria.find();
+    
+    // Extraer los IDs de las preguntas relacionadas a la encuesta
+    const idPreguntasRelacionadas = relaciones.map(rel => rel.id_pregunta.toString());
 
-    if (!relaciones || relaciones.length === 0) {
-      return res.status(404).json({ message: 'No se encontraron preguntas relacionadas a la encuesta' });
-    }
-
-    // Extraer los IDs de preguntas y categorías
-    const idPreguntas = relaciones.map(rel => rel.id_pregunta);
-
-    // Paso 2: Buscar los detalles de las preguntas usando los IDs
-    const preguntas = await Pregunta.find({ _id: { $in: idPreguntas } });
-
-    // Buscar todas las categorías disponibles
-    const categorias = await Categoria.find({});
-
-    if (!preguntas || preguntas.length === 0) {
-      return res.status(404).json({ message: 'Preguntas no encontradas' });
-    }
-
-    // Devolver las preguntas y las categorías
-    res.json({ preguntas, categorias });
+    // Pasar las preguntas, categorías y los IDs de preguntas relacionadas a la vista
+    res.render('forms/formEditarEncuestaP2', { username: userData.username, rol: userData.rol,
+      imagen: userData.imagen, activeSection: '',title:'Editar Encuesta parte 2',preguntas, categorias, idPreguntasRelacionadas });
   } catch (error) {
     console.error('Error al obtener las preguntas:', error);
     res.status(500).json({ message: 'Error al obtener las preguntas' });
   }
-}
+};
 //consulat ejemplo
-export const preguntasCategoria = async (req,res) => {
-  const { idEncuesta } = req.body;
+export const actualizarEncuesta = async(req,res) => {
 
-  try {
-    // Paso 1: Buscar las entradas de PreguntaEncuesta
-    const encpre = await EncPre.find({id_encuesta: '66ce2a15204b900b416d0b84'});
-    console.log(encpre);
-    res.json({encpre});
+}
 
-  } catch (error) {
-    console.error('Error al obtener las preguntas:', error);
-    res.status(500).json({ message: 'Error al obtener las preguntas' });
-  }
+export const actualizarEncuestaPregunta = async(req,res) => {
+
 }
 
 
@@ -453,7 +543,8 @@ const formsController = {
     findOneEncuesta,
     obtenerDatosEncuesta,
     preguntasSelects,
-    preguntasCategoria,
+    actualizarEncuesta,
+    actualizarEncuestaPregunta,
     deleteEncuesta,
     newEncPreg
 };
