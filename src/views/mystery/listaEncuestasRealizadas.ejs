@@ -29,24 +29,28 @@
                                         <div class="ag-courses_box">
                                             <% encuestas.forEach(encuesta=> { %>
                                                 <div class="ag-courses_item">
-                                                    <a href="#" class="ag-courses-item_link">
+                                                    <div class="ag-courses-item_link">
                                                         <!-- Añadir un data-attribute con el color -->
                                                         <div class="ag-courses-item_bg"
                                                             data-color-hover="<%= encuesta.id_area.color_hover %>">
                                                         </div>
                                                         <div class="ag-courses-item_title">
-                                                          <img src="../assets/img/resources/edit_pencil.png" alt="">
+                                                            <img src="../assets/img/resources/edit_pencil.png" alt="">
                                                             <%= encuesta.nombre %>
                                                         </div>
-                                                        <span class="badge rounded-pill bg-label-blank"><%= encuesta.id_area ? encuesta.id_area.nombre : '' %></span>
+                                                        <span class="badge rounded-pill bg-label-blank">
+                                                            <%= encuesta.id_area ? encuesta.id_area.nombre : '' %>
+                                                        </span>
 
-                                                        <div class="ag-courses-item_date-box">
-                                                            <!-- Start:
-                                                            <span class="ag-courses-item_date">
-                                                                <%= encuesta.fecha_creada %>
-                                                            </span> -->
+                                                        <div class="ag-courses-item_date-box rating-container-response">
+                                                            <span class="ag-courses-item_date"
+                                                                style="color: <%= encuesta.promedio <= 1 ? 'red' : encuesta.promedio <= 2 ? 'orange' : encuesta.promedio <= 3 ? 'yellow' : encuesta.promedio <= 4 ? 'blue' : 'green' %>;">
+                                                                <img src="../assets/img/resources/estrella-de-rock.png"
+                                                                    alt="Estrella" class="star-icon-response">
+                                                                <%= encuesta.promedio.toFixed(2) %>
+                                                            </span>
                                                         </div>
-                                                    </a>
+                                                    </div>
                                                 </div>
                                                 <% }) %>
                                         </div>

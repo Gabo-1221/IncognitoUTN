@@ -59,6 +59,8 @@ export const getMyQuestions = async(req, res) => {
       const categorias = await Categoria.find();
       console.log(encuestas)
       res.render('evaluer/MisEncuestas',{title:'Mis Encuestas',
+        imagen: userData.imagen,
+        activeSection:'Encuestas',
         encuestas:encuestas, 
         username: userData.username, 
         rol: userData.rol,areas:areas,
@@ -80,6 +82,8 @@ export const getMyAreas = async(req, res) => {
     
     const areas = await Area.find({id_creo:userId });
     res.render('evaluer/MisAreas',{
+      imagen: userData.imagen,
+      activeSection:'Areas',
       title:'Mis Areas',
       areas:areas,
       username: userData.username, 
@@ -100,6 +104,8 @@ export const getMyCategoria = async(req, res) => {
     if (userData) {
     const categorias = await Categoria.find({id_creo:userId });
     res.render('evaluer/MisCategorias',{
+      imagen: userData.imagen,
+      activeSection:'Categorias',
       title:'Mis Categorias',
       categorias:categorias,
       username: userData.username, 
@@ -122,6 +128,8 @@ export const getMyAsks = async(req, res) => {
     const categorias = await Categoria.find();
     const preguntas = await Pregunta.find({id_creo:userId });
     res.render('evaluer/MisPreguntas',{
+      imagen: userData.imagen,
+      activeSection:'Preguntas',
       title:'Mis Preguntas',
       preguntas:preguntas,
       username: userData.username, 

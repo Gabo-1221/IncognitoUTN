@@ -170,12 +170,19 @@ export const deleteCategoria = async (req, res) => {
 
 // Controlador para agregar una nueva area
 export const newArea = async (req, res) => {
+  const userId = req.session.userId;
+
+    // Validar que el usuario está autenticado
+    if (!userId) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
   try {
-    const { area, calificacion, user } = req.body;
+    const { area, calificacion, user, color } = req.body;
     const newArea = new Area({
       nombre: area,
       promedio: calificacion,
-      id_creo: user
+      id_creo: userId,
+      color_hover: color
     });
 
     await newArea.save();
@@ -212,12 +219,19 @@ export const findOneArea = async (req, res) => {
 
 // Controlador para actualizar un área
 export const updateArea = async (req, res) => {
-  const { id, area, promedio, user } = req.body;
+  const userId = req.session.userId;
+
+  // Validar que el usuario está autenticado
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
+  const { id, area, promedio, user,color } = req.body;
   try {
     const updatedArea = await Area.findByIdAndUpdate(id, {
       nombre: area,
       promedio: promedio,
-      id_creo: user
+      id_creo: userId,
+      color_hover: color
     }, { new: true }); // Devuelve el documento actualizado
 
     if (!updatedArea) {

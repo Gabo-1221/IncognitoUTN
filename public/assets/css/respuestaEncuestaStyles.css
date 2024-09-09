@@ -13,6 +13,7 @@
     color: var(--color-inactivo); 
     transition: 1s all;
     cursor: pointer; 
+    margin-right: 5px;
 }
 
 .valoracion label:hover {
@@ -181,4 +182,38 @@
     background-color: #f7d7fc4a !important;
     /* color: #03c3ec !important; */
     opacity: 0.8;
+  }
+
+  .categoria-encuesta {
+    font-size: 22px; /* Ajusta el tamaño según tus preferencias */
+  }
+  
+  .pregunta-encuesta {
+    font-size: 20px; /* Ajusta el tamaño según tus preferencias */
+  }
+
+#overlay {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+  }
+
+
+  /* ... otros estilos ... */
+
+.encuesta-nombre {
+    background-color: #f8f9fa; /* Color de fondo, puedes cambiarlo */
+    padding: 15px;
+    font-size: 24px; /* Ajusta el tamaño de fuente según tus preferencias */
+    text-align: center;
+    position: sticky;
+    top: 0; 
+    z-index: 10; /* Asegurar que esté encima de otros elementos */
   }
