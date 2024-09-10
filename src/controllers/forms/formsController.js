@@ -479,29 +479,76 @@ export const preguntasSelects = async (req, res) => {
   }
 };
 //consulat ejemplo
-export const actualizarEncuesta = async(req,res) => {
-
-}
-
-export const actualizarEncuestaPregunta = async(req,res) => {
-
-}
-
-export const updateEncuesta = async (req,res) => {
-  const datos = req.body;
+export const actualizarEncuesta = async(req, res) => {
+  const userId = req.session.userId;
+  // Validar que el usuario está autenticado
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
   try {
-    const updatEncuesta = await Encuesta.findByIdAndUpdate(id,{
-
+  const idEncuesta = req.params.idEncuesta;
+  const usuario = await userHelper.getUserData(userId);
+  const {nombre, area,canperson,fechat} = req.body;
+    const updatEncuesta = await Encuesta.findByIdAndUpdate(idEncuesta,{
+      nombre: nombre,
+      id_area:area,
+      id_encargado:userId,
+      cantidad:canperson,
+      fecha_limite:fechat
     },{new:true})
     if (!updatEncuesta) {
       return res.status(404).json({ message: 'Encuesta no encontrada' });
     }
-
-    res.redirect('/admin/listaAreas');
-
+    if (usuario.rol == 'Administrador' ) {
+      res.redirect(`/admin/formEditarEncuestaPt2/${idEncuesta}`);
+    } else if (usuario.rol == 'Evaluador' ) {
+      res.redirect(`/evaluador/formEditarEncuestaPt2/${idEncuesta}`);
+    } else {
+      res.status(500).json({message: 'Error al obtener vista Encuesta'})
+    } 
   } catch (error) {
-    
+    console.error("Error al actualizar la Encuesta:", error);
   }
+  
+
+}
+
+export const actualizarEncuestaPregunta = async(req,res) => {
+const userId = req.session.userId;
+const {preguntas} = req.body;
+const idEncuesta = req.params.idEncuesta;
+if (!userId) {
+  return res.status(401).json({ message: 'Usuario no autenticado' });
+}
+const usuario = await userHelper.getUserData(userId);
+try {
+    const eliminar = await PreguntaEncuesta.deleteMany({ id_encuesta: idEncuesta });
+for (const idpre of preguntas) {
+  try {
+        const updateEncPregunta = new EncPre({
+        id_encuesta:idEncuesta,
+        id_pregunta:idpre
+      });
+      await updateEncPregunta.save(); 
+
+    } catch (error) {
+      console.error("Error al ingresar las preguntas con Encuesta: ", error);
+
+    }
+  }
+  if (usuario.rol == 'Administrador' ) {
+    res.redirect(`/admin/listaEncuesta`);
+  } else if (usuario.rol == 'Evaluador' ) {
+    res.redirect(`/evaluador/listaMiEncuesta`);
+  } else {
+    res.status(500).json({message: 'Error al obtener vista Encuesta'})
+  } 
+} catch (error) {
+  console.error("Error al actualizar el encuestapregunta:", error);
+} 
+}
+
+export const updateEncuesta = async (req,res) => {
 
 }
 

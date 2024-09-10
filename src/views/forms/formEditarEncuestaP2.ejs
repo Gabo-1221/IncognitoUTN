@@ -24,9 +24,10 @@
 
           <div class="content-wrapper">
             <div class="container ">
-      <form id="encpreg" >
+
+      <form id="encuesta" method="post" >
       
-        <div class="modal-body">
+        <div class="">
           <div class="accordion" id="accordionExample">
             <% categorias.forEach((categoria, index) => { %>
               <div class="accordion-item">
@@ -58,9 +59,22 @@
 
           <div class="text-end my-lg-2">
             <button type="button" class="btn btn-danger">Cancelar</button>
-            <button type="button" class="btn btn-primary">Actualizar</button>
+            <button type="submit" class="btn btn-primary">Actualizar</button>
           </div>
         </form>
+        <script>
+          // Obtener la URL completa
+          const url = window.location.pathname;
+        
+          // Dividir la URL por '/' y obtener el último segmento (el ID de la encuesta)
+          const idEncuesta = url.split('/').pop();
+        
+          // Mostrar el ID en la consola o usarlo en el action del formulario
+          console.log(idEncuesta);
+        
+          // Establecer el action del formulario dinámicamente
+          document.getElementById('encuesta').action=`/forms/editarEncuestaPt2/${idEncuesta}`;
+        </script>
       </div>
     </div>
                       
