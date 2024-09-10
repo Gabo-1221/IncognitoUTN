@@ -37,7 +37,7 @@
                                                         <div class="ag-courses-item_title">
                                                             <img src="../assets/img/resources/edit_pencil.png" alt="">
                                                             <%= encuesta.nombre %>
-                                                        </div>
+                                                        </div>                                                        
                                                         <span class="badge rounded-pill bg-label-blank"><%= encuesta.id_area ? encuesta.id_area.nombre : '' %></span>
 
                                                         <div class="ag-courses-item_date-box">
@@ -48,7 +48,10 @@
                                                             <br> -->
                                                             <span>
                                                                 Días restantes: <span class="ag-courses-item_date"><%= encuesta.dias_restantes %></span> 
-                                                            </span>                                                            
+                                                            </span>     <br>
+                                                            <span>
+                                                                #Preguntas <span class="ag-courses-item_date"><%= encuesta.numero_preguntas %></span> 
+                                                            </span>                                                       
                                                           </div>
                                                     </a>
                                                 </div>

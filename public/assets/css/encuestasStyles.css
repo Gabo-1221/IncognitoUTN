@@ -184,3 +184,14 @@
     }
   }
 
+  .rating-container-response {
+    text-align: right; /* Alinea el contenido a la derecha */
+  }
+  
+  .star-icon-response {
+    width: 36px; /* Ajusta el tamaño de la estrella según sea necesario */
+    height: 36px;
+    margin-right: 5px; /* Ajusta el espacio entre la estrella y el texto */
+    margin-bottom: 15px;
+    vertical-align: middle; /* Alinea verticalmente la estrella con el texto */
+  }

@@ -19,6 +19,8 @@ router.post('/editarCategoria', formsController.updateCategoria);
 router.post('/editarArea', formsController.updateArea);
 router.post('/editarEditar', formsController.updateEncuesta);
 
+router.post('/editarEncuesta/:idEncuesta', formsController.actualizarEncuesta);
+router.post('/editarEncuestaPt2/:idEncuesta', formsController.actualizarEncuestaPregunta);
 
 
 export default router; // Exportar el router usando ES Modules
