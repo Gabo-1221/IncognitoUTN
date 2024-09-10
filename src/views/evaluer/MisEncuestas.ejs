@@ -64,8 +64,8 @@
                       <% encuestas.forEach( encuesta => { %>
                         <tr>
                           <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong><%= encuesta.nombre %></strong></td>
-                          <td><%= encuesta.id_area %></td>
-                          <td><%= encuesta.id_encargado %></td>
+                          <td><%= encuesta.id_area.nombre %></td>
+                          <td><%= encuesta.id_encargado._id ? encuesta.id_encargado.nombre : 'Usuario desconocido' %></td>
                           <td><%= encuesta.cantidad %></td>
                           <td><%= encuesta.fecha_creada %></td>
                           <td><%= encuesta.fecha_limite %></td>
@@ -107,15 +107,6 @@
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
-
-    <div class="buy-now">
-      <a
-        href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
-        target="_blank"
-        class="btn btn-danger btn-buy-now"
-        >Upgrade to Pro</a
-      >
-    </div>
 
     <%- include('../components/scriptsBody') %>
   </body>
