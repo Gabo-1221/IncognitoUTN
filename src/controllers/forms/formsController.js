@@ -301,8 +301,13 @@ export const newEncuesta = async (req, res) => {
 };
 
 export const findOneEncuesta = async(req, res ) => {
+  const userId = req.session.userId;
+
+  // Validar que el usuario está autenticado
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
   const {idEncuesta} = req.params;
-  
   try {
 
     const encuesta = await Encuesta.findById(idEncuesta);
@@ -392,6 +397,23 @@ export const preguntasCategoria = async (req,res) => {
   }
 }
 
+export const updateEncuesta = async (req,res) => {
+  const datos = req.body;
+  try {
+    const updatEncuesta = await Encuesta.findByIdAndUpdate(id,{
+
+    },{new:true})
+    if (!updatEncuesta) {
+      return res.status(404).json({ message: 'Encuesta no encontrada' });
+    }
+
+    res.redirect('/admin/listaAreas');
+
+  } catch (error) {
+    
+  }
+
+}
 
 // Controlador para eliminar una encuesta
 export const deleteEncuesta = async (req, res) => {
@@ -454,6 +476,7 @@ const formsController = {
     obtenerDatosEncuesta,
     preguntasSelects,
     preguntasCategoria,
+    updateEncuesta,
     deleteEncuesta,
     newEncPreg
 };

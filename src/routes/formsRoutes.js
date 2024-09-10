@@ -17,7 +17,8 @@ router.get('/eliminarEncuesta/:idEncuesta', formsController.deleteEncuesta);
 router.post('/editarPregunta', formsController.updateAsk);
 router.post('/editarCategoria', formsController.updateCategoria);
 router.post('/editarArea', formsController.updateArea);
+router.post('/editarEditar', formsController.updateEncuesta);
 
-//outer.get('/formEncuestaP2/:categoriaId', formsController.getAsksByCategoria);
+
 
 export default router; // Exportar el router usando ES Modules
