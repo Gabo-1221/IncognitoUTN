@@ -7,6 +7,7 @@ import EncPre from '../../models/PreguntaEncuesta.js';
 import Usu from '../../models/Usuario.js'; // Importa el modelo Usuario
 import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
 import userHelper from '../../helpers/userHelper.js';
+import RespuestaEncuesta from '../../models/RespuestaEncuesta.js';
 
 // Controlador para agregar una nueva pregunta
 export const newQuestion = async (req, res) => {
@@ -533,9 +534,24 @@ for (const idpre of preguntas) {
 
     } catch (error) {
       console.error("Error al ingresar las preguntas con Encuesta: ", error);
-
     }
+
+    
   }
+    // Obtener las preguntas válidas de la encuesta
+  const preguntasValidas = await EncPre.find({ id_encuesta: idEncuesta }).distinct('id_pregunta');
+  console.log(preguntasValidas)
+  // Eliminar las respuestas de la encuesta que no corresponden a las preguntas válidas
+      await RespuestaEncuesta.deleteMany({ 
+  id_encuesta: idEncuesta, 
+  id_pregunta: { $nin: preguntasValidas } 
+  });
+
+  await Usu .updateMany(
+    { encuestas_resueltas: idEncuesta }, 
+    { $pull: { encuestas_resueltas: idEncuesta } }
+  );
+
   if (usuario.rol == 'Administrador' ) {
     res.redirect(`/admin/listaEncuesta`);
   } else if (usuario.rol == 'Evaluador' ) {
