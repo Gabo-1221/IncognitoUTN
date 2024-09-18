@@ -6,6 +6,7 @@ import Categoria from '../../models/Categoria.js';
 import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
 import RespuestaEncuesta from '../../models/RespuestaEncuesta.js';
 import Usuario from '../../models/Usuario.js';
+import UsuarioRespuestaEncuesta from '../../models/UsuarioRespuestaEncuestas.js';
 
 export const getHomeMystery = async (req, res) => {
   try {
@@ -14,14 +15,82 @@ export const getHomeMystery = async (req, res) => {
       return res.status(400).json({ message: 'Usuario no autenticado' + userId });
     }
     const userData = await userHelper.getUserData(userId);
-    if (userData) {
-      res.render('mystery/homeMystery', {
-        title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
-        imagen: userData.imagen, activeSection: 'dashboard'
-      });
+    const usuario = await Usuario.findById(userId).populate('encuestas_resueltas');
+    const encuestasResueltas = usuario.encuestas_resueltas.length;
+
+    // 1. Consulta para obtener las encuestas (similar a getListaEncuestasPendientes):
+
+    const encuestas = await Encuesta.find({
+      _id: { $nin: userData.encuestas_resueltas }
+    }).populate({
+      path: 'id_area',
+      select: 'color_hover nombre'
+    })
+      .sort({ _id: -1 });
+
+    // 2. Mapear y filtrar las encuestas (similar a getListaEncuestasPendientes):
+    const encuestasConPreguntas = await Promise.all(encuestas.map(async encuesta => {
+      const numeroPreguntas = await PreguntaEncuesta.countDocuments({ id_encuesta: encuesta._id });
+      return { ...encuesta.toObject(), numero_preguntas: numeroPreguntas };
+    }));
+
+    const fechaActual = new Date();
+    const encuestasPendientes = encuestasConPreguntas.filter(encuesta => {
+      const fechaLimite = new Date(encuesta.fecha_limite);
+      if (fechaLimite > fechaActual) {
+        if (!encuesta.id_usuarios_respondieron.includes(userId)) {
+          if (encuesta.id_usuarios_respondieron.length < encuesta.cantidad) {
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+
+    const totalEncuestasUsuario = encuestasPendientes.length + encuestasResueltas;
+    // Obtener las últimas 6 encuestas resueltas por el usuario
+    const ultimasEncuestasResueltas = userData.encuestas_resueltas.slice(-6);
+
+    // Buscar información de las encuestas y sus calificaciones
+    // Buscar información de las encuestas, sus calificaciones y áreas
+    if (ultimasEncuestasResueltas.length > 0) {
+      const calificacionesEncuestas = await Promise.all(ultimasEncuestasResueltas.map(async (encuestaId) => {
+        const encuesta = await Encuesta.findById(encuestaId).populate('id_area');
+        const calificacionUsuario = await UsuarioRespuestaEncuesta.findOne({
+          id_encuesta: encuestaId,
+          id_usuario: userId
+        });
+        return {
+          nombreEncuesta: encuesta.nombre,
+          nombreArea: encuesta.id_area.nombre, // Obtener el nombre del área
+          calificacion: calificacionUsuario.calificacion
+        };
+      }));
+
+      if (userData) {
+        res.render('mystery/homeMystery', {
+          title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
+          imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
+          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: calificacionesEncuestas
+        });
+      } else {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
     } else {
-      res.status(404).json({ message: 'Usuario no encontrado' });
+
+      if (userData) {
+        res.render('mystery/homeMystery', {
+          title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
+          imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
+          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: [] 
+        });
+      } else {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
     }
+
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: 'Error 2', error: error.message });
@@ -209,12 +278,18 @@ export const registrarRespuestaEncuesta = async (req, res) => {
       return res.status(401).json({ message: 'Usuario no autenticado' });
     }
 
+    let sumaCalificaciones = 0;
+    let cantidadPreguntas = 0;
+
     // Iterar sobre las respuestas del formulario
     for (const key in req.body) {
       if (key.startsWith('pregunta_')) {
         const partes = key.split('_'); // Dividir la clave en partes
         const preguntaId = partes[1];
         const calificacion = req.body[key];
+
+        cantidadPreguntas++;
+        sumaCalificaciones += Array.isArray(calificacion) ? calificacion.reduce((total, calif) => total + parseInt(calif, 10), 0) : parseInt(calificacion, 10);
 
         // Verificar si calificacion es un array (si se seleccionó más de una estrella)
         if (Array.isArray(calificacion)) {
@@ -244,6 +319,17 @@ export const registrarRespuestaEncuesta = async (req, res) => {
         }
       }
     }
+
+    // 1. Calcular la calificación promedio (con decimales):
+    const calificacionPromedio = cantidadPreguntas > 0 ? (sumaCalificaciones / cantidadPreguntas).toFixed(2) : 0;
+
+    // 2. Guardar la calificación en el modelo UsuarioRespuestaEncuestas:
+    const nuevoUsuarioRespuesta = new UsuarioRespuestaEncuesta({
+      id_encuesta: encuestaId,
+      id_usuario: userId,
+      calificacion: calificacionPromedio
+    });
+    await nuevoUsuarioRespuesta.save();
 
     // Actualizar el array encuestas_resueltas del usuario
     await Usuario.findByIdAndUpdate(userId, {
