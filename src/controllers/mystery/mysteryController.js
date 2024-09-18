@@ -48,16 +48,49 @@ export const getHomeMystery = async (req, res) => {
     });
 
     const totalEncuestasUsuario = encuestasPendientes.length + encuestasResueltas;
+    // Obtener las últimas 6 encuestas resueltas por el usuario
+    const ultimasEncuestasResueltas = userData.encuestas_resueltas.slice(-6);
 
-    if (userData) {
-      res.render('mystery/homeMystery', {
-        title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
-        imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
-        totalEncuestasUsuario: totalEncuestasUsuario
-      });
+    // Buscar información de las encuestas y sus calificaciones
+    // Buscar información de las encuestas, sus calificaciones y áreas
+    if (ultimasEncuestasResueltas.length > 0) {
+      const calificacionesEncuestas = await Promise.all(ultimasEncuestasResueltas.map(async (encuestaId) => {
+        const encuesta = await Encuesta.findById(encuestaId).populate('id_area');
+        const calificacionUsuario = await UsuarioRespuestaEncuesta.findOne({
+          id_encuesta: encuestaId,
+          id_usuario: userId
+        });
+        return {
+          nombreEncuesta: encuesta.nombre,
+          nombreArea: encuesta.id_area.nombre, // Obtener el nombre del área
+          calificacion: calificacionUsuario.calificacion
+        };
+      }));
+
+      if (userData) {
+        res.render('mystery/homeMystery', {
+          title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
+          imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
+          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: calificacionesEncuestas
+        });
+      } else {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
     } else {
-      res.status(404).json({ message: 'Usuario no encontrado' });
+
+      if (userData) {
+        res.render('mystery/homeMystery', {
+          title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
+          imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
+          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: [] 
+        });
+      } else {
+        res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+
     }
+
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: 'Error 2', error: error.message });
@@ -287,16 +320,16 @@ export const registrarRespuestaEncuesta = async (req, res) => {
       }
     }
 
-     // 1. Calcular la calificación promedio (con decimales):
-     const calificacionPromedio = cantidadPreguntas > 0 ? (sumaCalificaciones / cantidadPreguntas).toFixed(2) : 0; 
+    // 1. Calcular la calificación promedio (con decimales):
+    const calificacionPromedio = cantidadPreguntas > 0 ? (sumaCalificaciones / cantidadPreguntas).toFixed(2) : 0;
 
-     // 2. Guardar la calificación en el modelo UsuarioRespuestaEncuestas:
-     const nuevoUsuarioRespuesta = new UsuarioRespuestaEncuesta({
-       id_encuesta: encuestaId,
-       id_usuario: userId,
-       calificacion: calificacionPromedio 
-     });
-     await nuevoUsuarioRespuesta.save(); 
+    // 2. Guardar la calificación en el modelo UsuarioRespuestaEncuestas:
+    const nuevoUsuarioRespuesta = new UsuarioRespuestaEncuesta({
+      id_encuesta: encuestaId,
+      id_usuario: userId,
+      calificacion: calificacionPromedio
+    });
+    await nuevoUsuarioRespuesta.save();
 
     // Actualizar el array encuestas_resueltas del usuario
     await Usuario.findByIdAndUpdate(userId, {

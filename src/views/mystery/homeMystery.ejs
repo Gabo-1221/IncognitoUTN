@@ -60,13 +60,16 @@
                                   <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                  <a class="dropdown-item" href="/mystery/listaEncuestasPendientes">Ver encuestas pendientes</a>
-                                  <a class="dropdown-item" href="/mystery/listaEncuestasRealizadas">Ver encuestas realizadas</a>
+                                  <a class="dropdown-item" href="/mystery/listaEncuestasPendientes">Ver encuestas
+                                    pendientes</a>
+                                  <a class="dropdown-item" href="/mystery/listaEncuestasRealizadas">Ver encuestas
+                                    realizadas</a>
                                 </div>
                               </div>
                             </div>
                             <span class="fw-semibold d-block mb-1">Total de encuestas</span>
-                            <h3 class="card-title mb-2"># <%= totalEncuestasUsuario %></h3>
+                            <h3 class="card-title mb-2"># <%= totalEncuestasUsuario %>
+                            </h3>
                           </div>
                         </div>
                       </div>
@@ -83,12 +86,14 @@
                                   <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                  <a class="dropdown-item" href="/mystery/listaEncuestasPendientes">Ver encuestas pendientes</a>
+                                  <a class="dropdown-item" href="/mystery/listaEncuestasPendientes">Ver encuestas
+                                    pendientes</a>
                                 </div>
                               </div>
                             </div>
                             <span>Encuestas pendientes</span>
-                            <h3 class="card-title text-nowrap mb-1"># <%= encuestasPendientes %></h3>
+                            <h3 class="card-title text-nowrap mb-1"># <%= encuestasPendientes %>
+                            </h3>
                           </div>
                         </div>
                       </div>
@@ -108,12 +113,14 @@
                                   <i class="bx bx-dots-vertical-rounded"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                  <a class="dropdown-item" href="/mystery/listaEncuestasRealizadas">Ver encuestas realizadas</a>
+                                  <a class="dropdown-item" href="/mystery/listaEncuestasRealizadas">Ver encuestas
+                                    realizadas</a>
                                 </div>
                               </div>
                             </div>
                             <span class="fw-semibold d-block mb-1">Encuestas resueltas</span>
-                            <h3 class="card-title mb-2"># <%= encuestasResueltas %></h3>
+                            <h3 class="card-title mb-2"># <%= encuestasResueltas %>
+                            </h3>
                           </div>
                         </div>
                       </div>
@@ -135,7 +142,7 @@
                               </div>
                             </div>
                             <span>Mi perfil</span>
-                            <a class="dropdown-item" href="/mystery/perfil">Ver mi perfil</a> 
+                            <a class="dropdown-item" href="/mystery/perfil">Ver mi perfil</a>
                             <h4 class="card-title text-nowrap mb-1"></h4>
                           </div>
                         </div>
@@ -163,7 +170,9 @@
                       <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                           <div class="d-flex flex-column align-items-center gap-1">
-                            <h2 class="mb-2"><%= totalEncuestasUsuario %></h2>
+                            <h2 class="mb-2">
+                              <%= totalEncuestasUsuario %>
+                            </h2>
                             <span>Total de encuestas</span>
                           </div>
                           <div id="orderStatisticsChart"></div>
@@ -236,8 +245,8 @@
                   <div class="col-lg-4 col-md-6 order-1">
                     <div class="card h-100">
                       <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="card-title m-0 me-2">Calificacion</h5>
-                        <div class="dropdown">
+                        <h5 class="card-title m-0 me-2">Ultimas encuestas</h5>
+                        <!-- <div class="dropdown">
                           <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="bx bx-dots-vertical-rounded"></i>
@@ -247,100 +256,38 @@
                             <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
                             <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                       <div class="card-body">
                         <ul class="p-0 m-0">
-                          <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <img src="../assets/img/resources/audit.png" alt="User" class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                              <div class="me-2">
-                                <small class="text-muted d-block mb-1">Alpha 1.0</small>
-                                <h6 class="mb-0">Alpha 1.11/ 1 categoriaseditar</h6>
-                              </div>
-                              <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">+82.6</h6>
-                                <span class="text-muted">USD</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <img src="../assets/img/resources/audit.png" alt="User" class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                              <div class="me-2">
-                                <small class="text-muted d-block mb-1">Wallet</small>
-                                <h6 class="mb-0">Mac'D</h6>
-                              </div>
-                              <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">+270.69</h6>
-                                <span class="text-muted">USD</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <img src="../assets/img/resources/audit.png" alt="User" class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                              <div class="me-2">
-                                <small class="text-muted d-block mb-1">Transfer</small>
-                                <h6 class="mb-0">Refund</h6>
-                              </div>
-                              <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">+637.91</h6>
-                                <span class="text-muted">USD</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <img src="../assets/img/resources/audit.png" alt="User" class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                              <div class="me-2">
-                                <small class="text-muted d-block mb-1">Credit Card</small>
-                                <h6 class="mb-0">Ordered Food</h6>
-                              </div>
-                              <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">-838.71</h6>
-                                <span class="text-muted">USD</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <img src="../assets/img/resources/audit.png" alt="User" class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                              <div class="me-2">
-                                <small class="text-muted d-block mb-1">Wallet</small>
-                                <h6 class="mb-0">Starbucks</h6>
-                              </div>
-                              <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">+203.33</h6>
-                                <span class="text-muted">USD</span>
-                              </div>
-                            </div>
-                          </li>
-                          <li class="d-flex">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <img src="../assets/img/resources/audit.png" alt="User" class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                              <div class="me-2">
-                                <small class="text-muted d-block mb-1">Mastercard</small>
-                                <h6 class="mb-0">Ordered Food</h6>
-                              </div>
-                              <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">-92.45</h6>
-                                <span class="text-muted">USD</span>
-                              </div>
-                            </div>
-                          </li>
+                          <% if (calificacionesEncuestas.length> 0) { %>
+                            <% calificacionesEncuestas.forEach(calificacion=> { %>
+                              <li class="d-flex mb-4 pb-1">
+                                <div class="avatar flex-shrink-0 me-3 text-center">
+                                  <img src="../assets/img/resources/audit.png" alt="User" class="rounded" />
+                                  <span class="badge badge-center bg-label-info">
+                                    <%= calificacion.calificacion %>
+                                  </span>
+                                </div>
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                  <div class="row me-2">
+                                    <small class="text-muted d-block mb-1">
+                                      <span class="badge bg-label-primary">
+                                        <%= calificacion.nombreArea %>
+                                      </span>
+                                    </small>
+                                    <h6 class="row mb-0">
+                                      <%= calificacion.nombreEncuesta %>
+                                    </h6>
+                                  </div>
+                                </div>
+                              </li>
+                              <% }); %>
+                          <% } else { %>
+                            <li class="d-flex mb-4 pb-1">
+                              <p>Aún no has respondido ninguna encuesta.</p>
+                            </li>
+                            <% } %>
                         </ul>
                       </div>
                     </div>

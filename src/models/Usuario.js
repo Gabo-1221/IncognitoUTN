@@ -13,8 +13,8 @@ const usuarioSchema = new mongoose.Schema({
   },
   terms: { type: Boolean, default: false },
   created_at: { type: Date, default: Date.now },
-  encuestas_creadas: { type: Array, default: [] }, // Considera usar ObjectId y referenciar al modelo Encuesta
-  encuestas_resueltas: { type: Array, default: [] }, // Considera usar ObjectId y referenciar al modelo Encuesta
+  encuestas_creadas: { type: Array, default: [] }, 
+  encuestas_resueltas: { type: Array, default: [] },
   updated_at: { type: Date, default: Date.now },
   status: { 
     type: mongoose.Schema.Types.ObjectId, 
