@@ -7,6 +7,7 @@ import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
 import RespuestaEncuesta from '../../models/RespuestaEncuesta.js';
 import Usuario from '../../models/Usuario.js';
 import UsuarioRespuestaEncuesta from '../../models/UsuarioRespuestaEncuestas.js';
+import Pregunta from '../../models/Pregunta.js';
 
 export const getHomeMystery = async (req, res) => {
   try {
@@ -51,6 +52,30 @@ export const getHomeMystery = async (req, res) => {
     // Obtener las últimas 6 encuestas resueltas por el usuario
     const ultimasEncuestasResueltas = userData.encuestas_resueltas.slice(-6);
 
+    const categoriasEstadisticas = await Promise.all(ultimasEncuestasResueltas.map(async (encuestaId) => {
+      const preguntasEncuesta = await PreguntaEncuesta.find({ id_encuesta: encuestaId });
+      const categoriasConteo = {};
+      for (const preguntaEncuesta of preguntasEncuesta) {
+        const pregunta = await Pregunta.findById(preguntaEncuesta.id_pregunta).populate('id_categoria');
+        const nombreCategoria = pregunta.id_categoria.nombre;
+        categoriasConteo[nombreCategoria] = (categoriasConteo[nombreCategoria] || 0) + 1;
+      }
+      return categoriasConteo;
+    }));
+
+    // Combinar las estadísticas de todas las encuestas
+    const categoriasTotales = {};
+    categoriasEstadisticas.forEach(encuestaCategorias => {
+      for (const categoria in encuestaCategorias) {
+        categoriasTotales[categoria] = (categoriasTotales[categoria] || 0) + encuestaCategorias[categoria];
+      }
+    });
+
+    // Convertir las estadísticas a un formato adecuado para el gráfico
+    const chartLabels = Object.keys(categoriasTotales).map(label => `'${label}'`); 
+    /* const chartSeries = Object.values(categoriasTotales); */
+    const chartSeries = Object.values(categoriasTotales);
+
     // Buscar información de las encuestas y sus calificaciones
     // Buscar información de las encuestas, sus calificaciones y áreas
     if (ultimasEncuestasResueltas.length > 0) {
@@ -71,8 +96,10 @@ export const getHomeMystery = async (req, res) => {
         res.render('mystery/homeMystery', {
           title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
           imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
-          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: calificacionesEncuestas
+          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: calificacionesEncuestas, chartLabels: chartLabels,
+          chartSeries: chartSeries
         });
+        console.log(chartLabels + ' ' + chartSeries);
       } else {
         res.status(404).json({ message: 'Usuario no encontrado' });
       }
@@ -83,7 +110,8 @@ export const getHomeMystery = async (req, res) => {
         res.render('mystery/homeMystery', {
           title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
           imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
-          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: [] 
+          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: [], chartLabels: chartLabels,
+          chartSeries: chartSeries
         });
       } else {
         res.status(404).json({ message: 'Usuario no encontrado' });
