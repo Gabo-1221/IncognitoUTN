@@ -99,7 +99,6 @@ export const getHomeMystery = async (req, res) => {
           totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: calificacionesEncuestas, chartLabels: chartLabels,
           chartSeries: chartSeries
         });
-        console.log(chartLabels + ' ' + chartSeries);
       } else {
         res.status(404).json({ message: 'Usuario no encontrado' });
       }
