@@ -21,11 +21,8 @@
     transform: rotate(360deg);
 }
 
-/* Selectores para aplicar estilos a las estrellas seleccionadas y anteriores */
-.valoracion input[type="checkbox"]:checked ~ label,
-.valoracion input[type="checkbox"]:checked ~ label ~ label,
-.valoracion input[type="checkbox"]:checked ~ label ~ label ~ label,
-.valoracion input[type="checkbox"]:checked ~ label ~ label ~ label ~ label { 
+/* Selector para aplicar estilos a la estrella seleccionada y anteriores (radio) */
+.valoracion input[type="radio"]:checked + label i { /* Cambiado ~ por + */
     color: var(--color-hover);
     transform: rotate(360deg);
 }
