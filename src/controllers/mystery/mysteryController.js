@@ -7,6 +7,7 @@ import PreguntaEncuesta from '../../models/PreguntaEncuesta.js';
 import RespuestaEncuesta from '../../models/RespuestaEncuesta.js';
 import Usuario from '../../models/Usuario.js';
 import UsuarioRespuestaEncuesta from '../../models/UsuarioRespuestaEncuestas.js';
+import Pregunta from '../../models/Pregunta.js';
 
 export const getHomeMystery = async (req, res) => {
   try {
@@ -51,6 +52,30 @@ export const getHomeMystery = async (req, res) => {
     // Obtener las últimas 6 encuestas resueltas por el usuario
     const ultimasEncuestasResueltas = userData.encuestas_resueltas.slice(-6);
 
+    const categoriasEstadisticas = await Promise.all(ultimasEncuestasResueltas.map(async (encuestaId) => {
+      const preguntasEncuesta = await PreguntaEncuesta.find({ id_encuesta: encuestaId });
+      const categoriasConteo = {};
+      for (const preguntaEncuesta of preguntasEncuesta) {
+        const pregunta = await Pregunta.findById(preguntaEncuesta.id_pregunta).populate('id_categoria');
+        const nombreCategoria = pregunta.id_categoria.nombre;
+        categoriasConteo[nombreCategoria] = (categoriasConteo[nombreCategoria] || 0) + 1;
+      }
+      return categoriasConteo;
+    }));
+
+    // Combinar las estadísticas de todas las encuestas
+    const categoriasTotales = {};
+    categoriasEstadisticas.forEach(encuestaCategorias => {
+      for (const categoria in encuestaCategorias) {
+        categoriasTotales[categoria] = (categoriasTotales[categoria] || 0) + encuestaCategorias[categoria];
+      }
+    });
+
+    // Convertir las estadísticas a un formato adecuado para el gráfico
+    const chartLabels = Object.keys(categoriasTotales).map(label => `'${label}'`);
+    /* const chartSeries = Object.values(categoriasTotales); */
+    const chartSeries = Object.values(categoriasTotales);
+
     // Buscar información de las encuestas y sus calificaciones
     // Buscar información de las encuestas, sus calificaciones y áreas
     if (ultimasEncuestasResueltas.length > 0) {
@@ -71,7 +96,8 @@ export const getHomeMystery = async (req, res) => {
         res.render('mystery/homeMystery', {
           title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
           imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
-          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: calificacionesEncuestas
+          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: calificacionesEncuestas, chartLabels: chartLabels,
+          chartSeries: chartSeries
         });
       } else {
         res.status(404).json({ message: 'Usuario no encontrado' });
@@ -83,7 +109,8 @@ export const getHomeMystery = async (req, res) => {
         res.render('mystery/homeMystery', {
           title: 'Incognito UTN | Dashboard', username: userData.username, rol: userData.rol,
           imagen: userData.imagen, activeSection: 'dashboard', encuestasResueltas: encuestasResueltas, encuestasPendientes: encuestasPendientes.length,
-          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: [] 
+          totalEncuestasUsuario: totalEncuestasUsuario, calificacionesEncuestas: [], chartLabels: chartLabels,
+          chartSeries: chartSeries
         });
       } else {
         res.status(404).json({ message: 'Usuario no encontrado' });
@@ -246,6 +273,18 @@ export const responderEncuesta = async (req, res) => {
           }
         });
 
+      // **NUEVO: Buscar respuestas existentes del usuario (corregido)**
+      const respuestasExistentes = await RespuestaEncuesta.find({
+        id_encuesta: encuestaId,
+        id_usuario: userId
+      });
+
+      // **NUEVO: Crear un mapa de respuestas por preguntaId (corregido)**
+      const respuestasPorPregunta = {};
+      respuestasExistentes.forEach(respuesta => {
+        respuestasPorPregunta[respuesta.id_pregunta] = respuesta.respuesta; // Usamos respuesta.respuesta en lugar de respuesta.calificacion
+      });
+
       // Renderiza la vista
       res.render('mystery/responderEncuesta', {
         title: 'Incognito UTN | Responder encuesta',
@@ -257,7 +296,9 @@ export const responderEncuesta = async (req, res) => {
         encuestaNombre: encuesta.nombre, // **Nombre de la encuesta**
         preguntas: preguntas, // Preguntas
         areaNombre: encuesta.id_area.nombre,
-        areaColor: encuesta.id_area.color_hover
+        areaColor: encuesta.id_area.color_hover,
+        // **NUEVO: Pasar el mapa de respuestas a la vista**
+        respuestas: respuestasPorPregunta
       });
     } else {
       res.status(404).json({ message: 'Usuario no encontrado' });
@@ -273,7 +314,6 @@ export const registrarRespuestaEncuesta = async (req, res) => {
     const encuestaId = req.body.encuestaId;
     const userId = req.session.userId;
 
-    // Validar que el usuario está autenticado
     if (!userId) {
       return res.status(401).json({ message: 'Usuario no autenticado' });
     }
@@ -281,63 +321,66 @@ export const registrarRespuestaEncuesta = async (req, res) => {
     let sumaCalificaciones = 0;
     let cantidadPreguntas = 0;
 
-    // Iterar sobre las respuestas del formulario
     for (const key in req.body) {
       if (key.startsWith('pregunta_')) {
-        const partes = key.split('_'); // Dividir la clave en partes
-        const preguntaId = partes[1];
-        const calificacion = req.body[key];
+        const preguntaId = key.split('_')[1];
+        const calificacion = parseInt(req.body[key], 10); // Obtener la calificación
 
         cantidadPreguntas++;
-        sumaCalificaciones += Array.isArray(calificacion) ? calificacion.reduce((total, calif) => total + parseInt(calif, 10), 0) : parseInt(calificacion, 10);
+        sumaCalificaciones += calificacion; 
 
-        // Verificar si calificacion es un array (si se seleccionó más de una estrella)
-        if (Array.isArray(calificacion)) {
-          // Iterar sobre las calificaciones del array
-          calificacion.forEach(async calif => {
-            // Crear un nuevo documento de RespuestaEncuesta para cada calificación
-            const nuevaRespuesta = new RespuestaEncuesta({
-              id_encuesta: encuestaId,
-              id_pregunta: preguntaId,
-              respuesta: calif, // Usar la calificación individual del array
-              id_usuario: userId,
-            });
+        // Buscar una respuesta existente para esta pregunta y usuario
+        let respuesta = await RespuestaEncuesta.findOne({
+          id_encuesta: encuestaId,
+          id_pregunta: preguntaId,
+          id_usuario: userId
+        });
 
-            // Guardar la respuesta en la base de datos
-            await nuevaRespuesta.save();
-          });
+        if (respuesta) {
+          // Actualizar la respuesta existente
+          respuesta.respuesta = calificacion; 
+          await respuesta.save();
         } else {
-          // Si solo se seleccionó una estrella, guardar la respuesta directamente
-          const nuevaRespuesta = new RespuestaEncuesta({
+          // Crear una nueva respuesta
+          respuesta = new RespuestaEncuesta({
             id_encuesta: encuestaId,
             id_pregunta: preguntaId,
             respuesta: calificacion,
             id_usuario: userId,
           });
-
-          await nuevaRespuesta.save();
+          await respuesta.save();
         }
       }
     }
 
-    // 1. Calcular la calificación promedio (con decimales):
-    const calificacionPromedio = cantidadPreguntas > 0 ? (sumaCalificaciones / cantidadPreguntas).toFixed(2) : 0;
+    // Calcular el promedio después de guardar todas las respuestas
+    const calificacionPromedio = (sumaCalificaciones / cantidadPreguntas).toFixed(2);
 
-    // 2. Guardar la calificación en el modelo UsuarioRespuestaEncuestas:
-    const nuevoUsuarioRespuesta = new UsuarioRespuestaEncuesta({
+    // Buscar un documento de calificación para la encuesta y el usuario
+    let calificacionEncuesta = await UsuarioRespuestaEncuesta.findOne({
       id_encuesta: encuestaId,
       id_usuario: userId,
-      calificacion: calificacionPromedio
-    });
-    await nuevoUsuarioRespuesta.save();
-
-    // Actualizar el array encuestas_resueltas del usuario
-    await Usuario.findByIdAndUpdate(userId, {
-      $push: { encuestas_resueltas: encuestaId }
     });
 
-    //res.redirect('/mystery/encuestaRegistrada');
-    //res.status(200).json({ message: 'Encuesta registrada correctamente' });
+    if (calificacionEncuesta) {
+      // Actualizar la calificación existente
+      calificacionEncuesta.calificacion = calificacionPromedio;
+      await calificacionEncuesta.save();
+    } else {
+      // Crear un nuevo documento de calificación
+      calificacionEncuesta = new UsuarioRespuestaEncuesta({
+        id_encuesta: encuestaId,
+        id_usuario: userId,
+        calificacion: calificacionPromedio
+      });
+      await calificacionEncuesta.save();
+
+      // Actualizar el array de encuestas resueltas SOLO si es una nueva calificación
+      await Usuario.findByIdAndUpdate(userId, {
+        $push: { encuestas_resueltas: encuestaId }
+      });
+    }
+
     res.redirect('/mystery/listaEncuestasPendientes');
   } catch (error) {
     console.error('Error al registrar las respuestas:', error);

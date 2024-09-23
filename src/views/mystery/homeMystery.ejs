@@ -154,8 +154,8 @@
                     <div class="card h-100">
                       <div class="card-header d-flex align-items-center justify-content-between pb-0">
                         <div class="card-title mb-0">
-                          <h5 class="m-0 me-2">Encuestas</h5>
-                          <small class="text-muted">% de mayor categoria por encuesta</small>
+                          <h5 class="m-0 me-2">Caegorias por encuesta</h5>
+                          <small class="text-muted">No. de mayor categoria por encuesta</small>
                         </div>
                         <div class="dropdown">
                           <button class="btn p-0" type="button" id="orederStatistics" data-bs-toggle="dropdown"
@@ -170,14 +170,18 @@
                       <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                           <div class="d-flex flex-column align-items-center gap-1">
-                            <h2 class="mb-2">
+                            <!-- <h2 class="mb-2">
                               <%= totalEncuestasUsuario %>
-                            </h2>
-                            <span>Total de encuestas</span>
+                            </h2> -->
+                            <!-- <span>Total de encuestas</span> -->
                           </div>
-                          <div id="orderStatisticsChart"></div>
+                          <!-- <div id="categoriasStatisticsChart"></div> -->
+                           <br>
+                          <div>
+                            <canvas id="myChart"></canvas>
+                          </div>
                         </div>
-                        <ul class="p-0 m-0">
+                        <!-- <ul class="p-0 m-0">
                           <li class="d-flex mb-4 pb-1">
                             <div class="avatar flex-shrink-0 me-3">
                               <span class="avatar-initial rounded bg-label-primary"><i
@@ -185,7 +189,9 @@
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                               <div class="me-2">
-                                <h6 class="mb-0">Electronic</h6>
+                                <h6 class="mb-0">
+                                  <%= chartLabels %>
+                                </h6>
                                 <small class="text-muted">Mobile, Earbuds, TV</small>
                               </div>
                               <div class="user-progress">
@@ -199,7 +205,9 @@
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                               <div class="me-2">
-                                <h6 class="mb-0">Fashion</h6>
+                                <h6 class="mb-0">
+                                  <%= chartSeries %>
+                                </h6>
                                 <small class="text-muted">T-shirt, Jeans, Shoes</small>
                               </div>
                               <div class="user-progress">
@@ -236,7 +244,7 @@
                               </div>
                             </div>
                           </li>
-                        </ul>
+                        </ul> -->
                       </div>
                     </div>
                   </div>
@@ -283,11 +291,11 @@
                                 </div>
                               </li>
                               <% }); %>
-                          <% } else { %>
-                            <li class="d-flex mb-4 pb-1">
-                              <p>Aún no has respondido ninguna encuesta.</p>
-                            </li>
-                            <% } %>
+                                <% } else { %>
+                                  <li class="d-flex mb-4 pb-1">
+                                    <p>Aún no has respondido ninguna encuesta.</p>
+                                  </li>
+                                  <% } %>
                         </ul>
                       </div>
                     </div>
@@ -304,6 +312,110 @@
     </div>
   </div>
   <%- include('../components/scriptsBody') %>
+    <script>
+      let cardColor, headingColor, axisColor, shadeColor, borderColor;
+
+      cardColor = config.colors.white;
+      headingColor = config.colors.headingColor;
+      axisColor = config.colors.axisColor;
+      borderColor = config.colors.borderColor;
+      // Order Statistics Chart
+      // --------------------------------------------------------------------
+      const chartCategoriasStatistics = document.querySelector('#categoriasStatisticsChart'),
+      categoriaChartConfig = {
+          chart: {
+            height: 165,
+            width: 130,
+            type: 'donut'
+          },
+          labels: ['Personal', 'Limpieza', 'Servicio', 'Alpha 1.0', 'Puntualidad'],
+          series: [8, 6, 6, 1],
+          colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success,  config.colors.warning],
+          stroke: {
+            width: 6,
+            colors: cardColor
+          },
+          dataLabels: {
+            enabled: false,
+            /*formatter: function (val, opt) {
+              return parseInt(val) + '%';
+            }*/
+            formatter: function (val, opt) {
+              const total = opt.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+              return `${Math.round((val / total) * 100)}%`; // Calcula el porcentaje real
+            }
+          },
+          legend: {
+            show: false
+          },
+          grid: {
+            padding: {
+              top: 0,
+              bottom: 0,
+              right: 15
+            }
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                size: '75%',
+                labels: {
+                  show: true,
+                  value: {
+                    fontSize: '1.5rem',
+                    fontFamily: 'Public Sans',
+                    color: headingColor,
+                    offsetY: -15,
+                    formatter: function (val) {
+                      return parseInt(val) + '%';
+                    }
+                  },
+                  name: {
+                    offsetY: 20,
+                    fontFamily: 'Public Sans'
+                  },
+                  total: {
+                    show: true,
+                    fontSize: '0.8125rem',
+                    color: axisColor,
+                    label: 'Categoria',
+                    /*formatter: function (w) {
+                      return '38%';
+                    }*/
+                    formatter: function (w) {
+                      const total = w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+                      return `${Math.round(total)}%`;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+      if (typeof chartCategoriasStatistics !== undefined && chartCategoriasStatistics !== null) {
+        const statisticsChart = new ApexCharts(chartCategoriasStatistics, categoriaChartConfig);
+        statisticsChart.render();
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      
+      const ctx = document.getElementById('myChart');
+    
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          /*labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],*/
+          labels: [<%- chartLabels %>],
+          datasets: [{
+            label: '# de encuestas',
+            /*data: [12, 19, 3, 5, 2, 3],*/
+            data: [<%= chartSeries %>],
+            borderWidth: 1
+          }]
+        }
+      });
+    </script>
 </body>
 
 </html>

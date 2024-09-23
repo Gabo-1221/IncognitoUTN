@@ -60,14 +60,19 @@
                                       <%= pregunta.id_pregunta.nombre %>
                                     </span>
                                     <div class="valoracion" data-pregunta-id="<%= pregunta.id_pregunta._id %>">
-                                      <% for (let i=1; i <=5; i++) { %> <!-- Cambiado el rango del bucle -->
+                                      <% for (let i=1; i <=5; i++) { %>
                                         <input type="radio" name="pregunta_<%= pregunta.id_pregunta._id %>"
                                           id="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>" value="<%= i %>"
-                                          style="display: none;">
-                                        <label for="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>">
-                                          <i class="fas fa-star"></i>
-                                        </label>
-                                        <% } %>
+                                          style="display: none;" <% if (respuestas &&
+                                          respuestas[pregunta.id_pregunta._id] &&
+                                          respuestas[pregunta.id_pregunta._id]==i) { %>
+                                        checked
+                                        <% } %> >
+                                          <label for="estrella_<%= pregunta.id_pregunta._id %>_<%= i %>">
+                                            <i
+                                              class="fas fa-star <% if (respuestas && respuestas[pregunta.id_pregunta._id] && respuestas[pregunta.id_pregunta._id] >= i) { %> estrella-seleccionada <% } %> "></i>
+                                          </label>
+                                          <% } %>
                                     </div>
                                     <br>
                                     <% }); %>
@@ -115,18 +120,37 @@
 
       const valoraciones = document.querySelectorAll('.valoracion');
       valoraciones.forEach(valoracion => {
-        const preguntaId = valoracion.dataset.preguntaId;
+        /*const preguntaId = valoracion.dataset.preguntaId;*/
         const estrellas = valoracion.querySelectorAll('input[type="checkbox"]');
         const labels = valoracion.querySelectorAll('label');
+
+        // **Iterar sobre las estrellas y colorear las que están checked**
+        estrellas.forEach((estrella, index) => {
+          if (estrella.checked) {
+            // Modificación: Iterar en orden inverso desde la última estrella
+            for (let i = estrellas.length - 1; i >= 0; i--) {
+              if (i <= index) {
+                labels[i].querySelector('i').style.color = '#ffa400';
+              } else {
+                labels[i].querySelector('i').style.color = '#5f5050'; // Color por defecto
+              }
+            }
+          }
+        });
 
         labels.forEach((label, index) => {
           label.addEventListener('click', function () {
             const selectedValue = index + 1;
+            const inputId = label.htmlFor;
+            const preguntaId = inputId.split('_')[1];
+
+            // Colorear las estrellas hasta la seleccionada
             labels.forEach((star, i) => {
-              if (i <= index) {
-                star.querySelector('i').style.color = '#ffa400';
+              console.log("i:", i, "index:", index); 
+              if (i <= index) { 
+                star.querySelector('i').style.color = '#ffa400'; 
               } else {
-                star.querySelector('i').style.color = '#5f5050';
+                star.querySelector('i').style.color = '#5f5050'; 
               }
             });
           });
