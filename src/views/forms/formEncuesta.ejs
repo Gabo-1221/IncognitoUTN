@@ -13,7 +13,7 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                               <div class="modal-header">
-                                <h5 class="modal-title" id="modalToggleLabel">Modal 1</h5>
+                                <h5 class="modal-title" id="modalToggleLabel">Crear encuesta (1/2)</h5>
                                 <button
                                   type="button"
                                   class="btn-close"
@@ -23,9 +23,10 @@
                               </div>
                                 <div class="modal-body">                              
                                     <form action="/forms/nuevaEncuesta" method="post">
+                                    <div id="alert"  role="alert"></div>
                                     <div class="mb-3">
                                       <label class="form-label" for="nombre">Nombre de la Encuesta</label>
-                                      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="" />
+                                      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa un nombre para la encuesta" />
                                     </div>
                                     <div class="mb-3">
                                       <label for="areaSelect" class="form-label">Categoria</label>
@@ -57,7 +58,7 @@
                                         id="canperson"
                                         name="canperson"
                                         class="form-control phone-mask"
-                                        placeholder="10"
+                                        placeholder="Ingresa cantidad de personas para contestar "
 
                                       />
                                     </div>
@@ -86,7 +87,86 @@
                               </div>
                             </div>
                           </div>
+                          <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                            // Selecciona el formulario de nueva encuesta
+                            const encuestaForm = document.querySelector('form[action="/forms/nuevaEncuesta"]');
+                            const encuestaSubmitButton = encuestaForm.querySelector('button[type="submit"]');
 
+                            // Crea un contenedor para los mensajes de error (opcional)
+                            const errorContainer = document.createElement('div');
+                            errorContainer.id = 'alert';
+                            encuestaForm.insertBefore(errorContainer, encuestaForm.firstChild); // Agrega el contenedor al inicio del formulario
+
+                            // Deshabilita el botón de enviar inicialmente
+                            encuestaSubmitButton.disabled = true;
+
+                            // Escucha los eventos 'input' en los campos requeridos
+                            const requiredFieldsEncuesta = ['nombre', 'areaSelect', 'canperson', 'fechat'];
+                            requiredFieldsEncuesta.forEach(fieldId => {
+                              const field = document.getElementById(fieldId);
+                              field.addEventListener('input', validateEncuestaForm);
+                            });
+
+                            encuestaForm.addEventListener('submit', function(event) {
+                              if (!validateEncuestaForm()) {
+                                event.preventDefault();
+                              }
+                            });
+
+                            function validateEncuestaForm() {
+                              let isValid = true;
+                              errorContainer.innerHTML = ''; 
+
+                              // Validar el campo "nombre"
+                              const nombreInput = document.getElementById('nombre');
+                              if (nombreInput.value.trim() === '') {
+                                isValid = false;
+                                showError('Por favor, ingresa un nombre para la encuesta.');
+                              }
+
+                              // Validar el campo "areaSelect"
+                              const areaSelect = document.getElementById('areaSelect');
+                              if (areaSelect.value === 'Selecionar una Area...') { // Verifica si se ha seleccionado una área diferente de la opción por defecto
+                                isValid = false;
+                                showError('Por favor, selecciona un área.');
+                              }
+
+                              // Validar el campo "canperson"
+                              const canpersonInput = document.getElementById('canperson');
+                              if (canpersonInput.value.trim() === '') {
+                                isValid = false;
+                                showError('Por favor, ingresa la cantidad de personas que podrán responder.');
+                              }
+
+                              // Validar el campo "fechat"
+                              const fechatInput = document.getElementById('fechat');
+                              if (fechatInput.value.trim() === '') {
+                                isValid = false;
+                                showError('Por favor, ingresa la fecha de término.');
+                              }
+
+                              // Habilita o deshabilita el botón de enviar según la validez del formulario
+                              encuestaSubmitButton.disabled = !isValid;
+
+                              if (isValid) {
+                                errorContainer.style.display = 'none'; // Oculta la alerta
+                              } else {
+                                errorContainer.classList.add('alert', 'alert-danger','alert-dismissible'); 
+                                errorContainer.style.display = 'block'; // Muestra la alerta
+                              }
+
+                              return isValid;
+                            }
+
+                            function showError(message) {
+                              const errorElement = document.createElement('span');
+                              errorElement.classList.add('error-messages');
+                              errorElement.textContent = message;
+                              errorContainer.appendChild(errorElement);
+                            }
+                          });
+                          </script>
                           <%- include('../forms/formEncuestaP2.ejs') %>
 
 

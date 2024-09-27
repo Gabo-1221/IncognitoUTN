@@ -5,7 +5,7 @@
                           <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                               <div class="modal-header">
-                                <h5 class="modal-title" id="modalToggleLabel2">Parte 2</h5>
+                                <h5 class="modal-title" id="modalToggleLabel2">Creacion de encueta (2/2)</h5>
                                 <button
                                   type="button"
                                   class="btn-close"
@@ -14,6 +14,8 @@
                                 ></button>
                               </div>
                               <form id="encpreg" >
+                              <div id="alert"  role="alert"></div>
+
                               <div class="modal-body">
                                       <div class="mb-3">
                                           <label for="categoriaSelect" class="form-label">Categoria</label>
@@ -163,4 +165,50 @@
                                       alert('Ocurrió un error al guardar las preguntas.');
                                   });
                               }
+                              document.addEventListener('DOMContentLoaded', function() {
+                                const encuestaParte2Form = document.getElementById('encpreg');
+                                const encuestaParte2SubmitButton = encuestaParte2Form.querySelector('button[type="button"]'); // El botón "Crear"
+
+                                // Crea un contenedor para los mensajes de error (opcional)
+                                const errorContainerParte2 = document.createElement('div');
+                                errorContainerParte2.id = 'alertParte2'; // Un ID diferente para este contenedor
+                                encuestaParte2Form.insertBefore(errorContainerParte2, encuestaParte2Form.firstChild);
+
+                                // Deshabilita el botón de enviar inicialmente
+                                encuestaParte2SubmitButton.disabled = true;
+
+                                // Escucha los eventos 'change' en las checkboxes de preguntas
+                                document.getElementById('preguntaList').addEventListener('change', validateEncuestaParte2Form);
+
+                                function validateEncuestaParte2Form() {
+                                  let isValid = true;
+                                  errorContainerParte2.innerHTML = '';
+
+                                  // Contar el número de preguntas seleccionadas
+                                  const selectedPreguntasCount = document.querySelectorAll('#preguntaList input[type="checkbox"]:checked').length;
+
+                                  // Validar que se hayan seleccionado al menos 3 preguntas
+                                  if (selectedPreguntasCount < 2) {
+                                    isValid = false;
+                                    showErrorParte2('Por favor, selecciona al menos 2 preguntas. de una categoria');
+                                  }
+
+                                  // Habilita o deshabilita el botón de enviar según la validez del formulario
+                                  encuestaParte2SubmitButton.disabled = !isValid;
+
+                                  if (isValid) {
+                                    errorContainerParte2.style.display = 'none'; // Oculta la alerta
+                                  } else {
+                                    errorContainerParte2.classList.add('alert', 'alert-danger','alert-dismissible'); 
+                                    errorContainerParte2.style.display = 'block'; // Muestra la alerta
+                                  }
+                                }
+
+                                function showErrorParte2(message) {
+                                  const errorElement = document.createElement('span');
+                                  errorElement.classList.add('error-messages');
+                                  errorElement.textContent = message;
+                                  errorContainerParte2.appendChild(errorElement);
+                                }
+                            });
                         </script>

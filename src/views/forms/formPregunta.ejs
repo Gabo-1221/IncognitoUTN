@@ -15,6 +15,7 @@
                             ></button>
                           </div>
                           <form action="/forms/nuevaPregunta" method="post">
+                          <div id="alert"  role="alert"></div>
                           <div class="modal-body">
                                 <div class="mb-3">
                                   <label class="form-label" for="pregunta">Pregunta</label>
@@ -41,6 +42,71 @@
                                 
                           </div>
                         </form>
+                        <script>
+                          document.addEventListener('DOMContentLoaded', function() {
+                          // Selecciona el formulario de nueva pregunta
+                          const preguntaForm = document.querySelector('form[action="/forms/nuevaPregunta"]');
+                          const preguntaSubmitButton = preguntaForm.querySelector('button[type="submit"]');
+                
+                          // Crea un contenedor para los mensajes de error (opcional)
+                          const errorContainer = document.querySelector('div #alert'); 
+                
+                          // Deshabilita el botón de enviar inicialmente
+                          preguntaSubmitButton.disabled = true;
+                
+                          // Escucha los eventos 'input' en los campos requeridos
+                          const requiredFieldsPregunta = ['pregunta', 'categoria'];
+                          requiredFieldsPregunta.forEach(fieldId => {
+                            const field = document.getElementById(fieldId);
+                            field.addEventListener('input', validatePreguntaForm);
+                          });
+
+                          preguntaForm.addEventListener('submit', function(event) {
+                            if (!validatePreguntaForm()) {
+                              event.preventDefault();
+                            }
+                          });
+
+                          function validatePreguntaForm() {
+                            let isValid = true;
+                            errorContainer.innerHTML = '';
+                            const alertContainer = document.getElementById('alert');
+
+                            // Validar el campo "pregunta"
+                            const preguntaInput = document.getElementById('pregunta');
+                            if (preguntaInput.value.trim() === '') {
+                              isValid = false;
+                              showError('Por favor, ingresa una pregunta.');
+                            }
+
+                            // Validar el campo "categoria"
+                            const categoriaSelect = document.getElementById('categoria');
+                            if (categoriaSelect.value === '1') { // Verifica si se ha seleccionado una categoría diferente de la opción por defecto
+                              isValid = false;
+                              showError('Por favor, selecciona una categoría.');
+                            }
+
+                            // Habilita o deshabilita el botón de enviar según la validez del formulario
+                            preguntaSubmitButton.disabled = !isValid;
+
+                            if (isValid) {
+                              alertContainer.style.display = 'none'; // Oculta la alerta
+                            } else {
+                              alertContainer.style.display = 'block'; // Muestra la alerta
+                            }
+                
+                            return isValid;
+                          }
+                
+                          function showError(message) {
+                            errorContainer.classList.add('alert', 'alert-danger','alert-dismissible');
+                            const errorElement = document.createElement('span');
+                            errorElement.classList.add('error-messages');
+                            errorElement.textContent = message;
+                            errorContainer.appendChild(errorElement);
+                          }
+                        });
+                        </script>
                         </div>
                       </div>
                     </div>

@@ -16,13 +16,21 @@
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
-        <%- include('../admin/menuAdmin') %>
-
+        <% if (rol === 'Administrador') { %>
+          <%- include('../admin/menuAdmin.ejs') %>
+        <% } else if (rol === 'Evaluador') { %>
+          <%- include('../evaluer/menuEvaluer.ejs') %>
+        <% } %>
+        
         <!-- Layout container -->
         <div class="layout-page">
-          <%- include('../admin/navbarAdmin') %>
+          <% if (rol === 'Administrador') { %>
+            <%- include('../admin/navbarAdmin.ejs') %>
+          <% } else if (rol === 'Evaluador') { %>
+            <%- include('../evaluer/navbarEvaluer.ejs') %>
+          <% } %>
 
-          <div class="content-wrapper">
+          <div class="content-wrapper pt-lg-4">
             <div class="container ">
               <form method="post" action="/forms/editarEncuesta/<%= encuesta._id %>">
                 <div class="mb-3">
@@ -67,9 +75,9 @@
                   <input class="form-control" type="date" name="fechat" id="fechat" value="<%= fechalimite %>">
                 </div>
                 
-                <div class="">
+                <div class="text-end my-lg-2">
                 <!-- <a href="/admin/formEditarEncuestaPt2/<%= encuesta._id %>" type="button" class="btn btn-primary">Siguiente</a> --> 
-                <button type="button" class="btn btn-outline-secondary">
+                <button type="button"  class="btn btn-outline-secondary" onclick="cancelar()">
                   Cancelar
                 </button>
                 <button type="submit" class="btn btn-outline-primary" >Siguiente</button>
@@ -80,6 +88,13 @@
         </div>
 
         <script>
+
+          function cancelar() {
+            if (confirm('¿Deseas cancelar el proceso de la encuensta?')) {
+              window.location.href = '/admin/listaEncuesta';
+            }
+          }
+
           document.getElementById('areaSelect').value = '<%= encuesta.id_area %>';
 
         </script>

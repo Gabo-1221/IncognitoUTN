@@ -16,13 +16,21 @@
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
-        <%- include('../admin/menuAdmin') %>
+        <% if (rol === 'Administrador') { %>
+          <%- include('../admin/menuAdmin.ejs') %>
+        <% } else if (rol === 'Evaluador') { %>
+          <%- include('../evaluer/menuEvaluer.ejs') %>
+        <% } %>
 
         <!-- Layout container -->
         <div class="layout-page">
-          <%- include('../admin/navbarAdmin') %>
+              <% if (rol === 'Administrador') { %>
+                <%- include('../admin/navbarAdmin.ejs') %>
+              <% } else if (rol === 'Evaluador') { %>
+                <%- include('../evaluer/navbarEvaluer.ejs') %>
+              <% } %>
 
-          <div class="content-wrapper">
+          <div class="content-wrapper pt-lg-4" >
             <div class="container ">
 
       <form id="encuesta" method="post" >
@@ -58,8 +66,8 @@
           </div>
 
           <div class="text-end my-lg-2">
-            <button type="button" class="btn btn-danger">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Actualizar</button>
+            <button type="button" class="btn btn-danger" onclick="cancelar()">Cancelar</button>
+            <button id="actualizarBtn" type="submit" class="btn btn-primary">Actualizar</button>
           </div>
         </form>
         <script>
@@ -87,39 +95,31 @@
     <!-- / Layout page -->
   </div>
   <script>
-    // Guardar la selección en localStorage al hacer clic en el checkbox
+    // Guardar la selección en una variable en lugar de sessionStorage
     document.addEventListener('DOMContentLoaded', function() {
-      // Cargar la selección desde localStorage al cargar la página
-      const seleccionadas = JSON.parse(localStorage.getItem('preguntasSeleccionadas')) || [];
-  
-      // Marcar las preguntas que estaban seleccionadas antes de recargar
-      document.querySelectorAll('input[type="checkbox"][name="preguntas[]"]').forEach(checkbox => {
-        if (seleccionadas.includes(checkbox.value)) {
-          checkbox.checked = true;
-        }
-        
-        // Manejar el evento de cambio del checkbox
+      // Variable para almacenar la selección
+      let preguntasSeleccionadas = []; 
+
+      // Manejar el evento de cambio del checkbox button
+      document.querySelectorAll('input[type="checkbox"][name^="preguntas"]').forEach(checkbox => {
         checkbox.addEventListener('change', function() {
+          const categoria = this.name.replace('preguntas[', '').replace(']', ''); // Obtener el nombre de la categoría
           const preguntaId = this.value;
-          
-          if (this.checked) {
-            // Si se selecciona, agregarla a la lista
-            if (!seleccionadas.includes(preguntaId)) {
-              seleccionadas.push(preguntaId);
-            }
-          } else {
-            // Si se deselecciona, quitarla de la lista
-            const index = seleccionadas.indexOf(preguntaId);
-            if (index !== -1) {
-              seleccionadas.splice(index, 1);
-            }
-          }
-          
-          // Guardar la lista actualizada en localStorage
-          localStorage.setItem('preguntasSeleccionadas', JSON.stringify(seleccionadas));
+
+          // Actualizar la variable con la nueva selección
+          preguntasSeleccionadas[categoria] = preguntaId; 
+
+          // Puedes mostrar la selección actual en la consola para verificar
+          console.log("Selección actual:", preguntasSeleccionadas); 
         });
       });
     });
+
+    function cancelar() {
+            if (confirm('¿Deseas cancelar el proceso de la encuensta?')) {
+              window.location.href = '/admin/listaEncuesta';
+            }
+          }
   </script>
   
   <!-- Overlay -->

@@ -441,7 +441,7 @@ export const obtenerDatosEncuesta = async (req, res) => {
     const encuesta = await Encuesta.findById(idEncuesta);
     const areas = await Area.find();
  
-
+    console.log(encuesta);
     const fechaLimiteFormateada = new Date(encuesta.fecha_limite).toISOString().split('T')[0];
 
     res.render('forms/formEditarEncuesta',{ username: userData.username, rol: userData.rol,

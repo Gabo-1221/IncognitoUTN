@@ -8,6 +8,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form action="/forms/editarArea" method="post">
+        <div id="alertedit"  role="alert"></div>
         <div class="modal-body">
           <input type="hidden" name="id" id="id">
           <div class="mb-3">
@@ -35,6 +36,73 @@
 
         </div>
       </form>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const form = document.querySelector('form[action="/forms/editarArea"]');
+          const submitButton = form.querySelector('button[type="submit"]');
+          
+          // Crea un contenedor para los mensajes de error (opcional)
+          const errorContainer = document.getElementById('alertedit');
+          // Puedes agregar estilos CSS para las clases "error-messages" y "error-message"
+
+
+          // Deshabilita el botón de enviar inicialmente
+          submitButton.disabled = true;
+
+          // Escucha los eventos 'input' en los campos requeridos
+          const requiredFields = ['area', 'color'];
+          requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            field.addEventListener('input', validateForm);
+          });
+
+          form.addEventListener('submit', function(event) {
+            if (!validateForm()) {
+              event.preventDefault();
+            }
+          });
+
+          function validateForm() {
+            let isValid = true;
+            errorContainer.innerHTML = ''; 
+            const alertContainer = document.getElementById('alert'); // Obtiene el elemento de la alerta
+            // Limpia la alerta
+
+            // Validar el campo "area"
+            const areaInput = document.getElementById('area');
+            if (areaInput.value.trim() === '') {
+              isValid = false;
+              showError('Por favor, ingresa el nombre del área.');
+            }
+
+            // Validar el campo "color"
+            const colorInput = document.getElementById('color');
+            if (colorInput.value.trim() === '') {
+              isValid = false;
+              showError('Por favor, selecciona un color.');
+            }
+
+            // Habilita o deshabilita el botón de enviar según la validez del formulario
+            submitButton.disabled = !isValid;
+
+            if (isValid) {
+              alertContainer.style.display = 'none'; // Oculta la alerta
+            } else {
+              alertContainer.style.display = 'block'; // Muestra la alerta
+            }
+            return isValid;
+          }
+
+
+        function showError(message) {
+          errorContainer.classList.add('alert', 'alert-danger','alert-dismissible');
+          const errorElement = document.createElement('span');
+          errorElement.classList.add('error-messages');
+          errorElement.textContent = message;
+          errorContainer.appendChild(errorElement);
+        }
+      });
+    </script>
     </div>
   </div>
 </div>

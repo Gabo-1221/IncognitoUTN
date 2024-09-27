@@ -7,6 +7,7 @@
       </div>
       <div class="modal-body">
         <form action="/forms/nuevaCategoria" method="post">
+          <div id="alert"  role="alert"></div>
           <div class="mb-3">
             <label class="form-label" for="categoria">Nombre</label>
             <input type="text" class="form-control" id="categoria" name="categoria" placeholder="Ingresar nombre de nueva Categoria"/>
@@ -25,6 +26,71 @@
             <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+          // Selecciona el formulario de nueva categoría
+          const categoriaForm = document.querySelector('form[action="/forms/nuevaCategoria"]');
+          const categoriaSubmitButton = categoriaForm.querySelector('button[type="submit"]');
+
+          // Crea un contenedor para los mensajes de error (opcional)
+          const errorContainer = document.querySelector('div #alert'); 
+
+          // Deshabilita el botón de enviar inicialmente
+          categoriaSubmitButton.disabled = true;
+
+          // Escucha los eventos 'input' en los campos requeridos
+          const requiredFieldsCategoria = ['categoria', 'color'];
+          requiredFieldsCategoria.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            field.addEventListener('input', validateCategoriaForm);
+          });
+
+          categoriaForm.addEventListener('submit', function(event) {
+            if (!validateCategoriaForm()) {
+              event.preventDefault();
+            }
+          });
+
+          function validateCategoriaForm() {
+            let isValid = true;
+            errorContainer.innerHTML = ''; 
+            const alertContainer = document.getElementById('alert');
+
+            // Validar el campo "categoria"
+            const categoriaInput = document.getElementById('categoria');
+            if (categoriaInput.value.trim() === '') {
+              isValid = false;
+              showError('Por favor, ingresa el nombre de la categoría.');
+            }
+
+            // Validar el campo "color"
+            const colorInput = document.getElementById('color');
+            if (colorInput.value.trim() === '') {
+              isValid = false;
+              showError('Por favor, selecciona un color.');
+            }
+
+            // Habilita o deshabilita el botón de enviar según la validez del formulario
+            categoriaSubmitButton.disabled = !isValid;
+
+            if (isValid) {
+              alertContainer.style.display = 'none'; // Oculta la alerta
+            } else {
+              alertContainer.style.display = 'block'; // Muestra la alerta
+            }
+
+            return isValid;
+          }
+
+          function showError(message) {
+            errorContainer.classList.add('alert', 'alert-danger','alert-dismissible');
+            const errorElement = document.createElement('span');
+            errorElement.classList.add('error-messages');
+            errorElement.textContent = message;
+            errorContainer.appendChild(errorElement);
+          }
+        });
+        </script>
       </div>
 
     </div>
